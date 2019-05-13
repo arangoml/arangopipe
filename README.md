@@ -1,7 +1,7 @@
 # arangopipe
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/arangoml/arangopipe/master?filepath=README.md)
 
-## Overview of Arangopipe
+# Overview of Arangopipe
 
 Arangopipe is a ArangoDB API component for tracing meta-data about machine learning projects. Tracking details of machine learning experiments, like hyper-parameters, or details of optimization techniques, etc., are of explicit concern to data scientists. This need is well served by most machine learning frameworks that are currently around. For example, <a href = https://www.tensorflow.org/guide/summaries_and_tensorboard> Tensorboard </a>, can be useful for this purpose for data scientists using Tensorflow. Analyzing modeling results in the aggregate, rather than focussing on a small set of experiments is equally important to data scientists. For example, data scientists may be interested in:
 
