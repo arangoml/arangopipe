@@ -8,7 +8,7 @@ Created on Sat Apr 13 08:35:58 2019
 
 from arango import ArangoClient
 import logging
-
+from arangopipe.arangopipe_config import ArangoPipeConfig
 
 
 # create logger with 'spam_application'
@@ -36,20 +36,34 @@ class ArangoPipe:
         (3) Register your featureset with ArangoPipe
         (4) Register you model with ArangoPipe
 """
-    def __init__(self):
+    def __init__(self, config = None, persist = False):
         self.emlg = None
+        if config is None:
+            self.cfg = self.get_config()
+        else:
+            self.cfg = config.cfg
+            if persist:
+                config.dump_data()
         self.init_graph()
 
+  
 
 
-
+    def get_config(self):
+        apc = ArangoPipeConfig()
+        return apc.get_cfg()
+        
 
 
     def lookup_dataset(self, dataset_name):
             
         """ Return a dataset identifier given a name. This can be used to get the dataset id that is used to log run information associated with execution of the pipeline."""
-        client = ArangoClient(protocol='http', host='localhost', port=8529)
-        db = client.db(name='arangopipe', username='arangopipe', password='arangopipe')
+        client = ArangoClient(protocol='http',\
+                              host=self.cfg['arangodb']['host'],\
+                              port=self.cfg['arangodb']['port'])
+        db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
+                       username=self.cfg['arangodb']['arangopipe_admin_username'],\
+                       password=self.cfg['arangodb']['arangopipe_admin_password'])
         # Execute the query
         cursor = db.aql.execute(
                 'FOR doc IN datasets FILTER doc.name == @value RETURN doc',
@@ -63,8 +77,12 @@ class ArangoPipe:
     def lookup_featureset(self, feature_set_name):
                 
         """ Return a featureset identifier given a name. This can be used to get the featureset id that is used to log run information associated with execution of the pipeline."""
-        client = ArangoClient(protocol='http', host='localhost', port=8529)
-        db = client.db(name='arangopipe', username='arangopipe', password='arangopipe')
+        client = ArangoClient(protocol='http',\
+                              host=self.cfg['arangodb']['host'],\
+                              port=self.cfg['arangodb']['port'])
+        db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
+                       username=self.cfg['arangodb']['arangopipe_admin_username'],\
+                       password=self.cfg['arangodb']['arangopipe_admin_password'])
         # Execute the query
         cursor = db.aql.execute(
                 'FOR doc IN featuresets FILTER doc.name == @value RETURN doc',
@@ -77,8 +95,12 @@ class ArangoPipe:
     def lookup_model(self, model_name):
             
         """ Return a model identifier given a name. This can be used to get the model id that is used to log run information associated with execution of the pipeline."""
-        client = ArangoClient(protocol='http', host='localhost', port=8529)
-        db = client.db(name='arangopipe', username='arangopipe', password='arangopipe')
+        client = ArangoClient(protocol='http',\
+                              host=self.cfg['arangodb']['host'],\
+                              port=self.cfg['arangodb']['port'])
+        db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
+                       username=self.cfg['arangodb']['arangopipe_admin_username'],\
+                       password=self.cfg['arangodb']['arangopipe_admin_password'])
         # Execute the query
         cursor = db.aql.execute(
                 'FOR doc IN models FILTER doc.name == @value RETURN doc',
@@ -86,24 +108,69 @@ class ArangoPipe:
         model_keys = [doc for doc in cursor]
     
         return model_keys[0]
+    
+    
+    def lookup_modelparams(self, tag_value):
+            
+        """ Return a model parameter result given a tag."""
+        client = ArangoClient(protocol='http',\
+                              host=self.cfg['arangodb']['host'],\
+                              port=self.cfg['arangodb']['port'])
+        db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
+                       username=self.cfg['arangodb']['arangopipe_admin_username'],\
+                       password=self.cfg['arangodb']['arangopipe_admin_password'])
+        # Execute the query
+        cursor = db.aql.execute(
+                'FOR r IN run\
+                    FILTER r.tag == @value \
+                        FOR mp IN 1..1 OUTBOUND r run_modelparams\
+                            RETURN mp ', bind_vars={'value': tag_value})
+        mp_keys = [doc for doc in cursor]
+    
+        return mp_keys[0]
+    
+    def lookup_modelperf(self, tag_value):
+            
+        """ Return a model dev performance given a tag."""
+        client = ArangoClient(protocol='http',\
+                              host=self.cfg['arangodb']['host'],\
+                              port=self.cfg['arangodb']['port'])
+        db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
+                       username=self.cfg['arangodb']['arangopipe_admin_username'],\
+                       password=self.cfg['arangodb']['arangopipe_admin_password'])
+        # Execute the query
+        cursor = db.aql.execute(
+                'FOR r IN run\
+                    FILTER r.tag == @value \
+                        FOR dp IN 1..1 OUTBOUND r run_devperf\
+                            RETURN dp ', bind_vars={'value': tag_value})
+        dp_keys = [doc for doc in cursor]
+    
+        return dp_keys[0]
 
 
 
     def init_graph(self):
         """ Initialize a graph when an instance of ArangoPipe is provisioned. """
-        client = ArangoClient(protocol='http', host='localhost', port=8529)
+        client = ArangoClient(protocol='http',\
+                              host=self.cfg['arangodb']['host'],\
+                              port=self.cfg['arangodb']['port'])
     
         # Connect to "_system" database as root user.
         # This returns an API wrapper for "_system" database.
-        sys_db = client.db('_system', username='root', password='admin123')
+        sys_db = client.db('_system',\
+                           username=self.cfg['arangodb']['root_user'],\
+                           password=self.cfg['arangodb']['root_user_password'])
         
-        if not sys_db.has_database('arangopipe'):
+        if not sys_db.has_database(self.cfg['arangodb']['arangopipe_dbname']):
             logger.error("arangopipe database has not been created.")
             raise AttributeError("arangopipe database has not been created!")
         else:
-            db = client.db(name='arangopipe', username='arangopipe', password='arangopipe')
-            if db.has_graph('enterprise_ml_graph'):
-                self.emlg = db.graph('enterprise_ml_graph')
+            db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
+                           username=self.cfg['arangodb']['arangopipe_admin_username'],\
+                           password=self.cfg['arangodb']['arangopipe_admin_password'])
+            if db.has_graph(self.cfg['mlgraph']['graphname']):
+                self.emlg = db.graph(self.cfg['mlgraph']['graphname'])
             else:
                 logger.error("ML tracking graph was not created. ")
                 raise AttributeError("ML tracking graph has not been created")
@@ -119,8 +186,12 @@ class ArangoPipe:
         models = self.emlg.vertex_collection("models")
         model_reg = models.insert(mi)
         
-        client = ArangoClient(protocol='http', host='localhost', port=8529)
-        db = client.db(name='arangopipe', username='arangopipe', password='arangopipe')
+        client = ArangoClient(protocol='http',\
+                              host=self.cfg['arangodb']['host'],\
+                              port=self.cfg['arangodb']['port'])
+        db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
+                       username=self.cfg['arangodb']['arangopipe_admin_username'],\
+                       password=self.cfg['arangodb']['arangopipe_admin_password'])
         # Execute the query
         cursor = db.aql.execute(
                 'FOR doc IN project FILTER doc.name == @value RETURN doc',
@@ -184,6 +255,9 @@ class ArangoPipe:
                     "timestamp": mperf["timestamp"]}
         if "deployment_tag" in ri:
             run_info["deployment_tag"] = ri["deployment_tag"]
+        if "tag" in ri:
+            run_info["tag"] = ri["tag"]
+        logger.info("Run info " + str(run_info))
         run_reg = run.insert(run_info)
         logger.info("Recording run " + str(run_reg))
     
@@ -251,8 +325,12 @@ class ArangoPipe:
         servingperf = self.emlg.vertex_collection("servingperf")
         sp_reg = servingperf.insert(sp)
         # Locate the deployment record
-        client = ArangoClient(protocol='http', host='localhost', port=8529)
-        db = client.db(name='arangopipe', username='arangopipe', password='arangopipe')
+        client = ArangoClient(protocol='http',\
+                              host=self.cfg['arangodb']['host'],\
+                              port=self.cfg['arangodb']['port'])
+        db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
+                       username=self.cfg['arangodb']['arangopipe_admin_username'],\
+                       password=self.cfg['arangodb']['arangopipe_admin_password'])
         # Execute the query
         cursor = db.aql.execute(
                 'FOR doc IN deployment FILTER doc.tag == @value RETURN doc',
