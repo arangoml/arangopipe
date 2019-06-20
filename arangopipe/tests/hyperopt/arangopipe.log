@@ -1,0 +1,22 @@
+2019-06-19 16:59:34,850 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-19 16:59:34,857 - arangopipe_logger - INFO - Recording project model link {'_id': 'project_models/2010908-2011442', '_key': '2010908-2011442', '_rev': '_Y079xGe---'}
+2019-06-19 16:59:38,030 - arangopipe_logger - INFO - Recording dataset dataset link {'_id': 'datasets/2011448', '_key': '2011448', '_rev': '_Y0790My---'}
+2019-06-19 16:59:39,165 - arangopipe_logger - INFO - Recording featureset {'_id': 'featuresets/2011451', '_key': '2011451', '_rev': '_Y0791Ty---'}
+2019-06-19 16:59:39,167 - arangopipe_logger - INFO - Recording featureset dataset link {'_id': 'featureset_dataset/2011451-2011448', '_key': '2011451-2011448', '_rev': '_Y0791T2---'}
+2019-06-19 17:00:24,536 - arangopipe_logger - INFO - Run info {'_key': '277958412459638930953962441292300579963', 'timestamp': '2019-06-19 17:00:24.536374', 'tag': 'Housing-Price-Hyperopt-Experiment'}
+2019-06-19 17:00:24,545 - arangopipe_logger - INFO - Recording run {'_id': 'run/277958412459638930953962441292300579963', '_key': '277958412459638930953962441292300579963', '_rev': '_Y08-hn6---'}
+2019-06-19 17:00:24,550 - arangopipe_logger - INFO - Recording model run link {'_id': 'run_models/277958412459638930953962441292300579963-2011442', '_key': '277958412459638930953962441292300579963-2011442', '_rev': '_Y08-hoS---'}
+2019-06-19 17:00:24,552 - arangopipe_logger - INFO - Recording model params {'_id': 'modelparams/277958412459638930953962441292300579963', '_key': '277958412459638930953962441292300579963', '_rev': '_Y08-hoa---'}
+2019-06-19 17:00:24,554 - arangopipe_logger - INFO - Recording run featureset link {'_id': 'run_featuresets/277958412459638930953962441292300579963-2011451', '_key': '277958412459638930953962441292300579963-2011451', '_rev': '_Y08-hom---'}
+2019-06-19 17:00:24,556 - arangopipe_logger - INFO - Recording run model params {'_id': 'run_modelparams/277958412459638930953962441292300579963-277958412459638930953962441292300579963', '_key': '277958412459638930953962441292300579963-277958412459638930953962441292300579963', '_rev': '_Y08-hou---'}
+2019-06-19 17:00:24,560 - arangopipe_logger - INFO - Recording model dev performance  {'_id': 'devperf/277958412459638930953962441292300579963', '_key': '277958412459638930953962441292300579963', '_rev': '_Y08-ho6---'}
+2019-06-19 17:00:24,563 - arangopipe_logger - INFO - Recording run dev perf link {'_id': 'run_devperf/277958412459638930953962441292300579963-277958412459638930953962441292300579963', '_key': '277958412459638930953962441292300579963-277958412459638930953962441292300579963', '_rev': '_Y08-hpG---'}
+2019-06-19 17:00:24,565 - arangopipe_logger - INFO - Recording run dev perf link {'_id': 'run_datasets/277958412459638930953962441292300579963-2011448', '_key': '277958412459638930953962441292300579963-2011448', '_rev': '_Y08-hpS---'}
+2019-06-19 19:12:22,955 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-19 19:12:22,962 - arangopipe_logger - INFO - Recording project model link {'_id': 'project_models/2017530-2018368', '_key': '2017530-2018368', '_rev': '_Y093WdC---'}
+2019-06-19 19:12:27,273 - arangopipe_logger - INFO - Recording dataset dataset link {'_id': 'datasets/2018383', '_key': '2018383', '_rev': '_Y093aqi---'}
+2019-06-19 19:12:28,499 - arangopipe_logger - INFO - Recording featureset {'_id': 'featuresets/2018386', '_key': '2018386', '_rev': '_Y093b3K---'}
+2019-06-19 19:12:28,501 - arangopipe_logger - INFO - Recording featureset dataset link {'_id': 'featureset_dataset/2018386-2018383', '_key': '2018386-2018383', '_rev': '_Y093b3S---'}
+2019-06-19 19:15:17,368 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-19 19:19:01,440 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-19 19:23:00,567 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized

@@ -4,7 +4,6 @@
 
 import os
 import warnings
-import sys
 
 import pandas as pd
 import numpy as np
@@ -14,7 +13,7 @@ from sklearn.linear_model import ElasticNet
 
 import mlflow
 import mlflow.sklearn
-from arangopipe import ArangoPipe
+from arangopipe.arangopipe_api import ArangoPipe
 import datetime
 
 
@@ -74,7 +73,10 @@ if __name__ == "__main__":
                     "model-params": model_params,\
                     "model-perf": model_perf,\
                     "pipeline" : "Wine-Regression-Pipeline",\
-                    "project": "Wine-Quality-Assessment"}
+                    "project": "Wine-Quality-Assessment",\
+                    "tag_for_deployment": True,\
+                    "deployment_tag": "Wine_Elastic_Net_Regression"}
       
         ap.log_run(run_info)
+       
         mlflow.sklearn.log_model(lr, "model")

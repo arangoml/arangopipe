@@ -8,6 +8,7 @@ Created on Thu Apr 25 09:30:33 2019
 
 from arango import ArangoClient
 import logging
+from arangopipe.arangopipe_config import ArangoPipeConfig
 
 
 
@@ -30,43 +31,69 @@ logger.addHandler(ch)
 
 class ArangoPipeAdmin:
     
-    def __init__(self, user_name = "authorized_user"):
+    def __init__(self, user_name = "authorized_user", config = None, persist = False):
         self.user_name = user_name
         self.db = None
+
         self.emlg = None
+        if config is None:
+            self.cfg = self.get_config()
+        else:
+            self.cfg = config.cfg
+            if persist:
+                config.dump_data()
         self.create_db()
         self.create_enterprise_ml_graph()
+    
+    def set_connection_params(self, config):
+        self.cfg = config
+        self.cfg.dump_data()
+        return
+
+
+        
+    def get_config(self):
+        apc = ArangoPipeConfig()
+        return apc.get_cfg()
+        
          
     def create_db(self):
-        client = ArangoClient(protocol='http', host='localhost', port=8529)
+        client = ArangoClient(protocol='http',\
+                              host=self.cfg['arangodb']['host'],\
+                              port=self.cfg['arangodb']['port'])
 
         # Connect to "_system" database as root user.
         # This returns an API wrapper for "_system" database.
-        sys_db = client.db('_system', username='root', password='admin123')
+        sys_db = client.db('_system',\
+                           username=self.cfg['arangodb']['root_user'],
+                           password=self.cfg['arangodb']['root_user_password'])
 
-        # Create a new database named "test" if it does not exist.
-        if not sys_db.has_database('arangopipe'):
-            sys_db.create_database('arangopipe')
+        # Create a new arangopipe database if it does not exist.
+        if not sys_db.has_database(self.cfg['arangodb']['arangopipe_dbname']):
+            sys_db.create_database(self.cfg['arangodb']['arangopipe_dbname'])
         
-        if not sys_db.has_user("arangopipe"):
-            sys_db.create_user(username = "arangopipe", password = "arangopipe")
+        if not sys_db.has_user(self.cfg['arangodb']['arangopipe_admin_username']):
+            sys_db.create_user(username = self.cfg['arangodb']['arangopipe_admin_username'],\
+                               password = self.cfg['arangodb']['arangopipe_admin_password'])
     
-        sys_db.update_permission(username = "arangopipe",\
-                                 database = "arangopipe", permission = "rw")
+        sys_db.update_permission(username = self.cfg['arangodb']['arangopipe_admin_username'],\
+                                 database = self.cfg['arangodb']['arangopipe_dbname'], permission = "rw")
 
-        # Connect to "test" database as root user.
+        # Connect to arangopipe database as administrative user.
          #This returns an API wrapper for "test" database.
-        db = client.db('arangopipe', username='arangopipe', password='arangopipe')
+        db = client.db(self.cfg['arangodb']['arangopipe_dbname'],\
+                       username=self.cfg['arangodb']['arangopipe_admin_username'],\
+                       password=self.cfg['arangodb']['arangopipe_admin_password'])
         self.db = db
          
         return
     
     def create_enterprise_ml_graph(self):
     
-        if not self.db.has_graph('enterprise_ml_graph'):
-            self.emlg = self.db.create_graph('enterprise_ml_graph')
+        if not self.db.has_graph(self.cfg['mlgraph']['graphname']):
+            self.emlg = self.db.create_graph(self.cfg['mlgraph']['graphname'])
         else:
-            self.emlg = self.db.graph('enterprise_ml_graph')
+            self.emlg = self.db.graph(self.cfg['mlgraph']['graphname'])
         
         
         if not self.emlg.has_vertex_collection('project'):
@@ -163,11 +190,14 @@ class ArangoPipeAdmin:
 
     
     def delete_arangomldb(self):
-        client = ArangoClient(protocol='http', host='localhost', port=8529)
 
-        # Connect to "_system" database as root user.
-        # This returns an API wrapper for "_system" database.
-        sys_db = client.db('_system', username='root', password='admin123')
+        client = ArangoClient(protocol='http',\
+                              host=self.cfg['arangodb']['host'],\
+                              port=self.cfg['arangodb']['port'])
+
+        sys_db = client.db('_system',\
+                           username=self.cfg['arangodb']['root_user'],\
+                           password=self.cfg['arangodb']['root_user_password'])
 
   
         if sys_db.has_database('arangopipe'):
@@ -176,8 +206,12 @@ class ArangoPipeAdmin:
         return
     
     def register_deployment(self, dep_tag):
-        client = ArangoClient(protocol='http', host='localhost', port=8529)
-        db = client.db(name='arangopipe', username='arangopipe', password='arangopipe')
+        client = ArangoClient(protocol='http',\
+                              host=self.cfg['arangodb']['host'],\
+                              port=self.cfg['arangodb']['port'])
+        db = client.db(name =self.cfg['arangodb']['arangopipe_dbname'],\
+                       username = self.cfg['arangodb']['arangopipe_admin_username'],\
+                       password = self.cfg['arangodb']['arangopipe_admin_password'])
         # Execute the query
         cursor = db.aql.execute(
                 'FOR doc IN run FILTER doc.deployment_tag == @value RETURN doc',
@@ -232,3 +266,11 @@ class ArangoPipeAdmin:
         
         dep_model_reg = dep_model_edge.insert(the_dep_model_edge)
         return dep_model_reg
+    
+    
+
+    
+
+        
+        
+        
