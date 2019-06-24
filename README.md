@@ -68,7 +68,9 @@ This repository contains **Arangopipe** and examples to illustrate how it can be
 
     `pip install -i https://test.pypi.org/simple/ arangopipe`
 
-The $\texttt{tests}$ durectory contains examples that illustrate how **Arangopipe** can be used with other machine learning libraries. For example, the $\texttt{mlflow}$ directory provides examples of how **Arangopipe** can be used with [mlflow](https://www.mlflow.org/docs/latest/index.html). To run these examples, you will need to install $\texttt{mlflow}$ first. Similarly, to see how **Arangopipe** can be used to with hyper-parameter optimization experiments, look at the examples in the $\texttt{hyperopt}$ directory. To run these examples, you will need to have $\tex
+The _tests_ durectory contains examples that illustrate how **Arangopipe** can be used with other machine learning libraries. For example, the _mlflow_ directory provides examples of how **Arangopipe** can be used with [mlflow](https://www.mlflow.org/docs/latest/index.html). To run these examples, you will need to install _mlflow}_ first. Similarly, to see how **Arangopipe** can be used to with hyper-parameter optimization experiments, look at the examples in the _hyperopt_ directory. To run these examples, you will need to have _hyperopt_ installed.
+
+
 
 
  
