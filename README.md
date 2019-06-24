@@ -1,4 +1,4 @@
-
+<!-- Required extensions: mathjax, headerid(level=3) -->
 # Overview of Arangopipe
 Arangopipe is a ArangoDB API component for tracing meta-data about machine learning projects. Tracking details of machine learning experiments, like hyper-parameters, or details of optimization techniques, etc., are of explicit concern to data scientists. This need is well served by most machine learning frameworks that are currently around. For example,  [**Tensorboard**](https://www.tensorflow.org/guide/summaries_and_tensorboard), can be useful for this purpose for data scientists using Tensorflow. Analyzing modeling results in the aggregate, rather than focussing on a small set of experiments is equally important to data scientists. For example, data scientists may be interested in:
 
@@ -23,7 +23,7 @@ Arangopipe has two components:
 When data scientists have refined their models to a point where they are ready to track it and log its performance during model development, they can do so with a simple API call. If the model is deployment ready, they can indicate this by adding a deployment tag as part of the data provided to the model tracking API.  When models have been deployed, **Arangopipe** administrators provision a *deployment* entitiy in **Arangopipe** to start tracking the serving performance of the deployed model. As serving performance becomes available, it can be recorded against this deployed entity. 
 
 ## Arangopipe Graph Model
-![Graph representation of ArangoPipe entities](https://github.com/arangoml/arangopipearangopipe_schema.png)
+![Graph representation of ArangoPipe entities](arangopipe_schema.png)
 
 ### Data Dictionary 
 
@@ -51,3 +51,24 @@ Arangopipe represents metadata as a graph. The nodes of the graph above are the 
 20. (Edge) Project - Models: This captures the models associated with a project.
 
 The data associated with the nodes and edges of the graph are stored as documents. The documents do not have a fixed structure and represent data using key-value pairs. This offers flexibility and permits users to decide the metadata elements that they would like to store. This also permits users to store metadata from any machine learning tech stack in Arangopipe.
+
+## Installing Arangopipe
+
+This repository contains **Arangopipe** and examples to illustrate how it can be used with machine learning tools like **hyperopt** and **MLFlow**. To install **Arangopipe**, do the following:
+
+1.  Install ArangoDB
+
+    `docker run -p 8529:8529 -e ARANGO_ROOT_PASSWORD=openSesame arangodb/arangodb:3.4.6`
+    
+2.  Install python-arango
+
+    `pip install python-arango`
+    
+3.  Install Arangopipe
+
+    `pip install -i https://test.pypi.org/simple/ arangopipe`
+
+The $\texttt{tests}$ durectory contains examples that illustrate how **Arangopipe** can be used with other machine learning libraries. For example, the $\texttt{mlflow}$ directory provides examples of how **Arangopipe** can be used with [mlflow](https://www.mlflow.org/docs/latest/index.html). To run these examples, you will need to install $\texttt{mlflow}$ first. Similarly, to see how **Arangopipe** can be used to with hyper-parameter optimization experiments, look at the examples in the $\texttt{hyperopt}$ directory. To run these examples, you will need to have $\tex
+
+
+ 
