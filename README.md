@@ -1,4 +1,4 @@
-<!-- Required extensions: mathjax, headerid(level=3) -->
+
 # Overview of Arangopipe
 Arangopipe is a ArangoDB API component for tracing meta-data about machine learning projects. Tracking details of machine learning experiments, like hyper-parameters, or details of optimization techniques, etc., are of explicit concern to data scientists. This need is well served by most machine learning frameworks that are currently around. For example,  [**Tensorboard**](https://www.tensorflow.org/guide/summaries_and_tensorboard), can be useful for this purpose for data scientists using Tensorflow. Analyzing modeling results in the aggregate, rather than focussing on a small set of experiments is equally important to data scientists. For example, data scientists may be interested in:
 
@@ -68,7 +68,7 @@ This repository contains **Arangopipe** and examples to illustrate how it can be
 
     `pip install -i https://test.pypi.org/simple/ arangopipe`
 
-The _tests_ durectory contains examples that illustrate how **Arangopipe** can be used with other machine learning libraries. For example, the _mlflow_ directory provides examples of how **Arangopipe** can be used with [mlflow](https://www.mlflow.org/docs/latest/index.html). To run these examples, you will need to install _mlflow}_ first. Similarly, to see how **Arangopipe** can be used to with hyper-parameter optimization experiments, look at the examples in the _hyperopt_ directory. To run these examples, you will need to have _hyperopt_ installed.
+The _tests_ durectory contains examples that illustrate how **Arangopipe** can be used with other machine learning libraries. For example, the _mlflow_ directory provides examples of how **Arangopipe** can be used with [mlflow](https://www.mlflow.org/docs/latest/index.html). To run these examples, you will need to install _mlflow_ first. Similarly, to see how **Arangopipe** can be used to with hyper-parameter optimization experiments, look at the examples in the _hyperopt_ directory. To run these examples, you will need to have [_hyperopt_](https://pypi.org/project/hyperopt/) installed.
 
 
 
