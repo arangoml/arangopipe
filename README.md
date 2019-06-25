@@ -64,7 +64,12 @@ This repository contains **Arangopipe** and examples to illustrate how it can be
 
     `pip install python-arango`
     
-3.  Install Arangopipe
+3.  Install PyYAML
+
+    `pip install PyYAML`  
+    
+    
+4.  Install Arangopipe
 
     `pip install -i https://test.pypi.org/simple/ arangopipe`
 

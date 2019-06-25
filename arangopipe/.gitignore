@@ -1,7 +1,7 @@
 # Compiled python modules.
 *.pyc
 # log files
-/tests/*.log
+**/*.log
 # Setuptools distribution folder.
 /dist/
 #mlruns folder

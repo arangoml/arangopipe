@@ -1,52 +1,51 @@
-2019-06-19 16:51:06,015 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
-2019-06-19 16:51:06,017 - arangopipe_logger - INFO - Recording dataset dataset link {'_id': 'datasets/2010912', '_key': '2010912', '_rev': '_Y072AM----'}
-2019-06-19 16:51:06,020 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
-2019-06-19 16:51:06,026 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
-2019-06-19 16:51:06,029 - arangopipe_logger - INFO - Recording featureset {'_id': 'featuresets/2010919', '_key': '2010919', '_rev': '_Y072AMu---'}
-2019-06-19 16:51:06,030 - arangopipe_logger - INFO - Recording featureset dataset link {'_id': 'featureset_dataset/2010919-2010912', '_key': '2010919-2010912', '_rev': '_Y072AM2---'}
-2019-06-19 16:51:06,034 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
-2019-06-19 16:51:06,039 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
-2019-06-19 16:51:06,043 - arangopipe_logger - INFO - Recording project model link {'_id': 'project_models/2010908-2010927', '_key': '2010908-2010927', '_rev': '_Y072ANq---'}
-2019-06-19 16:51:06,047 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
-2019-06-19 16:51:06,052 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
-2019-06-19 16:51:06,057 - arangopipe_logger - INFO - Run info {'_key': '0ef73d9edf08487793c77a1742f4033e', 'timestamp': '2019-06-06 12:52:11.190048', 'deployment_tag': 'Wine_Elastic_Net_Regression', 'tag': 'wine regression model test 1'}
-2019-06-19 16:51:06,059 - arangopipe_logger - INFO - Recording run {'_id': 'run/0ef73d9edf08487793c77a1742f4033e', '_key': '0ef73d9edf08487793c77a1742f4033e', '_rev': '_Y072AOm---'}
-2019-06-19 16:51:06,060 - arangopipe_logger - INFO - Recording model run link {'_id': 'run_models/0ef73d9edf08487793c77a1742f4033e-2010927', '_key': '0ef73d9edf08487793c77a1742f4033e-2010927', '_rev': '_Y072AOu---'}
-2019-06-19 16:51:06,061 - arangopipe_logger - INFO - Recording model params {'_id': 'modelparams/0ef73d9edf08487793c77a1742f4033e', '_key': '0ef73d9edf08487793c77a1742f4033e', '_rev': '_Y072AOy---'}
-2019-06-19 16:51:06,063 - arangopipe_logger - INFO - Recording run featureset link {'_id': 'run_featuresets/0ef73d9edf08487793c77a1742f4033e-2010919', '_key': '0ef73d9edf08487793c77a1742f4033e-2010919', '_rev': '_Y072AO2---'}
-2019-06-19 16:51:06,064 - arangopipe_logger - INFO - Recording run model params {'_id': 'run_modelparams/0ef73d9edf08487793c77a1742f4033e-0ef73d9edf08487793c77a1742f4033e', '_key': '0ef73d9edf08487793c77a1742f4033e-0ef73d9edf08487793c77a1742f4033e', '_rev': '_Y072AP----'}
-2019-06-19 16:51:06,065 - arangopipe_logger - INFO - Recording model dev performance  {'_id': 'devperf/0ef73d9edf08487793c77a1742f4033e', '_key': '0ef73d9edf08487793c77a1742f4033e', '_rev': '_Y072APC---'}
-2019-06-19 16:51:06,067 - arangopipe_logger - INFO - Recording run dev perf link {'_id': 'run_devperf/0ef73d9edf08487793c77a1742f4033e-0ef73d9edf08487793c77a1742f4033e', '_key': '0ef73d9edf08487793c77a1742f4033e-0ef73d9edf08487793c77a1742f4033e', '_rev': '_Y072APG---'}
-2019-06-19 16:51:06,068 - arangopipe_logger - INFO - Recording run dev perf link {'_id': 'run_datasets/0ef73d9edf08487793c77a1742f4033e-2010912', '_key': '0ef73d9edf08487793c77a1742f4033e-2010912', '_rev': '_Y072APO---'}
-2019-06-19 16:51:06,116 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
-2019-06-19 18:52:30,941 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
-2019-06-19 18:52:30,943 - arangopipe_logger - INFO - Recording dataset dataset link {'_id': 'datasets/2016832', '_key': '2016832', '_rev': '_Y09lKX6---'}
-2019-06-19 18:52:30,947 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
-2019-06-19 18:52:30,952 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
-2019-06-19 18:53:56,865 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
-2019-06-19 18:53:56,867 - arangopipe_logger - INFO - Recording dataset dataset link {'_id': 'datasets/2017179', '_key': '2017179', '_rev': '_Y09meSK---'}
-2019-06-19 18:53:56,871 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
-2019-06-19 18:53:56,876 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
-2019-06-19 18:54:37,709 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
-2019-06-19 18:55:43,459 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
-2019-06-19 18:55:43,461 - arangopipe_logger - INFO - Recording dataset dataset link {'_id': 'datasets/2017534', '_key': '2017534', '_rev': '_Y09oGYS---'}
-2019-06-19 18:55:43,465 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
-2019-06-19 18:55:43,470 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
-2019-06-19 18:55:43,473 - arangopipe_logger - INFO - Recording featureset {'_id': 'featuresets/2017541', '_key': '2017541', '_rev': '_Y09oGZC---'}
-2019-06-19 18:55:43,475 - arangopipe_logger - INFO - Recording featureset dataset link {'_id': 'featureset_dataset/2017541-2017534', '_key': '2017541-2017534', '_rev': '_Y09oGZG---'}
-2019-06-19 18:55:43,478 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
-2019-06-19 18:55:43,484 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
-2019-06-19 18:55:43,488 - arangopipe_logger - INFO - Recording project model link {'_id': 'project_models/2017530-2017549', '_key': '2017530-2017549', '_rev': '_Y09oGa----'}
-2019-06-19 18:55:43,492 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
-2019-06-19 18:55:43,498 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
-2019-06-19 18:55:43,503 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
-2019-06-19 18:55:43,508 - arangopipe_logger - INFO - Run info {'_key': '0ef73d9edf08487793c77a1742f4033e', 'timestamp': '2019-06-06 12:52:11.190048', 'deployment_tag': 'Wine_Elastic_Net_Regression', 'tag': 'wine regression model test 1'}
-2019-06-19 18:55:43,509 - arangopipe_logger - INFO - Recording run {'_id': 'run/0ef73d9edf08487793c77a1742f4033e', '_key': '0ef73d9edf08487793c77a1742f4033e', '_rev': '_Y09oGbS---'}
-2019-06-19 18:55:43,511 - arangopipe_logger - INFO - Recording model run link {'_id': 'run_models/0ef73d9edf08487793c77a1742f4033e-2017549', '_key': '0ef73d9edf08487793c77a1742f4033e-2017549', '_rev': '_Y09oGbW---'}
-2019-06-19 18:55:43,512 - arangopipe_logger - INFO - Recording model params {'_id': 'modelparams/0ef73d9edf08487793c77a1742f4033e', '_key': '0ef73d9edf08487793c77a1742f4033e', '_rev': '_Y09oGbe---'}
-2019-06-19 18:55:43,513 - arangopipe_logger - INFO - Recording run featureset link {'_id': 'run_featuresets/0ef73d9edf08487793c77a1742f4033e-2017541', '_key': '0ef73d9edf08487793c77a1742f4033e-2017541', '_rev': '_Y09oGbi---'}
-2019-06-19 18:55:43,515 - arangopipe_logger - INFO - Recording run model params {'_id': 'run_modelparams/0ef73d9edf08487793c77a1742f4033e-0ef73d9edf08487793c77a1742f4033e', '_key': '0ef73d9edf08487793c77a1742f4033e-0ef73d9edf08487793c77a1742f4033e', '_rev': '_Y09oGbm---'}
-2019-06-19 18:55:43,516 - arangopipe_logger - INFO - Recording model dev performance  {'_id': 'devperf/0ef73d9edf08487793c77a1742f4033e', '_key': '0ef73d9edf08487793c77a1742f4033e', '_rev': '_Y09oGbu---'}
-2019-06-19 18:55:43,518 - arangopipe_logger - INFO - Recording run dev perf link {'_id': 'run_devperf/0ef73d9edf08487793c77a1742f4033e-0ef73d9edf08487793c77a1742f4033e', '_key': '0ef73d9edf08487793c77a1742f4033e-0ef73d9edf08487793c77a1742f4033e', '_rev': '_Y09oGby---'}
-2019-06-19 18:55:43,519 - arangopipe_logger - INFO - Recording run dev perf link {'_id': 'run_datasets/0ef73d9edf08487793c77a1742f4033e-2017534', '_key': '0ef73d9edf08487793c77a1742f4033e-2017534', '_rev': '_Y09oGb6---'}
-2019-06-19 18:55:43,567 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:07:53,271 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:07:53,273 - arangopipe_logger - INFO - Recording dataset dataset link {'_id': 'datasets/2153838', '_key': '2153838', '_rev': '_Y2xrAdi---'}
+2019-06-25 10:07:53,276 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:07:53,281 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:07:53,284 - arangopipe_logger - INFO - Recording featureset {'_id': 'featuresets/2153845', '_key': '2153845', '_rev': '_Y2xrAeO---'}
+2019-06-25 10:07:53,285 - arangopipe_logger - INFO - Recording featureset dataset link {'_id': 'featureset_dataset/2153845-2153838', '_key': '2153845-2153838', '_rev': '_Y2xrAeS---'}
+2019-06-25 10:07:53,288 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:07:53,293 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:07:53,297 - arangopipe_logger - INFO - Recording project model link {'_id': 'project_models/2153834-2153854', '_key': '2153834-2153854', '_rev': '_Y2xrAfC---'}
+2019-06-25 10:08:25,220 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:08:25,222 - arangopipe_logger - INFO - Recording dataset dataset link {'_id': 'datasets/2154147', '_key': '2154147', '_rev': '_Y2xrfqS---'}
+2019-06-25 10:08:25,224 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:08:25,229 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:08:25,232 - arangopipe_logger - INFO - Recording featureset {'_id': 'featuresets/2154154', '_key': '2154154', '_rev': '_Y2xrfr----'}
+2019-06-25 10:08:25,233 - arangopipe_logger - INFO - Recording featureset dataset link {'_id': 'featureset_dataset/2154154-2154147', '_key': '2154154-2154147', '_rev': '_Y2xrfrC---'}
+2019-06-25 10:08:25,236 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:08:25,241 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:08:25,245 - arangopipe_logger - INFO - Recording project model link {'_id': 'project_models/2154143-2154162', '_key': '2154143-2154162', '_rev': '_Y2xrfru---'}
+2019-06-25 10:08:25,248 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:08:25,252 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:08:25,257 - arangopipe_logger - INFO - Run info {'_key': '0ef73d9edf08487793c77a1742f4033e', 'timestamp': '2019-06-06 12:52:11.190048', 'deployment_tag': 'Wine_Elastic_Net_Regression', 'tag': 'wine regression model test 1'}
+2019-06-25 10:08:25,258 - arangopipe_logger - INFO - Recording run {'_id': 'run/0ef73d9edf08487793c77a1742f4033e', '_key': '0ef73d9edf08487793c77a1742f4033e', '_rev': '_Y2xrfsm---'}
+2019-06-25 10:08:25,260 - arangopipe_logger - INFO - Recording model run link {'_id': 'run_models/0ef73d9edf08487793c77a1742f4033e-2154162', '_key': '0ef73d9edf08487793c77a1742f4033e-2154162', '_rev': '_Y2xrfsq---'}
+2019-06-25 10:08:25,261 - arangopipe_logger - INFO - Recording model params {'_id': 'modelparams/0ef73d9edf08487793c77a1742f4033e', '_key': '0ef73d9edf08487793c77a1742f4033e', '_rev': '_Y2xrfsy---'}
+2019-06-25 10:08:25,262 - arangopipe_logger - INFO - Recording run featureset link {'_id': 'run_featuresets/0ef73d9edf08487793c77a1742f4033e-2154154', '_key': '0ef73d9edf08487793c77a1742f4033e-2154154', '_rev': '_Y2xrfs2---'}
+2019-06-25 10:08:25,264 - arangopipe_logger - INFO - Recording run model params {'_id': 'run_modelparams/0ef73d9edf08487793c77a1742f4033e-0ef73d9edf08487793c77a1742f4033e', '_key': '0ef73d9edf08487793c77a1742f4033e-0ef73d9edf08487793c77a1742f4033e', '_rev': '_Y2xrfs6---'}
+2019-06-25 10:08:25,265 - arangopipe_logger - INFO - Recording model dev performance  {'_id': 'devperf/0ef73d9edf08487793c77a1742f4033e', '_key': '0ef73d9edf08487793c77a1742f4033e', '_rev': '_Y2xrftC---'}
+2019-06-25 10:08:25,266 - arangopipe_logger - INFO - Recording run dev perf link {'_id': 'run_devperf/0ef73d9edf08487793c77a1742f4033e-0ef73d9edf08487793c77a1742f4033e', '_key': '0ef73d9edf08487793c77a1742f4033e-0ef73d9edf08487793c77a1742f4033e', '_rev': '_Y2xrftG---'}
+2019-06-25 10:08:25,268 - arangopipe_logger - INFO - Recording run dev perf link {'_id': 'run_datasets/0ef73d9edf08487793c77a1742f4033e-2154147', '_key': '0ef73d9edf08487793c77a1742f4033e-2154147', '_rev': '_Y2xrftK---'}
+2019-06-25 10:08:25,315 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:09:17,746 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:09:17,747 - arangopipe_logger - INFO - Recording dataset dataset link {'_id': 'datasets/2154542', '_key': '2154542', '_rev': '_Y2xsS9K---'}
+2019-06-25 10:09:17,750 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:09:17,755 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:09:17,758 - arangopipe_logger - INFO - Recording featureset {'_id': 'featuresets/2154549', '_key': '2154549', '_rev': '_Y2xsS9y---'}
+2019-06-25 10:09:17,759 - arangopipe_logger - INFO - Recording featureset dataset link {'_id': 'featureset_dataset/2154549-2154542', '_key': '2154549-2154542', '_rev': '_Y2xsS96---'}
+2019-06-25 10:09:17,762 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:09:17,766 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:09:17,771 - arangopipe_logger - INFO - Recording project model link {'_id': 'project_models/2154538-2154557', '_key': '2154538-2154557', '_rev': '_Y2xsT-m---'}
+2019-06-25 10:09:17,774 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:09:17,778 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:09:17,783 - arangopipe_logger - INFO - Run info {'_key': '0ef73d9edf08487793c77a1742f4033e', 'timestamp': '2019-06-06 12:52:11.190048', 'deployment_tag': 'Wine_Elastic_Net_Regression', 'tag': 'wine regression model test 1'}
+2019-06-25 10:09:17,785 - arangopipe_logger - INFO - Recording run {'_id': 'run/0ef73d9edf08487793c77a1742f4033e', '_key': '0ef73d9edf08487793c77a1742f4033e', '_rev': '_Y2xsT_e---'}
+2019-06-25 10:09:17,786 - arangopipe_logger - INFO - Recording model run link {'_id': 'run_models/0ef73d9edf08487793c77a1742f4033e-2154557', '_key': '0ef73d9edf08487793c77a1742f4033e-2154557', '_rev': '_Y2xsT_m---'}
+2019-06-25 10:09:17,787 - arangopipe_logger - INFO - Recording model params {'_id': 'modelparams/0ef73d9edf08487793c77a1742f4033e', '_key': '0ef73d9edf08487793c77a1742f4033e', '_rev': '_Y2xsT_q---'}
+2019-06-25 10:09:17,789 - arangopipe_logger - INFO - Recording run featureset link {'_id': 'run_featuresets/0ef73d9edf08487793c77a1742f4033e-2154549', '_key': '0ef73d9edf08487793c77a1742f4033e-2154549', '_rev': '_Y2xsT_u---'}
+2019-06-25 10:09:17,790 - arangopipe_logger - INFO - Recording run model params {'_id': 'run_modelparams/0ef73d9edf08487793c77a1742f4033e-0ef73d9edf08487793c77a1742f4033e', '_key': '0ef73d9edf08487793c77a1742f4033e-0ef73d9edf08487793c77a1742f4033e', '_rev': '_Y2xsT_2---'}
+2019-06-25 10:09:17,791 - arangopipe_logger - INFO - Recording model dev performance  {'_id': 'devperf/0ef73d9edf08487793c77a1742f4033e', '_key': '0ef73d9edf08487793c77a1742f4033e', '_rev': '_Y2xsT_6---'}
+2019-06-25 10:09:17,793 - arangopipe_logger - INFO - Recording run dev perf link {'_id': 'run_devperf/0ef73d9edf08487793c77a1742f4033e-0ef73d9edf08487793c77a1742f4033e', '_key': '0ef73d9edf08487793c77a1742f4033e-0ef73d9edf08487793c77a1742f4033e', '_rev': '_Y2xsTA----'}
+2019-06-25 10:09:17,794 - arangopipe_logger - INFO - Recording run dev perf link {'_id': 'run_datasets/0ef73d9edf08487793c77a1742f4033e-2154542', '_key': '0ef73d9edf08487793c77a1742f4033e-2154542', '_rev': '_Y2xsTAG---'}
+2019-06-25 10:09:17,841 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized

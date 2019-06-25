@@ -1,0 +1,18 @@
+2019-06-25 10:01:13,927 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:01:13,929 - arangopipe_logger - INFO - Recording dataset dataset link {'_id': 'datasets/2152778', '_key': '2152778', '_rev': '_Y2xk6ei---'}
+2019-06-25 10:01:13,932 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:01:13,936 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:01:13,939 - arangopipe_logger - INFO - Recording featureset {'_id': 'featuresets/2152785', '_key': '2152785', '_rev': '_Y2xk6fK---'}
+2019-06-25 10:01:13,941 - arangopipe_logger - INFO - Recording featureset dataset link {'_id': 'featureset_dataset/2152785-2152778', '_key': '2152785-2152778', '_rev': '_Y2xk6fO---'}
+2019-06-25 10:01:41,922 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:01:41,923 - arangopipe_logger - INFO - Recording dataset dataset link {'_id': 'datasets/2153081', '_key': '2153081', '_rev': '_Y2xlV0K---'}
+2019-06-25 10:01:41,926 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:01:41,931 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:01:41,934 - arangopipe_logger - INFO - Recording featureset {'_id': 'featuresets/2153088', '_key': '2153088', '_rev': '_Y2xlV0y---'}
+2019-06-25 10:01:41,935 - arangopipe_logger - INFO - Recording featureset dataset link {'_id': 'featureset_dataset/2153088-2153081', '_key': '2153088-2153081', '_rev': '_Y2xlV06---'}
+2019-06-25 10:01:50,075 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:01:50,077 - arangopipe_logger - INFO - Recording dataset dataset link {'_id': 'datasets/2153371', '_key': '2153371', '_rev': '_Y2xldxy---'}
+2019-06-25 10:01:50,080 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:01:50,084 - arangopipe_logger - INFO - Arango Pipe ML Graph initialized
+2019-06-25 10:01:50,087 - arangopipe_logger - INFO - Recording featureset {'_id': 'featuresets/2153378', '_key': '2153378', '_rev': '_Y2xldya---'}
+2019-06-25 10:01:50,089 - arangopipe_logger - INFO - Recording featureset dataset link {'_id': 'featureset_dataset/2153378-2153371', '_key': '2153378-2153371', '_rev': '_Y2xldye---'}
