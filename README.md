@@ -58,16 +58,11 @@ This repository contains **Arangopipe** and examples to illustrate how it can be
 
 1.  Install ArangoDB
 
-    `docker run -p 8529:8529 -e ARANGO_ROOT_PASSWORD=openSesame arangodb/arangodb:3.4.6`
+    `docker run -p 8529:8529 -e ARANGO_ROOT_PASSWORD=openSesame arangodb`
     
-2.  Install python-arango
+2.  Install pre-requisites
 
-    `pip install python-arango`
-    
-3.  Install PyYAML
-
-    `pip install PyYAML`  
-    
+    `pip install -r requirements.txt`
     
 4.  Install Arangopipe
 
