@@ -60,7 +60,7 @@ We can use *_Graph Traversal_* to retrieve the dataset associated with the featu
 FOR f in featuresets
     FILTER f.name == 'wine_no_transformations'
         FOR d IN 1..1 OUTBOUND f featureset_dataset
-        RETURN d
+            RETURN d
 ```
 ## Deleting a dataset from the database
 
