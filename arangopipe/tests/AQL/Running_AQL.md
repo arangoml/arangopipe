@@ -1,4 +1,4 @@
-# Running AQL queries  on Arangopipe
+# Running AQL queries on Arangopipe
 
 Apart, from using the **Arangopipe** search feature, it is also possible to query machine learning meta-data using the query feature in **ArangoDB**. An excerpt of the feature is shown in the figure below.
 <figure>
@@ -15,32 +15,7 @@ The left pane shows an editor area where we can enter queries. We can the execut
 
 If you would like to learn more about AQL, please view the [AQL documentation](https://www.arangodb.com/docs/stable/aql/). The [tutorials](https://www.arangodb.com/docs/stable/tutorials.html) section of the documentation may also be of interest.
 
-## Deleting a dataset from the database
 
-The first AQL operation that is demonstrated is the deletion of a *_dataset_* vertex from the **_dataset_** vertex collection. In particular, we will delete the *_dataset_* with the *_name_* attribute of "_wine dataset_". The AQL query for this operation is shown below.
-```
-
-FOR d IN datasets
-
-    FILTER d.name == 'wine dataset'
-  
-    REMOVE d IN datasets
-  
-```
-This query can be executed by entering the query in the query editor and execute the query by clicking the **_Execute_** button (see Figure 1).
-
-## Deleting a featureset from the database
-
-A featureset can be deleted from the database in a similar manner. The AQL query to delete a featureset vertex with a particular name is shown below.
-
-```
-FOR f in featuresets
-
-    FILTER f.name == 'wine_no_transformations'
-    
-    REMOVE f IN featuresets
-
-```
 
 ## Inserting a dataset into the database
 
@@ -79,3 +54,37 @@ FOR ds IN datasets
             INSERT {"_from": fs._id, "_to": ds._id} INTO featureset_dataset
 ```
 
+## Graph Traversal with AQL
+We can use *_Graph Traversal_* to retrieve the dataset associated with the featureset. The AQL query to do this is shown below
+```
+FOR f in featuresets
+    FILTER f.name == 'wine_no_transformations'
+        FOR d IN 1..1 OUTBOUND f featureset_dataset
+        RETURN d
+```
+## Deleting a dataset from the database
+
+To complete the illustration, we now look at how deletes are performed. Deleting assets from **Arangopipe** requires specific privileges. However, AQL provides this feature. A user with sufficient privileges, for example an **Arangopipe** administrator, could perform this action. This example shows how a vertex from the *_dataset_* vertex collection is deleted.
+```
+
+FOR d IN datasets
+
+    FILTER d.name == 'wine dataset'
+  
+    REMOVE d IN datasets
+  
+```
+
+
+## Deleting a featureset from the database
+
+A featureset can be deleted from the database in a similar manner. The AQL query to delete a featureset vertex with a particular name is shown below.
+
+```
+FOR f in featuresets
+
+    FILTER f.name == 'wine_no_transformations'
+    
+    REMOVE f IN featuresets
+
+```
