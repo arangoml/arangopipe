@@ -11,33 +11,35 @@ from arangopipe.arangopipe_api import ArangoPipe
 from arangopipe.arangopipe_config import ArangoPipeConfig
 import datetime
 
-def clean():
-    admin = ArangoPipeAdmin()
+def clean(config):
+    admin = ArangoPipeAdmin(config)
     admin.delete_arangomldb()
     return
 
 # A user with privileges can register a project with Arangopipe
-def test_provision_project():
+def test_provision_project(config):
     proj_info = {"name": "Wine-Quality-Regression-Modelling"}
-    admin = ArangoPipeAdmin()
+    admin = ArangoPipeAdmin(config)
     proj_reg = admin.register_project(proj_info)
     return 
 
 # convinience method to test arangopipe install
 def run_tests():
     try:
-        clean()
-        test_provision_project()
-        test_dataset_registration()
-        test_dataset_lookup()
-        test_featureset_registration()
-        test_featureset_lookup()
-        test_model_registration()
-        test_model_lookup()
-        test_set_db_connection()
-        test_log_run()
-        test_provision_deployment()
-        test_log_servingperf()
+        config = ArangoPipeConfig()
+        config.set_dbconnection(hostname = "localhost", port = 8529,\
+                                root_user = "root", root_user_password = "open sesame")
+        clean(config)
+        test_provision_project(config)
+        test_dataset_registration(config)
+        test_dataset_lookup(config)
+        test_featureset_registration(config)
+        test_featureset_lookup(config)
+        test_model_registration(config)
+        test_model_lookup(config)
+        test_log_run(config)
+        test_provision_deployment(config)
+        test_log_servingperf(config)
 
     except:
         print ("Failures encountered, exceptions occured")
@@ -49,31 +51,31 @@ def run_tests():
 
 
 # This user can register datasets, featuresets and models
-def test_dataset_registration():
-    ap = ArangoPipe()
+def test_dataset_registration(config):
+    ap = ArangoPipe(config)
     ds_info = {"name" : "wine dataset",\
                    "description": "Wine quality ratings","source": "UCI ML Repository" }
     
     ds_reg = ap.register_dataset(ds_info)
     return
 
-def test_dataset_lookup():
-    ap = ArangoPipe()
+def test_dataset_lookup(config):
+    ap = ArangoPipe(config)
     ds_reg = ap.lookup_dataset("wine dataset")
     return
 
-def test_featureset_lookup():
-    ap = ArangoPipe()
+def test_featureset_lookup(config):
+    ap = ArangoPipe(config)
     fs_reg = ap.lookup_featureset("wine_no_transformations")
     return 
 
-def test_model_lookup():
-    ap = ArangoPipe()
+def test_model_lookup(config):
+    ap = ArangoPipe(config)
     model_reg = ap.lookup_model("elastic_net_wine_model")
     return
     
-def test_featureset_registration():
-    ap = ArangoPipe()
+def test_featureset_registration(config):
+    ap = ArangoPipe(config)
     fs_info = {"fixed acidity": "float64",\
                "volatile acidity": "float64",\
                "citric acid": "float64",\
@@ -92,8 +94,8 @@ def test_featureset_registration():
     fs_reg = ap.register_featureset(fs_info, ds_reg["_key"])
     return
 
-def test_log_run():
-     ap = ArangoPipe()
+def test_log_run(config):
+     ap = ArangoPipe(config)
      ds_reg = ap.lookup_dataset("wine dataset")
      fs_reg = ap.lookup_featureset("wine_no_transformations")
      model_reg = ap.lookup_model("elastic_net_wine_model")
@@ -116,37 +118,32 @@ def test_log_run():
      return
      
      
-def test_model_registration():
-    ap = ArangoPipe()
+def test_model_registration(config):
+    ap = ArangoPipe(config)
     model_info = {"name": "elastic_net_wine_model",  "type": "elastic net regression"}
     model_reg = ap.register_model(model_info)
     return
     
 
 # A user with prvileges can register a tagged deployment with Arangopipe by simply providing the deployment tag
-def test_provision_deployment():
-    admin = ArangoPipeAdmin()
+def test_provision_deployment(config):
+    admin = ArangoPipeAdmin(config)
     ret = admin.register_deployment("Wine_Elastic_Net_Regression")
     
     return
 # A user with prvileges can log serving performance with Arangopipe
-def test_log_servingperf():
+def test_log_servingperf(config):
     to_date = datetime.datetime.now()
     from_date = to_date - datetime.timedelta(days = 30)
     ex_servingperf = {"rmse": 0.822242, "r2": 0.12678, "mae": 0.62787,\
                       "from_date": str(from_date), "to_date": str(to_date)}
     dep_tag = "Wine_Elastic_Net_Regression"
     user_id = "prvileged user"
-    ap = ArangoPipe()
+    ap = ArangoPipe(config)
     ret = ap.log_serving_perf(ex_servingperf, dep_tag, user_id)
     return ret
 
-def test_set_db_connection():
-    apc = ArangoPipeConfig()
-    apc.set_dbconnection()
-    ap = ArangoPipe(config = apc, persist = False)
-    model_reg = ap.lookup_model("elastic_net_wine_model")
-    return
+
 
 
     

@@ -2,7 +2,8 @@ import pathlib
 from setuptools import setup
 
 # The directory containing this file
-HERE = pathlib.Path(__file__).parent
+HERE = pathlib.Path(__file__).resolve().parents[1]
+
 
 # The text of the README file
 README = (HERE / "README.md").read_text()
@@ -10,7 +11,7 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 setup(
     name="arangopipe",
-    version="0.0.21",
+    version="0.0.25",
     description="package for machine learning meta-data management and analysis",
     long_description=README,
     long_description_content_type="text/markdown",

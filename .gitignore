@@ -1,10 +1,10 @@
 # Compiled python modules.
-*.pyc
+**/*.pyc
 # log files
-/tests/*.log
+**/*.log
 # Setuptools distribution folder.
-/dist/
+arangopipe/dist/
 #mlruns folder
-/arangopipe/mlruns/
+/arangopipe/tests/mlflow/mlruns/
 # Python egg metadata, regenerated from source files by setuptools.
-/*.egg-info
+arangopipe/*.egg-info
