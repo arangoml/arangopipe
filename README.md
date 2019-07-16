@@ -1,5 +1,31 @@
+# ArangoML Pipeline
 
-# Overview of Arangopipe
+ArangoML Pipeline is a common and extensible Metadata Layer for Machine Learning Pipelines which allows Data Scientists and [DataOps](https://en.wikipedia.org/wiki/DataOps) to manage all information related to their ML pipeline in one place.
+
+## Introduction
+When productizing Machine Learning Pipelines (e.g., [TensorFlow Extended](https://www.tensorflow.org/tfx/guide) or [Kubeflow](https://www.kubeflow.org/))
+the capture (and access to) of metadata across the pipeline is a vital. Typically, each of the  components of such ML pipeline produces/requires Metadata, for example:
+* Datastorage: size, location, creation date, checksum, ...
+* Feature Store (processed dataset): transformation, version, basedatasetm ...
+* Model Training: training/validation performance, training duration, ...
+* Model Serving: model linage, serving performance, ...
+
+Instead of each component storing its own metadata, a common Metadata Layer allows for queries across the entire pipeline and more efficient management.
+[**ArangoDB**](https://www.arangodb.com) being a multi model database supporting both efficient document and graph data models within a single database engine is a great fit for such kind of common metadata layer for the following reasons:
+* The metadata produced by each component is typically unstructured (e.g., TensorFlow's training metadata is different from PyTorch's metadata) and hence a great fit for a document databases
+* The relationship between the different entities (i.e., metadata) can be neatly expressed as graphs (e.g., this model has been trained by *run_34* on *dataset_y*)
+* Querying the metadata can be easily expressed as a graph traversal (e.g., all models which have been derived from *dataset_y*)
+
+## Use Cases
+ArangoML Pipeline benefits many different scenarios including:
+* Capture of Linage Information (e.g., Which dataset influences which Model)
+* Capture of Audit Information (e.g, A given model was training two month ago with the following training/validation performance)
+* Reproducibility of Model Training
+* Model Serving Policy (e.g., Which model should be deployed in production based on training statistics)
+* Extension of existing ML pipelines through simple python/HTTP API
+
+
+## Overview
 Arangopipe is a ArangoDB API component for tracing meta-data about machine learning projects. Tracking details of machine learning experiments, like hyper-parameters, or details of optimization techniques, etc., are of explicit concern to data scientists. This need is well served by most machine learning frameworks that are currently around. For example,  [**Tensorboard**](https://www.tensorflow.org/guide/summaries_and_tensorboard), can be useful for this purpose for data scientists using Tensorflow. Analyzing modeling results in the aggregate, rather than focussing on a small set of experiments is equally important to data scientists. For example, data scientists may be interested in:
 
 1.  Finding out the range of modeling techniques that have been used for a particular modeling task.
@@ -14,18 +40,18 @@ Machine learning tools and libraries focus of solving machine learning problems 
 2.  Data from Model Building: Data from model building activity is tracked. This includes data about the model parameters (post optimization) and optimization parameters (learning rates, batch-sizes, optimization technique etc.)
 3.  Data from Model Performance: Data about the model performance is tracked. This includes performance observed in development and deployed model performance.
 
-## Arangopipe Usage Narrative
+##  Usage
 Arangopipe has two components:
 1. **Arangopipe**
 2. **ArangopipeAdmin**
 
 **ArangopipeAdmin** is an administrative component. It is meant to provision projects and users into **Arangopipe**. When projects and users have been provisioned in **Arangopipe**, they can start using **Arangopipe** to track data from their machine learning experiments. To begin with, data scientists can *register* entities like datasets, featuresets and model meta-data with **Arangopipe**. Registeration yields an identifier for the entity that they can use to reference the entity in their subsequent interaction with **Arangopipe**. Information provided during registeration includes a component name that they can use to *lookup* the identifier for the entity using the lookup API.
-When data scientists have refined their models to a point where they are ready to track it and log its performance during model development, they can do so with a simple API call. If the model is deployment ready, they can indicate this by adding a deployment tag as part of the data provided to the model tracking API.  When models have been deployed, **Arangopipe** administrators provision a *deployment* entitiy in **Arangopipe** to start tracking the serving performance of the deployed model. As serving performance becomes available, it can be recorded against this deployed entity. 
+When data scientists have refined their models to a point where they are ready to track it and log its performance during model development, they can do so with a simple API call. If the model is deployment ready, they can indicate this by adding a deployment tag as part of the data provided to the model tracking API.  When models have been deployed, **Arangopipe** administrators provision a *deployment* entitiy in **Arangopipe** to start tracking the serving performance of the deployed model. As serving performance becomes available, it can be recorded against this deployed entity.
 
 ## Arangopipe Graph Model
 ![Graph representation of ArangoPipe entities](arangopipe_schema.png)
 
-### Data Dictionary 
+### Data Dictionary
 
 Arangopipe represents metadata as a graph. The nodes of the graph above are the principal elements about which metadata is gathered. These elements are high level abstractions that are encountered in any machine learning pipeline. A brief description of each of these elements is provided. Elements of the data model are either nodes or edges.
 
@@ -59,18 +85,13 @@ This repository contains **Arangopipe** and examples to illustrate how it can be
 1.  Install ArangoDB
 
     `docker run -p 8529:8529 -e ARANGO_ROOT_PASSWORD=openSesame arangodb`
-    
+
 2.  Install pre-requisites
 
     `pip install -r requirements.txt`
-    
+
 4.  Install Arangopipe
 
     `pip install -i https://test.pypi.org/simple/ arangopipe`
 
 The _tests_ durectory contains examples that illustrate how **Arangopipe** can be used with other machine learning libraries. For example, the _mlflow_ directory provides examples of how **Arangopipe** can be used with [mlflow](https://www.mlflow.org/docs/latest/index.html). To run these examples, you will need to install _mlflow_ first. Similarly, to see how **Arangopipe** can be used to with hyper-parameter optimization experiments, look at the examples in the _hyperopt_ directory. To run these examples, you will need to have [_hyperopt_](https://pypi.org/project/hyperopt/) installed.
-
-
-
-
- 
