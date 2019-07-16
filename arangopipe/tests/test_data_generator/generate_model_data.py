@@ -29,6 +29,7 @@ preds = data.columns.tolist()
 preds.remove("medianHouseValue")
 X = data[preds]
 Y = data["medianHouseValue"]
+Y = np.log(Y)
 
 # create logger with 'spam_application'
 logger = logging.getLogger('arangopipe_test_data(models)_logger')
@@ -82,7 +83,7 @@ def generate_runs(clean = False):
         proj_info = {"name": "Home_Value_Assessor"}
         proj_reg = admin.register_project(proj_info)
     
-    the_period = period_string_generator()
+    period = period_string_generator()
     ds_info = {"description": "Housing Price Data"}
     featureset = data.dtypes.to_dict()
     featureset = {k:str(featureset[k]) for k in featureset}
@@ -91,7 +92,7 @@ def generate_runs(clean = False):
     for data_tuple in dataset_generator():
         logger.info("Processing Dataset:" + str(count) )
         count = count + 1
-        aperiod = next(the_period)
+        aperiod = next(period)
         X_train = data_tuple[0]
         X_test = data_tuple[1]
         y_train = data_tuple[2]
