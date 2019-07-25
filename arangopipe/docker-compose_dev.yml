@@ -7,7 +7,8 @@ services:
     ports:
       - "6529:8529"
   arangopipe:
-    image: "docker_build_arangopipe:latest"
+    build: .
+    image: docker_build_arangopipe
     ports:
       - "8888:8888"
     depends_on:
