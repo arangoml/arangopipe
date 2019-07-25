@@ -5,6 +5,7 @@
 import os
 import warnings
 
+
 import pandas as pd
 import numpy as np
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
@@ -15,6 +16,8 @@ import mlflow
 import mlflow.sklearn
 from arangopipe.arangopipe_api import ArangoPipe
 import datetime
+from arangopipe.arangopipe_admin_api import ArangoPipeAdmin
+from arangopipe.arangopipe_config import ArangoPipeConfig
 
 
 def eval_metrics(actual, pred):
@@ -28,7 +31,10 @@ def eval_metrics(actual, pred):
 if __name__ == "__main__":
     warnings.filterwarnings("ignore")
     np.random.seed(40)
-    ap = ArangoPipe()
+    conn_config = ArangoPipeConfig()
+    conn_config.set_dbconnection(hostname = "arangodb", port = 8529,\
+                                root_user = "root", root_user_password = "open sesame")
+    ap = ArangoPipe(config = conn_config)
     # Read the wine-quality csv file (make sure you're running this from the root of MLflow!)
     wine_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "wine-quality.csv")
     data = pd.read_csv(wine_path)
@@ -73,10 +79,7 @@ if __name__ == "__main__":
                     "model-params": model_params,\
                     "model-perf": model_perf,\
                     "pipeline" : "Wine-Regression-Pipeline",\
-                    "project": "Wine-Quality-Assessment",\
-                    "tag_for_deployment": True,\
-                    "deployment_tag": "Wine_Elastic_Net_Regression"}
+                    "project": "Wine-Quality-Assessment"}
       
         ap.log_run(run_info)
-       
         mlflow.sklearn.log_model(lr, "model")
