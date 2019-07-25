@@ -1,7 +1,7 @@
 SRC = arangopipe/*.py
 DOCKER_FILE = Dockerfile
 DOCKER_IMAGE = docker_build_arangopipe
-DOCKER_PASSWORD = arangopipe
+DOCKER_PASSWORD = <the password>
 DOCKER_REPO = arangopipe
 
 python_arangopipe:$(SRC)
