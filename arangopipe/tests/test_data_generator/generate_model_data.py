@@ -8,7 +8,8 @@ Created on Fri Jul 12 07:25:18 2019
  
 
 from arangopipe.arangopipe_api import ArangoPipe
-from arangopipe_admin_api import ArangoPipeAdmin
+from arangopipe.arangopipe_admin_api import ArangoPipeAdmin
+from arangopipe.arangopipe_config import ArangoPipeConfig
 import pandas as pd
 import datetime as dt
 import os
@@ -18,6 +19,7 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import uuid
 import numpy as np
 import logging
+
 
 NUM_PERIODS = 22
 go_back_days = dt.timedelta(days = 30)
@@ -74,14 +76,20 @@ def eval_metrics(actual, pred):
 
 
 def generate_runs(clean = False):
-
+    conn_config = ArangoPipeConfig()
+    conn_config.set_dbconnection(hostname = "arangodb", port = 8529,\
+                                root_user = "root", root_user_password = "open sesame")
+    admin = ArangoPipeAdmin(config = conn_config)
+    ap = ArangoPipe(config = conn_config)
+    
     if clean:
-        admin = ArangoPipeAdmin()
         admin.delete_arangomldb()
         admin.create_db()
         admin.create_enterprise_ml_graph()
-        proj_info = {"name": "Home_Value_Assessor"}
-        proj_reg = admin.register_project(proj_info)
+    
+    proj_info = {"name": "Home_Value_Assessor"}
+    proj_reg = admin.register_project(proj_info)
+    
     
     period = period_string_generator()
     ds_info = {"description": "Housing Price Data"}
@@ -89,6 +97,7 @@ def generate_runs(clean = False):
     featureset = {k:str(featureset[k]) for k in featureset}
     count = 1
     
+
     for data_tuple in dataset_generator():
         logger.info("Processing Dataset:" + str(count) )
         count = count + 1
@@ -118,7 +127,7 @@ def generate_runs(clean = False):
         ds_info["name"] = dataset_tag
         ds_info["source"] = "Housing Price Operational Data Store"
         featureset["generated_by"] = feature_pipeline_tag
-        ap = ArangoPipe()
+        
         ds_reg = ap.register_dataset(ds_info)
         fs_reg = ap.register_featureset(featureset, ds_reg["_key"])
         model_info = {"name": "Housing Regression Model",  "type": "LASSO regression"}
@@ -135,8 +144,7 @@ def generate_runs(clean = False):
                     "tag_for_deployment": True,\
                     "deployment_tag": deployment_tag}
         ap.log_run(run_info)
-        apadmin = ArangoPipeAdmin()
-        apadmin.register_deployment(deployment_tag)
+        admin.register_deployment(deployment_tag)
         user_id = "Arangopipe Test Data Generator"
         ap.log_serving_perf(ex_servingperf, deployment_tag, user_id)
         
