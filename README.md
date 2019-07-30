@@ -48,8 +48,26 @@ Arangopipe has two components:
 **ArangopipeAdmin** is an administrative component. It is meant to provision projects and users into **Arangopipe**. When projects and users have been provisioned in **Arangopipe**, they can start using **Arangopipe** to track data from their machine learning experiments. To begin with, data scientists can *register* entities like datasets, featuresets and model meta-data with **Arangopipe**. Registeration yields an identifier for the entity that they can use to reference the entity in their subsequent interaction with **Arangopipe**. Information provided during registeration includes a component name that they can use to *lookup* the identifier for the entity using the lookup API.
 When data scientists have refined their models to a point where they are ready to track it and log its performance during model development, they can do so with a simple API call. If the model is deployment ready, they can indicate this by adding a deployment tag as part of the data provided to the model tracking API.  When models have been deployed, **Arangopipe** administrators provision a *deployment* entitiy in **Arangopipe** to start tracking the serving performance of the deployed model. As serving performance becomes available, it can be recorded against this deployed entity.
 
+## Getting Started
+
+To get started with **Arangoipe** using a [Jupyter Notebook](https://jupyter.org/), do the following:
+
+1. Install [_docker-compose](https://docs.docker.com/compose/).
+
+2. Clone the [arangopipe github repository](https://github.com/arangoml/arangopipe/) using `git clone https://github.com/arangoml/arangopipe.git`. Change into the created directory `arangopipe/arangopipe`.
+
+3. Start **Arangopipe** together with [Jupyter](https://jupyter.org/) by running
+
+    ` docker-compose up`
+
+4. Point your browser to:  `http://localhost:8888` to get to a **Jupyter** notebook.
+
+5. Point your browser to: `http://localhost:6529` to get to the **ArangoDB** web user interface.
+
+6. Browse the documentation and examples provided using the file browser available from the **Jupyter** notebook.
+
 ## Arangopipe Graph Model
-![Graph representation of ArangoPipe entities](arangopipe_schema.png)
+![Graph representation of Arangopipe entities](arangopipe_schema.png)
 
 ### Data Dictionary
 
