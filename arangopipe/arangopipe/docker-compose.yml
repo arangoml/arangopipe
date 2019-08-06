@@ -1,0 +1,17 @@
+version: '3'
+services:
+  arangodb:
+    environment:
+      - ARANGO_NO_AUTH=1
+    image: "arangodb:3.4"
+    ports:
+      - "6529:8529"
+  arangopipe:
+    image: "docker_build_arangopipe:latest"
+    ports:
+      - "8888:8888"
+    depends_on:
+      - arangodb
+    links:
+      - arangodb
+
