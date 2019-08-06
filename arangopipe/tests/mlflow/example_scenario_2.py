@@ -32,7 +32,7 @@ if __name__ == "__main__":
     warnings.filterwarnings("ignore")
     np.random.seed(40)
     conn_config = ArangoPipeConfig()
-    conn_config.set_dbconnection(hostname = "arangodb", port = 8529,\
+    conn_config.set_dbconnection(hostname = "localhost", port = 8529,\
                                 root_user = "root", root_user_password = "open sesame")
     ap = ArangoPipe(config = conn_config)
     # Read the wine-quality csv file (make sure you're running this from the root of MLflow!)

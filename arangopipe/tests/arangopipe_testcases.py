@@ -27,7 +27,7 @@ def test_provision_project(config):
 def run_tests():
     try:
         config = ArangoPipeConfig()
-        config.set_dbconnection(hostname = "arangodb", port = 8529,\
+        config.set_dbconnection(hostname = "localhost", port = 8529,\
                                 root_user = "root", root_user_password = "open sesame")
         clean(config)
         test_provision_project(config)
