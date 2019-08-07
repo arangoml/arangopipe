@@ -52,15 +52,17 @@ When data scientists have refined their models to a point where they are ready t
 
 To get started with **Arangoipe** using a [Jupyter Notebook](https://jupyter.org/), do the following:
 
-1. Install [_docker-compose](https://docs.docker.com/compose/).
+1. Install [_docker_](https://docs.docker.com/install/)
 
-2. Clone the [arangopipe github repository](https://github.com/arangoml/arangopipe/) using `git clone https://github.com/arangoml/arangopipe.git`. Change into the created directory `arangopipe/arangopipe`.
+2. Pull the arangopipe docker image by running:
+
+    `docker pull arangopipe/apsi`
 
 3. Start **Arangopipe** together with [Jupyter](https://jupyter.org/) by running
 
-    ` docker-compose up`
+    ` docker run -it -p 6529:8529 -p 8888:8888 apsi`
 
-4. Point your browser to:  `http://localhost:8888` to get to a **Jupyter** notebook.
+4. Point your browser to:  `http://localhost:8888` to get to a **Jupyter** notebook. The default notebook password is _root_
 
 5. Point your browser to: `http://localhost:6529` to get to the **ArangoDB** web user interface.
 
