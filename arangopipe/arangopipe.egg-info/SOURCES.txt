@@ -1,0 +1,12 @@
+MANIFEST.in
+README.md
+setup.py
+arangopipe/__init__.py
+arangopipe/arangopipe_admin_api.py
+arangopipe/arangopipe_api.py
+arangopipe/arangopipe_config.py
+arangopipe/arangopipe_config.yaml
+arangopipe.egg-info/PKG-INFO
+arangopipe.egg-info/SOURCES.txt
+arangopipe.egg-info/dependency_links.txt
+arangopipe.egg-info/top_level.txt
