@@ -10,6 +10,9 @@ from arangopipe.arangopipe_admin_api import ArangoPipeAdmin
 from arangopipe.arangopipe_api import ArangoPipe
 from arangopipe.arangopipe_config import ArangoPipeConfig
 import datetime
+from arangopipe.rf_dataset_shift_detector import RF_DatasetShiftDetector
+import os
+import pandas as pd
 
 def clean(config):
     admin = ArangoPipeAdmin(config = config)
@@ -40,6 +43,7 @@ def run_tests():
         test_log_run(config)
         test_provision_deployment(config)
         test_log_servingperf(config)
+        test_dataset_shift()
 
     except:
         print ("Failures encountered, exceptions occured")
@@ -142,6 +146,19 @@ def test_log_servingperf(config):
     ap = ArangoPipe(config = config)
     ret = ap.log_serving_perf(ex_servingperf, dep_tag, user_id)
     return ret
+
+def test_dataset_shift():
+    ds_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "covariate_shift/cal_housing.csv")
+    df = pd.read_csv(ds_path)
+    req_cols = df.columns.tolist()
+    df = df[req_cols]
+    df1 = df.query("lat <= -119")
+    df2 = df.query("lat > -119")
+    rfd = RF_DatasetShiftDetector()
+    score = rfd.detect_dataset_shift(df1, df2)
+    print ("Detaset shift score : ", score)
+    
+    return
 
 
 
