@@ -4,6 +4,8 @@
 **/*.log
 # Setuptools distribution folder.
 arangopipe/dist/
+# Remove the build directory from repo
+arangopipe/build/
 #mlruns folder
 /arangopipe/tests/mlflow/mlruns/
 # Python egg metadata, regenerated from source files by setuptools.
