@@ -137,7 +137,7 @@ class TestArangopipe(unittest.TestCase):
         score = rfd.detect_dataset_shift(df1, df2)
         print ("Detaset shift score : ", score)
         
-        return
+        return score
 
     def dataset_shift_negative(self):
         ds_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "covariate_shift/cal_housing.csv")
@@ -150,7 +150,7 @@ class TestArangopipe(unittest.TestCase):
         score = rfd.detect_dataset_shift(df1, df2)
         print ("Detaset shift score : ", score)
     
-        return
+        return score
     
     def test_register_dataset(self):
         err_raised = False
@@ -282,33 +282,18 @@ class TestArangopipe(unittest.TestCase):
         return
     
     def test_dataset_shift_positive(self):
-        err_raised = False
-        try:
-            self.dataset_shift_positive()
         
-        except:
-            err_raised = True
-            print ('-'*60)
-            traceback.print_exc(file=sys.stdout)
-            print ('-'*60)
-            self.assertTrue(err_raised,\
-                            'Exception raised while checking for dataset shift')
-        self.assertFalse(err_raised)
+        score = self.dataset_shift_positive()
+        
+        self.assertTrue(score > 0.8)
         return
     
     def test_dataset_shift_negative(self):
-        err_raised = False
-        try:
-            self.dataset_shift_negative()
+
+        score = self.dataset_shift_negative()
         
-        except:
-            err_raised = True
-            print ('-'*60)
-            traceback.print_exc(file=sys.stdout)
-            print ('-'*60)
-            self.assertTrue(err_raised,\
-                            'Exception raised while checking for dataset shift')
-        self.assertFalse(err_raised)
+
+        self.assertTrue(score < 0.6)
         return
         
 
