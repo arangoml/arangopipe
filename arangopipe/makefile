@@ -21,5 +21,7 @@ docker_publish_SI_latest:
 	@echo 'done!'
 clean:
 	rm -rf arangopipe.egg-info build dist
+
+rebuild_all: clean python_arangopipe upload_test_pypi docker_APSI_build docker_publish_SI_latest   
 	
 
