@@ -1,10 +1,10 @@
 SRC = arangopipe/*.py
 DOCKER_FILE = Dockerfile
-DOCKER_PASSWORD = <the password>
+DOCKER_PASSWORD = arangopipe
 DOCKER_REPO = arangopipe
 DOCKER_SI_FILE = Dockerfile_Single_Image
 DOCKER_SI_IMG_NAME = apsi
-TEST_PYPI_PASSWORD = <the password>
+TEST_PYPI_PASSWORD = shriya217
 
 python_arangopipe:$(SRC)
 	python3 setup.py sdist bdist_wheel
@@ -21,5 +21,7 @@ docker_publish_SI_latest:
 	@echo 'done!'
 clean:
 	rm -rf arangopipe.egg-info build dist
+
+rebuild_all: clean python_arangopipe upload_test_pypi docker_APSI_build docker_publish_SI_latest   
 	
 
