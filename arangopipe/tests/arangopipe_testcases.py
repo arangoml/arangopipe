@@ -53,6 +53,10 @@ class TestArangopipe(unittest.TestCase):
         ds_reg = self.ap.lookup_dataset("wine_dataset")
         return
     
+    def lookup_featureset(self):
+        fs_reg = self.ap.lookup_featureset("wine_no_transformations")
+        return
+    
     def register_model(self):
    
         model_info = {"name": "elastic_net_wine_model", \
@@ -195,6 +199,24 @@ class TestArangopipe(unittest.TestCase):
                             'Exception raised while registering featureset')
         self.assertFalse(err_raised)
         return
+    
+    def test_lookup_featureset(self):
+        err_raised = False
+        try:
+            self.register_dataset()
+            self.register_featureset()
+            self.lookup_featureset()
+        except:
+            err_raised = True
+            print ('-'*60)
+            traceback.print_exc(file=sys.stdout)
+            print ('-'*60)
+            self.assertTrue(err_raised,\
+                            'Exception raised while registering featureset')
+        self.assertFalse(err_raised)
+        return
+    
+    
     
     def test_register_model(self):
         err_raised = False
