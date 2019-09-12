@@ -1,0 +1,31 @@
+{
+  "name": "react-redux-antd-boilerplate",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "antd": "^3.21.4",
+    "axios": "^0.19.0",
+    "node-sass": "^4.12.0",
+    "react": "^16.2.0",
+    "react-app-rewired": "^1.5.0",
+    "react-dom": "^16.2.0",
+    "react-highlight-words": "^0.16.0",
+    "react-redux": "^5.0.7",
+    "react-router-dom": "^4.2.2",
+    "react-router-redux": "^5.0.0-alpha.9",
+    "react-scripts": "1.1.1",
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0",
+    "sass-loader": "^7.2.0"
+  },
+  "scripts": {
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test --env=jsdom",
+    "eject": "react-app-rewired eject"
+  },
+  "proxy": "http://localhost:8001",
+  "devDependencies": {
+    "babel-plugin-import": "^1.6.7"
+  }
+}
