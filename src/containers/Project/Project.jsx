@@ -3,19 +3,12 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
-  getUploadedDocuments,
-  processDocument,
-  deleteDocument,
-  saveToCSV,
-  clearDB
+
 } from '../../actions/document'
 
 import { Table, Input, Button, Icon, Row, Col, Tag, Divider, Card} from 'antd';
 import Highlighter from 'react-highlight-words';
 
-import Toolbar from "../../components/Toolbar/Toolbar";
-import DocModal from "../../components/Modal/DocModal";
-import UploadDrawer from "../../components/Drawer/UploadDrawer";
 
 
 class Project extends React.Component {
@@ -124,11 +117,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  getUploadedDocuments,
-  processDocument,
-  deleteDocument,
-  saveToCSV,
-  clearDB
+
 }, dispatch);
 
 export default connect(

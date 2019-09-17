@@ -111,7 +111,7 @@ class App extends React.Component{
             <Content style={{ margin: '0 16px' }}>
               <BreadcrumbHeader />
               <main>
-                  <Route exact path="/home" component={Home} />
+                  <Route exact path="/" component={Home} />
                   <Route path="/deployment" component={Deployment} />
                   <Route path="/user" component={User} />
                   <Route path="/project" component={Project} />

@@ -1,37 +1,10 @@
 import React from 'react';
 import { Table } from 'antd';
 
-const data = [
-  {
-    key: '1',
-    name: 'Housing Data Featureset',
-    period: '01/01/2019 to 01/31/2019',
-    source: 'Pipeline Housing Features',
-    dataset_soucre: 'HD_01_01_2018_to_01_31_2018',
-  },
-  {
-    key: '2',
-    name: 'Housing Data Featureset',
-    period: '01/01/2019 to 01/31/2019',
-    source: 'Pipeline Housing Features',
-    dataset_soucre: 'London No. 1 Lake Park',
-  },
-  {
-    key: '3',
-    name: 'Housing Data Featureset',
-    period: '01/01/2019 to 01/31/2019',
-    source: 'Pipeline Housing Features',
-    dataset_soucre: 'HD_01_01_2018_to_01_31_2018',
-  },
-  {
-    key: '4',
-    name: 'Housing Data Featureset',
-    period: '01/01/2019 to 01/31/2019',
-    source: 'Pipeline Portial User Features',
-    dataset_soucre: 'HD_01_01_2018_to_01_31_2018',
-  },
-];
-
+const capitalizeFLetter = (str) => {
+    return str[0].toUpperCase() +  
+            str.slice(1); 
+  }
 
 const MetaSearchTable = (props) => {
   const unallowedColumns = ['_id', '_key', '_rev', 'key']
@@ -50,7 +23,7 @@ const MetaSearchTable = (props) => {
       if(!unallowedColumns.includes(key)) {
         let newColumn = {
           key: key,
-          title: key,
+          title: capitalizeFLetter(key),
           dataIndex: key,
           sorter: (a, b) => {
             if(typeof(a[key]) == 'string')

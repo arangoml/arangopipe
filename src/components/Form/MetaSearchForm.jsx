@@ -8,12 +8,16 @@ import {
 
 
 import { Form, Icon, Input, Button, Select } from 'antd';
-import { FIND_OPTIONS } from "../../constants/searchOptions";
+import { FIND_OPTIONS, WITH_OPTIONS, DEPLOY_QUERY } from "../../constants/searchOptions";
 
 const { Option } = Select;
 
 
 class MyForm extends React.Component {
+  state = {
+    currentCollection: 'datasets'
+  }
+
   componentDidMount() {
     // To disabled submit button at the beginning.
     this.props.form.validateFields();
@@ -25,15 +29,25 @@ class MyForm extends React.Component {
   }
 
   makeQueryAndRun(values) {
+
     let query = ''
 
     if(values.collection !== null)
       query += `FOR d IN ${values.collection} `;
     if(values.with !== null && values.equal !== null)
-      query += `FILTER d.${values.with} == '${values.equal}' `;
+      if(values.with === 'deployment'){
+        const where = DEPLOY_QUERY[values.collection].where
+        const filter = DEPLOY_QUERY[values.collection].filter
+        const at = DEPLOY_QUERY[values.collection].at
+        // const get = DEPLOY_QUERY[values.collection].get
+
+        query = `FOR exp IN ${where} FILTER exp.${filter} == '${values.equal}' 
+                  FOR d IN 1..1 OUTBOUND exp ${at} `
+      }
+      else query += `FILTER d.${values.with} == '${values.equal}' `;
       
     if(query !== '')
-      query += 'return d';
+      query += 'RETURN d';
     
     this.props.getCollections(query)
   } 
@@ -49,6 +63,10 @@ class MyForm extends React.Component {
   };
 
   handleCollectionChange(value) {
+    this.setState({
+      currentCollection: value
+    })
+
     this.props.form.resetFields()
     this.props.form.validateFields();
     this.makeQueryAndRun({collection: value, with: null, equal: null})
@@ -74,6 +92,11 @@ class MyForm extends React.Component {
       find_ops.push(<Option key={key} value={value}>{key}</Option>);
     });
     
+    const with_ops = [];
+
+    Object.entries(WITH_OPTIONS[this.state.currentCollection]).forEach(([key, value]) => {
+      with_ops.push(<Option key={key} value={value}>{key}</Option>);
+    });
 
     // Only show error after a field is touched.
     const datasetError = isFieldTouched('collection') && getFieldError('collection');
@@ -97,8 +120,7 @@ class MyForm extends React.Component {
             rules: [{ required: true, message: 'Please select!' }],
           })(
             <Select style={{ width: 120 }}>
-              <Option key="name" value="name">Name</Option>
-              <Option key="key" value="tag">Tag</Option>
+              {with_ops}
             </Select>
           )}
         </Form.Item>
