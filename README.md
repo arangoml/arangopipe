@@ -99,19 +99,26 @@ Arangopipe represents metadata as a graph. The nodes of the graph above are the 
 The data associated with the nodes and edges of the graph are stored as documents. The documents do not have a fixed structure and represent data using key-value pairs. This offers flexibility and permits users to decide the metadata elements that they would like to store. This also permits users to store metadata from any machine learning tech stack in Arangopipe.
 
 ## Installing Arangopipe
+**Arangopipe** is available as a docker image. Docker containers for both _tensorflow_ and _torch_ are available. To run Arangopipe:
 
-This repository contains **Arangopipe** and examples to illustrate how it can be used with machine learning tools like **hyperopt** and **MLFlow**. To install **Arangopipe**, do the following:
+1. Pull the container of your choice from _dockerhub_, for example, _tensorflow_:
 
-1.  Install ArangoDB
+    `docker pull arangopipe/ap_tensor_flow` 
 
-    `docker run -p 8529:8529 -e ARANGO_ROOT_PASSWORD=openSesame arangodb`
+    If you want the _torch  container, use:
+    
+    `docker pull arangopipe/ap_torch` 
 
-2.  Install pre-requisites
+2. Run the container of you pulled. For _tensorflow_:
 
-    `pip install -r requirements.txt`
+    `docker run -it -p 6529:8529 -p 8888:8888 ap_tensor_flow:latest`
 
-4.  Install Arangopipe
+    for _torch_:
+    
+    `docker run -it -p 6529:8529 -p 8888:8888 ap_torch:latest`
 
-    `pip install -i https://test.pypi.org/simple/ arangopipe`
+3. Execute a `docker ps` command to get the ID of the running container. You can then point your browser to `http://localhost:8888`. When prompted for a password, enter `root` . You will then see an examples notebook that explains how the examples are laid out in the directory. The examples illustrate how arangopipe can work with various tools in a machine learning stack. Examples of integration with _hyperopt_, _scikitlearn_, _tensorflow_, _torch_ and _mlflow_ are provided. 
 
-The _tests_ durectory contains examples that illustrate how **Arangopipe** can be used with other machine learning libraries. For example, the _mlflow_ directory provides examples of how **Arangopipe** can be used with [mlflow](https://www.mlflow.org/docs/latest/index.html). To run these examples, you will need to install _mlflow_ first. Similarly, to see how **Arangopipe** can be used to with hyper-parameter optimization experiments, look at the examples in the _hyperopt_ directory. To run these examples, you will need to have [_hyperopt_](https://pypi.org/project/hyperopt/) installed.
+ 
+
+
