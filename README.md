@@ -1,4 +1,4 @@
-## Overview
+# Overview
 The Arangopipe UI is a single page application for its user community. <br>
 The Arangopipe user community consists of the following groups:<br>
 
@@ -19,19 +19,21 @@ Arangopipe Administrators can perform the following actions:<br>
 For the MVP, there is no division of user privileges. <br>
 However, in the future, assigning privileges to users to control the actions is foreseen.
 
-## Application Techs
+### Application Techs
 * React
 * Redux
 * Ant Design
 
-## Backend Dependencies
+### Backend Dependencies
 * ArangoDB
 * ArangoML Pipeline
 * Jupyter Notebook
 
-## Getting Started
 
-### Docker Install
+
+# Getting Started
+
+## Docker Install
 
 ```bash
 apt update
@@ -40,7 +42,7 @@ apt-get install docker.io -y
 apt-get install docker-compose -y
 ```
 
-### Run
+## Run
 
 To start the project, just run:
 
@@ -53,8 +55,11 @@ If you want to start containers in background (as a daemon), add the `-d` flag:
 ```bash
 docker-compose up -d
 ```
+Open http://localhost:3000 to view Application in the browser.
+Open http://localhost:6529 to view ArangoDB UI  in the browser.
+Open http://localhost:8888 to view Jupyter notebook  in the browser.
 
-### Stop
+## Stop
 
 You can stop containers by typing `Cmd + C` on Mac or `Ctrl + C` on Windows/Linux. 
 
@@ -66,7 +71,7 @@ docker-compose stop
 
 ## Available Scripts
 
-In the project directory, you can run:
+In the `app` directory , you can run:
 
 ### `npm start`
 
