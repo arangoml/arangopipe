@@ -169,7 +169,7 @@ class TreeGraphForm extends React.Component {
   }
 
   componentWillMount() {
-    const d_tag = this.props.deploymentTag
+    const d_tag = this.props.deploymentTag.trim()
     const queries = []
 
     queries.push(`FOR exp IN run FILTER exp.deployment_tag == '${d_tag}' 

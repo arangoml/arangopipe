@@ -15,13 +15,13 @@ const { Option } = Select;
 
 class MyForm extends React.Component {
   state = {
-    currentCollection: 'datasets'
+    currentCollection: 'deployment'
   }
 
   componentDidMount() {
     // To disabled submit button at the beginning.
     this.props.form.validateFields();
-    this.makeQueryAndRun({collection: 'datasets', with: null, equal: null})
+    this.makeQueryAndRun({collection: 'deployment', with: null, equal: null})
   }
 
   hasErrors(fieldsError) {
@@ -41,10 +41,10 @@ class MyForm extends React.Component {
         const at = DEPLOY_QUERY[values.collection].at
         // const get = DEPLOY_QUERY[values.collection].get
 
-        query = `FOR exp IN ${where} FILTER exp.${filter} == '${values.equal}' 
+        query = `FOR exp IN ${where} FILTER exp.${filter} == '${values.equal.trim()}' 
                   FOR d IN 1..1 OUTBOUND exp ${at} `
       }
-      else query += `FILTER d.${values.with} == '${values.equal}' `;
+      else query += `FILTER d.${values.with} == '${values.equal.trim()}' `;
       
     if(query !== '')
       query += 'RETURN d';
@@ -111,7 +111,7 @@ class MyForm extends React.Component {
       <Form layout="inline" onSubmit={this.handleSubmit} style={{textAlign:'center'}}>
         <Form.Item label="Find" validateStatus={datasetError ? 'error' : ''} help={datasetError || ''}>
           {getFieldDecorator('collection', {
-            initialValue: 'datasets',
+            initialValue: 'deployment',
           })(
             <Select style={{ width: 200 }} onChange={(value) => {this.handleCollectionChange(value)}}>
               {find_ops}
@@ -146,7 +146,7 @@ class MyForm extends React.Component {
         </Form.Item>
         <Form.Item>
           <Button type="light" htmlType="button" icon="rollback" 
-                disabled={this.hasErrors(getFieldsError())}
+                
                 onClick={(e) => this.resetSearchForm(e)}>
             Reset
           </Button>
