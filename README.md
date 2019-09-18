@@ -30,8 +30,39 @@ However, in the future, assigning privileges to users to control the actions is 
 * Jupyter Notebook
 
 ## Getting Started
-1. `npm install`
-2. `npm start`
+
+### Docker Install
+
+```bash
+apt update
+apt-get install docker -y
+apt-get install docker.io -y
+apt-get install docker-compose -y
+```
+
+### Run
+
+To start the project, just run:
+
+```bash
+docker-compose up
+```
+
+If you want to start containers in background (as a daemon), add the `-d` flag:
+
+```bash
+docker-compose up -d
+```
+
+### Stop
+
+You can stop containers by typing `Cmd + C` on Mac or `Ctrl + C` on Windows/Linux. 
+
+If you started the project in background, then run:
+
+```bash
+docker-compose stop
+```
 
 ## Available Scripts
 
