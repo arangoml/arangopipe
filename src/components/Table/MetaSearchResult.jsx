@@ -1,10 +1,11 @@
 import React from 'react';
-import { Table } from 'antd';
+import { Table, Button } from 'antd';
 
 const capitalizeFLetter = (str) => {
     return str[0].toUpperCase() +  
             str.slice(1); 
   }
+
 
 const MetaSearchTable = (props) => {
   const unallowedColumns = ['_id', '_key', '_rev', 'key']
@@ -36,6 +37,20 @@ const MetaSearchTable = (props) => {
       }
       
     });
+
+    if(props.filter ===  'deployment') {
+      columns.push(
+      {
+        title: 'Graph',
+        key: 'graph',
+        align: 'center',
+        render: (text, record) => (
+          <span>
+            <Button type="primary" shape="circle" icon="line-chart" onClick={props.showGraph}/>
+          </span>
+        ),
+      })
+    }
   }
 
   let data = (props.data || []).map(d => {
@@ -43,11 +58,14 @@ const MetaSearchTable = (props) => {
       return d
     })
 
-  return (<Table columns={columns} 
-           dataSource={data} 
-           onChange={this.handleChange} 
-           bordered={true}
-           scroll={{x:true}}/>)
+  return (<div>
+            <Table columns={columns} 
+             dataSource={data} 
+             onChange={this.handleChange} 
+             bordered={true}
+             scroll={{x:true}}/>
+
+          </div>)
 }
 
 

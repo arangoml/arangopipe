@@ -36,7 +36,7 @@ class MyForm extends React.Component {
       query += `FOR d IN ${values.collection} `;
     if(values.with !== null && values.equal !== null)
       if(values.with === 'deployment'){
-        const where = DEPLOY_QUERY[values.collection].where
+        const where = DEPLOY_QUERY[values.collection || 'datasets'].where
         const filter = DEPLOY_QUERY[values.collection].filter
         const at = DEPLOY_QUERY[values.collection].at
         // const get = DEPLOY_QUERY[values.collection].get
@@ -50,6 +50,7 @@ class MyForm extends React.Component {
       query += 'RETURN d';
     
     this.props.getCollections(query)
+    this.props.setFilter(values.with, values.equal)
   } 
 
   handleSubmit = e => {
@@ -57,7 +58,6 @@ class MyForm extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         this.makeQueryAndRun(values)
-        console.log('Received values of form: ', values);
       }
     });
   };
@@ -70,6 +70,10 @@ class MyForm extends React.Component {
     this.props.form.resetFields()
     this.props.form.validateFields();
     this.makeQueryAndRun({collection: value, with: null, equal: null})
+  }
+
+  handleWithChange(value) {
+    
   }
 
   resetSearchForm(e){
@@ -104,10 +108,10 @@ class MyForm extends React.Component {
     const equalError = isFieldTouched('equal') && getFieldError('equal');
 
     return (
-      <Form layout="inline" onSubmit={this.handleSubmit}>
+      <Form layout="inline" onSubmit={this.handleSubmit} style={{textAlign:'center'}}>
         <Form.Item label="Find" validateStatus={datasetError ? 'error' : ''} help={datasetError || ''}>
           {getFieldDecorator('collection', {
-            initialValue: 'Datasets',
+            initialValue: 'datasets',
           })(
             <Select style={{ width: 200 }} onChange={(value) => {this.handleCollectionChange(value)}}>
               {find_ops}
@@ -119,7 +123,7 @@ class MyForm extends React.Component {
             initialValue: null,
             rules: [{ required: true, message: 'Please select!' }],
           })(
-            <Select style={{ width: 120 }}>
+            <Select style={{ width: 120 }} onChange={(value) => {this.handleWithChange(value)}} >
               {with_ops}
             </Select>
           )}

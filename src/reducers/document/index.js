@@ -1,5 +1,5 @@
 
-import { DOCUMENT } from '../type'
+import { DOCUMENT, GRAPH } from '../type'
 
 
 const initState = {}
@@ -13,6 +13,12 @@ const DocumentReducer = (state = initState, action) => {
       return {
         ...state,
         documents: payload
+      }
+
+    case DOCUMENT.GRAPH:
+      return {
+        ...state,
+        graph: payload
       }
 
     default:

@@ -1,4 +1,4 @@
-import { DOCUMENT } from '../../reducers/type'
+import { DOCUMENT, GRAPH } from '../../reducers/type'
 import AUTHAPI from '../AUTHAPI'
 import moment from 'moment';
 import { message } from 'antd'
@@ -20,6 +20,40 @@ export const getCollections = (query) => {
         throw err
       })
     }
+  }
+}
+
+export const getGraphData = (query) => {
+  return (dispatch) => {
+    let apis = []
+
+    apis = query.map(q => {
+      if(q !== ''){
+        return {
+          method: 'POST',
+          url: '_api/cursor',
+          data: { "query" : q}
+        }
+      }
+    })
+
+
+    Promise.all([apis.map(api => AUTHAPI(api))]).then(async res => {
+        let data = []
+      
+        // res[0].map(d => {
+        for (var index = 0; index < res[0].length; index += 1) {
+          await res[0][index].then(r => {
+            data.push(r.data.result)
+          })
+        }
+        // })
+
+        return dispatch({ type: DOCUMENT.GRAPH, payload: data })
+    })
+    
+
+    
   }
 }
 
