@@ -1,45 +1,34 @@
-This project is a simple boilerplate for React (v16), Redux, Router (v4), and Ant Design (UI components).
+## Overview
+The Arangopipe UI is a single page application for its user community. 
+The Arangopipe user community consists of the following groups:
+1.Arangopipe Administrators
+2.Arangopipe Users
 
-Elements of Boilerplate
-1. Create React App and Ant Design without the need for npm eject
-2. Add Redux for state management (see sample counter: action, reducers, store)
-3. A basic Header, Content, Footer layout from Ant Design
-4. React Router v4 + antd: Add breadcrumbs and connect with React Router v4 
+Arangopipe is a tool for managing metadata for machine learning projects. 
+Projects and project artifacts are tracked in the Arangopipe datastore. 
+Project data needs access control. 
+It is tothis end that we have the above categories of users. 
 
-## Ant Design
+Arangopipe Administrators can perform the following actions:
+1.Adding a project to Arangopipe
+2.Registering a deployment with Arangopipe. After a deploymentis registered, serving performance on the deployment can be logged and tracked.
+3.Adding a user to ArangopipeFor the MVP, there is no division of user privileges. 
 
-The first step (React + Ant Design) is based on the "Advanced Guides" section of the create react app with Ant Design, where we modify config-overrides to install antd on demand.
-[Ant Design: Use with Create React App](https://ant.design/docs/react/use-with-create-react-app)
+However, in the future, assigning privileges to users to control the actions is foreseen.
 
-Instead of importing all styles of of the antd library (`@import '~antd/dist/antd.css';`) (which may cause network performance issues), we can just load the styles of the components used in our project.
+## Application Techs
+* React
+* Redux
+* Ant Design
 
-Ant Design is a an out-of-box UI solution for enterprise applications used by 
-* Ant Financial
-* Alibaba
-* Tencent
-* Baidu
-* Koubei
-* Meituan
-* Didi
-* Eleme
+## Backend Dependencies
+* ArangoDB
+* ArangoML Pipeline
+* Jupyter Notebook
 
-It based on React and is minimalistic and themeable.
-
-For the project to build, **these files must exist with exact filenames**:
-
-* `public/index.html` is the page template;
-* `src/index.js` is the JavaScript entry point.
-
-You can delete or rename the other files.
-
-You may create subdirectories inside `src`. For faster rebuilds, only files inside `src` are processed by Webpack.<br>
-You need to **put any JS and CSS files inside `src`**, otherwise Webpack won’t see them.
-
-Only files inside `public` can be used from `public/index.html`.<br>
-Read instructions below for using assets from JavaScript and HTML.
-
-You can, however, create more top-level directories.<br>
-They will not be included in the production build so you can use them for things like documentation.
+## Getting Started
+1. `npm install`
+2. `npm start`
 
 ## Available Scripts
 
