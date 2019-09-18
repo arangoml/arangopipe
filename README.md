@@ -1,18 +1,18 @@
 ## Overview
-The Arangopipe UI is a single page application for its user community. 
-The Arangopipe user community consists of the following groups:
-1.Arangopipe Administrators
-2.Arangopipe Users
+The Arangopipe UI is a single page application for its user community. <br>
+The Arangopipe user community consists of the following groups:<br>
+1.Arangopipe Administrators<br>
+2.Arangopipe Users<br>
 
 Arangopipe is a tool for managing metadata for machine learning projects. 
 Projects and project artifacts are tracked in the Arangopipe datastore. 
 Project data needs access control. 
 It is tothis end that we have the above categories of users. 
 
-Arangopipe Administrators can perform the following actions:
-1.Adding a project to Arangopipe
-2.Registering a deployment with Arangopipe. After a deploymentis registered, serving performance on the deployment can be logged and tracked.
-3.Adding a user to ArangopipeFor the MVP, there is no division of user privileges. 
+Arangopipe Administrators can perform the following actions:<br>
+1.Adding a project to Arangopipe<br>
+2.Registering a deployment with Arangopipe. After a deploymentis registered, serving performance on the deployment can be logged and tracked.<br>
+3.Adding a user to ArangopipeFor the MVP, there is no division of user privileges. <br>
 
 However, in the future, assigning privileges to users to control the actions is foreseen.
 
