@@ -1,4 +1,13 @@
 FROM arangodb:3.4
+
+FROM node:8.7.0-alpine AS frontend
+RUN mkdir -p /arangopipe_frontend
+WORKDIR /arangopipe_frontend
+COPY arangopipe_frontend/app/package.json /arangopipe_frontend
+COPY arangopipe_frontend/app/package-lock.json /arangopipe_frontend
+RUN npm install
+COPY arangopipe_frontend/app/ /arangopipe_frontend
+
 FROM continuumio/miniconda3 
 MAINTAINER Joerg Schad <info@arangodb.com>
 ENV GIT_PYTHON_REFRESH=quiet
@@ -15,6 +24,7 @@ RUN conda install pytorch cudatoolkit=10.0 -c pytorch
 WORKDIR /
 COPY --from=0 / .
 WORKDIR /workspace/experiments
+COPY --from=frontend /arangopipe_frontend .
 COPY tests/AQL/ examples/AQL/
 COPY tests/covariate_shift/ examples/covariate_shift/
 COPY tests/hyperopt/ examples/hyperopt/
@@ -25,8 +35,10 @@ COPY arangopipe_examples_torch.ipynb .
 ENV PYTHONPATH=`pwd`:$PYTHONPATH
 RUN jupyter notebook --generate-config --allow-root
 RUN echo "c.NotebookApp.password = u'sha1:6a3f528eec40:6e896b6e4828f525a6e20e5411cd1c8075d68619'" >> /root/.jupyter/jupyter_notebook_config.py
-EXPOSE 8888 8529
-COPY startup_commands.sh /workspace/scripts/startup_commands.sh
-RUN ["chmod", "+x", "/workspace/scripts/startup_commands.sh"]
-ENTRYPOINT ["/workspace/scripts/startup_commands.sh"]
+
+EXPOSE 8888 8529 3000
+
+COPY startup_commands.sh /workspace/experiments/startup_commands.sh
+RUN ["chmod", "+x", "/workspace/experiments/startup_commands.sh"]
+ENTRYPOINT ["/workspace/experiments/startup_commands.sh"]
 
