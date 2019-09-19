@@ -1,0 +1,16 @@
+FROM arangodb:3.4
+FROM continuumio/miniconda3
+FROM node:8.7.0-alpine 
+MAINTAINER Joerg Schad <info@arangodb.com>
+ENV GIT_PYTHON_REFRESH=quiet
+WORKDIR /
+COPY arangopipe_frontend/app/package.json arangopipe_frontend/app/package.json
+COPY arangopipe_frontend/app/package-lock.json arangopipe_frontend/app/package-lock.json
+COPY arangopipe_frontend/app/ arangopipe_frontend/app/
+#COPY fe_startupcmd.sh arangopipe_frontend/app/fe_startupcmd.sh
+EXPOSE 3000
+RUN npm install
+#RUN ["chmod", "+x", "arangopipe_frontend/app/fe_startupcmd.sh"]
+#ENTRYPOINT ["arangopipe_frontend/app/fe_startupcmd.sh"]
+#CMD ["npm", "start"]
+
