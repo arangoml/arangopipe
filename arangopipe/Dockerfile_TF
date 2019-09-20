@@ -1,23 +1,26 @@
 FROM arangodb:3.4
 # This image uses two base images arangodb (above) and tensorflow (below)
-FROM tensorflow/tensorflow:latest-py3 
+FROM tensorflow/tensorflow:latest-py3
 MAINTAINER Joerg Schad <info@arangodb.com>
 ENV GIT_PYTHON_REFRESH=quiet
 RUN apt-get update
 RUN apt-get install -y python-pip
-#RUN pip install --upgrade pip
-RUN pip install conda mlflow hyperopt sklearn2 jsonpickle python-arango==4.4.0
+RUN pip install mlflow hyperopt sklearn2 jsonpickle python-arango==4.4.0
 RUN pip install -i https://test.pypi.org/simple/ arangopipe
 RUN mkdir -p /workspace
 RUN pip install jupyter
 RUN pip install matplotlib
 RUN pip install tensorflow-data-validation
-RUN pip install PyYAML==5.1.1 
-#RUN git clone git@github.com:arangoml/arangopipe.git /workspace
+RUN pip install PyYAML==5.1.1
 WORKDIR /
 COPY --from=0 / .
 WORKDIR /workspace/experiments
-COPY tests/ examples/
+COPY tests/AQL/ examples/AQL/
+COPY tests/covariate_shift/ examples/covariate_shift/
+COPY tests/hyperopt/ examples/hyperopt/
+COPY tests/mlflow/ examples/mlflow/
+COPY tests/test_data_generator/ examples/test_data_generator/
+COPY tests/TFX/ examples/TFX/
 COPY arangopipe_examples.ipynb .
 ENV PYTHONPATH=`pwd`:$PYTHONPATH
 RUN jupyter notebook --generate-config --allow-root

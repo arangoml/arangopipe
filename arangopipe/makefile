@@ -1,10 +1,10 @@
 SRC = arangopipe/*.py
 DOCKER_FILE = Dockerfile
-DOCKER_PASSWORD = <the password>
+DOCKER_PASSWORD = <the_password>
 DOCKER_REPO = arangopipe
-DOCKER_SI_FILE = Dockerfile_Single_Image
-DOCKER_SI_IMG_NAME = apsi
-TEST_PYPI_PASSWORD = <the password>
+DOCKER_SI_FILE = Dockerfile_TFFE
+DOCKER_SI_IMG_NAME = ap_tensor_flow
+TEST_PYPI_PASSWORD = <the_password>
 
 python_arangopipe:$(SRC)
 	python3 setup.py sdist bdist_wheel

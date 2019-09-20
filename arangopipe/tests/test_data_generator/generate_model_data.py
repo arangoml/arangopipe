@@ -125,14 +125,19 @@ def generate_runs(clean = False):
         pipeline_tag = "Pipeline_HPE" + aperiod
         feature_pipeline_tag = "Feature Pipeline HPE" + aperiod 
         ds_info["name"] = dataset_tag
+        ds_info["tag"] = dataset_tag
         ds_info["source"] = "Housing Price Operational Data Store"
         featureset["generated_by"] = feature_pipeline_tag
+        featureset["name"] = "log_transformed_house_value"
+        featureset["tag"] = dataset_tag
         
         ds_reg = ap.register_dataset(ds_info)
         fs_reg = ap.register_featureset(featureset, ds_reg["_key"])
-        model_info = {"name": "Housing Regression Model",  "type": "LASSO regression"}
+        model_tag = "model_period:" + aperiod
+        model_info = {"name": "Housing Regression Model",\
+                      "type": "LASSO regression", "tag": model_tag}
         model_reg = ap.register_model(model_info, project = "Home_Value_Assessor") 
-        model_params = { "alpha": alpha_random, "run_id": str(ruuid)}
+        model_params = { "alpha": alpha_random,"run_id": str(ruuid)}
         run_info = {"dataset" : ds_reg["_key"],\
                     "featureset": fs_reg["_key"],\
                     "run_id": str(ruuid),\
