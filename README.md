@@ -62,9 +62,15 @@ To get started with **Arangoipe** using a [Jupyter Notebook](https://jupyter.org
 
     `docker pull arangopipe/ap_torch`   (for _torch_)
 
-3. Start **Arangopipe** together with [Jupyter](https://jupyter.org/) by running
+3. Start **Arangopipe** together with [Jupyter](https://jupyter.org/) by running:
 
-    ` docker run -it -p 6529:8529 -p 8888:8888 apsi`
+    ` docker run -p 6529:8529 -p 8888:8888 -p 3000:3000 -it arangopipe/ap_tensor_flow`  (_tensorflow_)
+    
+    or, for _torch_,
+    
+    ` docker run -p 6529:8529 -p 8888:8888 -p 3000:3000 -it ap_torch:latest`
+
+    
 
 4. Point your browser to:  `http://localhost:8888` to get to a **Jupyter** notebook. The default notebook password is _root_
 
