@@ -68,7 +68,7 @@ To get started with **Arangoipe** using a [Jupyter Notebook](https://jupyter.org
     
     or, for _torch_,
     
-    ` docker run -p 6529:8529 -p 8888:8888 -p 3000:3000 -it ap_torch:latest`
+    ` docker run -p 6529:8529 -p 8888:8888 -p 3000:3000 -it arangopipe/ap_torch`
 
     
 
