@@ -54,9 +54,13 @@ To get started with **Arangoipe** using a [Jupyter Notebook](https://jupyter.org
 
 1. Install [_docker_](https://docs.docker.com/install/)
 
-2. Pull the arangopipe docker image by running:
+2. Docker images for *tensorflow* and *torch* are available in *dockerhub*. Pull the arangopipe docker image of your choice by running:
 
-    `docker pull arangopipe/apsi`
+    `docker pull arangopipe/ap_tensor_flow`  (for _tensorflow_)
+
+    or
+
+    `docker pull arangopipe/ap_torch`   (for _torch_)
 
 3. Start **Arangopipe** together with [Jupyter](https://jupyter.org/) by running
 
@@ -119,10 +123,14 @@ The data associated with the nodes and edges of the graph are stored as document
 
 3. Execute a `docker ps` command to get the ID of the running container. You can then get to a shell in the container using the `docker exec` command. Once you are in the container shell, you can generate test data to try **Arangopipe** using the `test_data_generator` utility provided with **Arangopipe**. The details are shown in the figure below.
 
-<!--- ![Test Data Generation](test_data_generation.png) --->
-<img src="test_data_generation.png" height="400">
+    <!--- ![Test Data Generation](test_data_generation.png) --->
+    <img src="test_data_generation.png" height="400">
 
-You can then point your browser to `http://localhost:8888`. When prompted for a password, enter `root` You will then see an examples notebook that explains how the examples are laid out in the directory. The examples illustrate how arangopipe can work with various tools in a machine learning stack. Examples of integration with _hyperopt_, _scikitlearn_, _tensorflow_, _torch_ and _mlflow_ are provided. 
+    You can then point your browser to `http://localhost:8888`. When prompted for a password, enter     `root` You will then see an examples notebook that explains how the examples are laid out in the directory. The examples illustrate how arangopipe can work with various tools in a machine learning stack. Examples of integration with _hyperopt_, _scikitlearn_, _tensorflow_, _torch_ and _mlflow_ are provided. 
+
+4. To use the **Arangopipe** user interface, point your browser to `http://localhost:3000`. To sign into the user interface, use a username of `root` and `open sesame` as password (note, there is a space between open and sesame). You neeed to complete the steps above to use the user interface. The features of the user interface are provided in the next section.
+
+
 
 ## Arangopipe User Interface Application
 Machine learning pipelines can use the **Arangopipe** API to update the **Arangopipe** database as they progress through their execution. Data scientists and ops personel, can use the **Arangopipe** UI to obtain information about deployed pipelines, trace the lineage of a deployment or track the details of a deployed asset (models, featuresets etc.). The **Arangopipe** UI offers a summary view of assets for each project tracked by **Arangopipe**. The summary view is presented in the left navigation bar of the landing page of the user interface application. This feature is not functional at this time. The search feature, which can be used to track assets and view lineage information, is available at this time. The search feature can be accessed from the right hand pane of the landing page. This is shown below. Functional areas are clearly annotated.
