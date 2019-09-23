@@ -121,11 +121,11 @@ The data associated with the nodes and edges of the graph are stored as document
 
 2. Run the container of you pulled. For _tensorflow_:
 
-    `docker run -it -p 6529:8529 -p 8888:8888 ap_tensor_flow:latest`
+    `docker run -it -p 6529:8529 -p 8888:8888 ap_tensor_flow:0.1`
 
     for _torch_:
     
-    `docker run -it -p 6529:8529 -p 8888:8888 ap_torch:latest`
+    `docker run -it -p 6529:8529 -p 8888:8888 ap_torch:0.1`
 
 3. Execute a `docker ps` command to get the ID of the running container. You can then get to a shell in the container using the `docker exec` command. Once you are in the container shell, you can generate test data to try **Arangopipe** using the `test_data_generator` utility provided with **Arangopipe**. The details are shown in the figure below.
 
@@ -139,10 +139,10 @@ The data associated with the nodes and edges of the graph are stored as document
 
 
 ## Arangopipe User Interface Application
-Machine learning pipelines can use the **Arangopipe** API to update the **Arangopipe** database as they progress through their execution. Data scientists and ops personel, can use the **Arangopipe** UI to obtain information about deployed pipelines, trace the lineage of a deployment or track the details of a deployed asset (models, featuresets etc.). The **Arangopipe** UI offers a summary view of assets for each project tracked by **Arangopipe**. The summary view is presented in the left navigation bar of the landing page of the user interface application. This feature is not functional at this time. The search feature, which can be used to track assets and view lineage information, is available at this time. The search feature can be accessed from the right hand pane of the landing page. This is shown below. Functional areas are clearly annotated.
+Machine learning pipelines can use the **Arangopipe** API to update the **Arangopipe** database as they progress through their execution. Data scientists and ops personel, can use the **Arangopipe** UI to obtain information about deployed pipelines, trace the lineage of a deployment or track the details of a deployed asset (models, featuresets etc.). The **Arangopipe** UI offers a summary view of assets for each project tracked by **Arangopipe**. The summary view (content under "ML Projects Summary") is presented in the left navigation bar of the landing page of the user interface application. This feature is not functional at this time. The administration features (associated with the "User", "Deployment" and "Project" links in the left navigation pane) are not available at this time and will be available shortly. The search feature, which can be used to track assets and view lineage information, is available at this time. The search feature can be accessed from the right hand pane of the landing page. This is shown below.
 
 <!--- ![Search Deployments](search_deployments_ann.png) -->
-<img src="search_deployments_ann.png" height="600">
+<img src="search_deployments.png" height="600">
 <figcaption> Figure 1: Arangopipe User Interface Application</figcaption>
 
 
