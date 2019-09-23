@@ -80,7 +80,7 @@ To get started with **Arangoipe** using a [Jupyter Notebook](https://jupyter.org
 
     Tensorflow:
 
-    
+    [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/arangoml/arangopipe/0.1?filepath=arangopipe%2Farangopipe_examples.ipynb)
 
     Torch:
 
