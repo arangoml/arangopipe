@@ -54,15 +54,8 @@ To get started with **Arangoipe** using a [Jupyter Notebook](https://jupyter.org
 
 1. Install [_docker_](https://docs.docker.com/install/)
 
-2. Docker images for *tensorflow* and *torch* are available in *dockerhub*. Pull the arangopipe docker image of your choice by running:
 
-    `docker pull arangopipe/ap_tensor_flow`  (for _tensorflow_)
-
-    or
-
-    `docker pull arangopipe/ap_torch`   (for _torch_)
-
-3. Start **Arangopipe** together with [Jupyter](https://jupyter.org/) by running:
+2. Start **Arangopipe** together with [Jupyter](https://jupyter.org/) by running:
 
     ` docker run -p 6529:8529 -p 8888:8888 -p 3000:3000 -it arangopipe/ap_tensor_flow`  (_tensorflow_)
     
@@ -72,11 +65,11 @@ To get started with **Arangoipe** using a [Jupyter Notebook](https://jupyter.org
 
     
 
-4. Point your browser to:  `http://localhost:8888` to get to a **Jupyter** notebook. The default notebook password is _root_
+3. Point your browser to:  `http://localhost:8888` to get to a **Jupyter** notebook. The default notebook password is _root_
 
-5. Point your browser to: `http://localhost:6529` to get to the **ArangoDB** web user interface.
+4. Point your browser to: `http://localhost:6529` to get to the **ArangoDB** web user interface.
 
-6. Browse the documentation and examples provided using the file browser available from the **Jupyter** notebook.
+5. Browse the documentation and examples provided using the file browser available from the **Jupyter** notebook.
 
     Tensorflow:
 
@@ -121,15 +114,7 @@ The data associated with the nodes and edges of the graph are stored as document
 ## Installing Arangopipe
 **Arangopipe** is available as a docker image. Docker containers for both _tensorflow_ and _torch_ are available. To run Arangopipe:
 
-1. Pull the container of your choice from _dockerhub_, for example, _tensorflow_:
-
-    `docker pull arangopipe/ap_tensor_flow` 
-
-    If you want the _torch  container, use:
-    
-    `docker pull arangopipe/ap_torch` 
-
-2. Run the container of you pulled. For _tensorflow_:
+1.  Start the ArangoML container. For _tensorflow_:
 
     `docker run -it -p 6529:8529 -p 8888:8888 ap_tensor_flow:0.1`
 
@@ -137,14 +122,14 @@ The data associated with the nodes and edges of the graph are stored as document
     
     `docker run -it -p 6529:8529 -p 8888:8888 ap_torch:0.1`
 
-3. Execute a `docker ps` command to get the ID of the running container. You can then get to a shell in the container using the `docker exec` command. Once you are in the container shell, you can generate test data to try **Arangopipe** using the `test_data_generator` utility provided with **Arangopipe**. The details are shown in the figure below.
+2. Execute a `docker ps` command to get the ID of the running container. You can then get to a shell in the container using the `docker exec` command. Once you are in the container shell, you can generate test data to try **Arangopipe** using the `test_data_generator` utility provided with **Arangopipe**. The details are shown in the figure below.
 
     <!--- ![Test Data Generation](test_data_generation.png) --->
     <img src="test_data_generation.png" height="400">
 
     You can then point your browser to `http://localhost:8888`. When prompted for a password, enter     `root` You will then see an examples notebook that explains how the examples are laid out in the directory. The examples illustrate how arangopipe can work with various tools in a machine learning stack. Examples of integration with _hyperopt_, _scikitlearn_, _tensorflow_, _torch_ and _mlflow_ are provided. 
 
-4. To use the **Arangopipe** user interface, point your browser to `http://localhost:3000`. To sign into the user interface, use a username of `root` and `open sesame` as password (note, there is a space between open and sesame). You neeed to complete the steps above to use the user interface. The features of the user interface are provided in the next section.
+3. To use the **Arangopipe** user interface, point your browser to `http://localhost:3000`. To sign into the user interface, use a username of `root` and `open sesame` as password (note, there is a space between open and sesame). You neeed to complete the steps above to use the user interface. The features of the user interface are provided in the next section.
 
 
 
