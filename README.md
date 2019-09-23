@@ -78,6 +78,16 @@ To get started with **Arangoipe** using a [Jupyter Notebook](https://jupyter.org
 
 6. Browse the documentation and examples provided using the file browser available from the **Jupyter** notebook.
 
+    Tensorflow:
+
+    
+
+    Torch:
+
+    [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/arangoml/arangopipe/0.1?filepath=arangopipe%2Farangopipe_examples_torch.ipynb)
+
+
+
 ## Arangopipe Graph Model
 ![Graph representation of Arangopipe entities](arangopipe_schema.png)
 
