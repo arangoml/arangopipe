@@ -50,12 +50,12 @@ When data scientists have refined their models to a point where they are ready t
 
 ## Getting Started
 
-To get started with **Arangoipe** using a [Jupyter Notebook](https://jupyter.org/), do the following:
+To facilitate an easy start, docker containers for *torch* and *tensorflow* are provided. These containers have all components of the **ArangoML Pipeline** (Arangopipe, ArangoDB and the Arangopipe user interface). To get started:
 
 1. Install [_docker_](https://docs.docker.com/install/)
 
 
-2. Start **Arangopipe** together with [Jupyter](https://jupyter.org/) by running:
+2. Start the container of your choice (*tensorflow* or *torch*):
 
     ` docker run -p 6529:8529 -p 8888:8888 -p 3000:3000 -it arangopipe/ap_tensor_flow`  (_tensorflow_)
     
@@ -70,9 +70,15 @@ To get started with **Arangoipe** using a [Jupyter Notebook](https://jupyter.org
  
     <img src="run_torch_driver.png" height="400">
 
-4. Execute this step after the model development step above has completed. Point your browser `http:localhost:3000'. Login into the **Arangopipe** user interface with username `root` and password `open sesame`. Select `Models` in the `Search Metadata` content pane. You should see the model you developed in the previous step. The details are shown in the figure below.
+4. Execute this step after the model development step above has completed. Point your browser http:localhost:3000. Login to the Arangopipe user interface with username  root and password  `open sesame`. Select `Models` in the `Search Metadata` content pane. You should see the model you developed in the previous step. The details are shown in the figure below.
 
     <img src="pytorch_model_FE.png" height="400">
+    
+5. Running an example in the *tensorflow* container: Run the tensorflow container. Point your browser to http://localhost:8888. You will be prompted for a password. Use `root` for the password. In the file browser that is presented in the Jupyter notebook, open the `examples` directory and then open the  `TFX` directory. Open the notebook `tfx_metadata_integration.ipynb`. Read the description of the notebook. This notebook provides an example of how **Arangopipe** can be used with *tensorflow*. The utility of the multi-model feature of **ArangoDB** is leveraged in this example. [Tensorflow Data Validation](https://www.tensorflow.org/tfx/data_validation/get_started) is used to generate the summary statistics for a dataset. This *tensorflow* artifact can be stored in **Arangopipe** and reused as needed. This capability is illustrated in this notebook.
+
+6.  Execute this step after you have executed all the cells in the notebook discussed in the previous step. Point your browser to http:localhost:3000. Login to the Arangopipe user interface with username  root and password  `open sesame`. Select `Featursets` in the `Search Metadata` content pane. You should see the featureset logged with **Arangopipe** resulting from executing the notebook discussed in the previous step.
+
+    <img src="tensorflow_example.png" height="400">
     
 5. You can generate test data to explore the **Arangopipe** user interface. Execute a `docker ps` command to get the ID of the running container. You can then get to a shell in the container using the `docker exec` command. Once you are in the container shell, you can generate test data to try **Arangopipe** using the `test_data_generator` utility provided with **Arangopipe**. The details are shown in the figure below.
 
