@@ -143,7 +143,7 @@ If you would like to use **Arangopipe** with your pipelines, you would need to d
 
 1. `pip install sklearn`
 
-2. `pip install python-arango == 4.4.0`
+2. `pip install python-arango==4.4.0`
 
 3. `pip install arangopipe`
 
