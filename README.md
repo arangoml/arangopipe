@@ -134,7 +134,7 @@ Arangopipe represents metadata as a graph. The nodes of the graph above are the 
 
 The data associated with the nodes and edges of the graph are stored as documents. The documents do not have a fixed structure and represent data using key-value pairs. This offers flexibility and permits users to decide the metadata elements that they would like to store. This also permits users to store metadata from any machine learning tech stack in Arangopipe.
 
-## Installing Arangopipe
+## Installing Arangopipe API
 To install the **Arangopipe** API, you would need to do the following:
 
 1. `pip install python-arango == 4.4.0`
