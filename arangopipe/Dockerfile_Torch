@@ -4,7 +4,6 @@ FROM node:8.7.0-alpine AS frontend
 RUN mkdir -p /arangopipe_frontend
 WORKDIR /arangopipe_frontend
 COPY arangopipe_frontend/app/package.json /arangopipe_frontend
-COPY arangopipe_frontend/app/package-lock.json /arangopipe_frontend
 RUN npm install
 COPY arangopipe_frontend/app/ /arangopipe_frontend
 

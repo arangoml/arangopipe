@@ -13,6 +13,7 @@ import BreadcrumbHeader from "../../components/BreadcrumbHeader";
 import Sidebar from "../../components/Sidebar";
 import User from '../User/User';
 import Project from '../Project/Project';
+import Query from '../Query/Query';
 
 import './App.css'
 import config from '../../utils/config'
@@ -55,6 +56,7 @@ class App extends React.Component{
      } else {
        this.getCurrentUser()
      }
+     console.log(this.props)
   }
 
   render() {
@@ -115,6 +117,7 @@ class App extends React.Component{
                   <Route path="/deployment" component={Deployment} />
                   <Route path="/user" component={User} />
                   <Route path="/project" component={Project} />
+                  <Route path="/query" component={Query} />
               </main>
             </Content>
             <Footer style={{ textAlign: 'center' }}>ArangoML Pipeline ©2019 in Germany</Footer>

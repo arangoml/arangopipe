@@ -24,29 +24,35 @@ class Sidebar extends React.Component{
               </Link>
             </div>
             <hr/>
-            <Menu theme="dark" defaultSelectedKeys={['0']} mode="inline">
-              <Menu.Item key="0">
+            <Menu theme="dark" defaultSelectedKeys={[this.props.initItem || 'home']} mode="inline">
+              <Menu.Item key="home">
                 <Link to="/">
                   <Icon type="home" />
                   <span>Home</span>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="1">
+              <Menu.Item key="user">
                 <Link to="/user">
                   <Icon type="user" />
                   <span>User</span>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="2">
+              <Menu.Item key="deployment">
                 <Link to="/deployment">
                   <Icon type="desktop" />
                   <span>Deployment</span>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="3">
+              <Menu.Item key="project">
                 <Link to="/project">
                   <Icon type="pie-chart" />
                   <span>Project</span>
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="query">
+                <Link to="/query">
+                  <Icon type="fire" />
+                  <span>Query</span>
                 </Link>
               </Menu.Item>
             </Menu>

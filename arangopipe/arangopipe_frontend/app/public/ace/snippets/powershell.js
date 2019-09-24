@@ -1,9 +1,7 @@
-define("ace/snippets/powershell",["require","exports","module"],function(e,t,n){"use strict";t.snippetText="",t.scope="powershell"});
-                (function() {
-                    window.require(["ace/snippets/powershell"], function(m) {
-                        if (typeof module == "object" && typeof exports == "object" && module) {
-                            module.exports = m;
-                        }
-                    });
-                })();
-            
+define(function(require, exports, module) {
+"use strict";
+
+exports.snippetText = require("../requirejs/text!./powershell.snippets");
+exports.scope = "powershell";
+
+});
