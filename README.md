@@ -65,7 +65,11 @@ To facilitate an easy start, docker containers for *torch* and *tensorflow* are 
 
 
 
-3. Running an example in the *torch* container: Run the *torch* docker container. You will have to use the `docker ps` command and get to the shell in the container using the `docker exec` command. Change directory to the `examples/pytorch` directory. The *torch* container provides an example of a linear regression model that uses **Arangopipe** to log experiment metadata. The experiment meta data includes information about the dataset, featureset and optimization settings used to run the *pytorch* model. Once you are in the shell of the *torch* container, run the driver program that develops the torch model and logs the experiment meta-data to *arangopipe*. The details are shown in the figure below.
+3. Running an example in the *torch* container: Run the *torch* docker container. You will have to use the `docker ps` command and get to the shell in the container using the `docker exec` command. Change directory to the `examples/pytorch` directory. The *torch* container provides an example of a linear regression model that uses **Arangopipe** to log experiment metadata. The experiment meta data includes information about the dataset, featureset and optimization settings used to run the *pytorch* model. Once you are in the shell of the *torch* container, run the driver program that develops the torch model and logs the experiment meta-data to *arangopipe*. To run the driver program, launch an `ipython` shell. In the shell, execute the following:
+    1. `from ch_torch_linear_regression_driver import run_driver`
+    2. run_driver()
+
+    The details are shown in the figure below.
 
  
     <img src="run_torch_driver.png" height="400">
@@ -76,7 +80,7 @@ To facilitate an easy start, docker containers for *torch* and *tensorflow* are 
     
 5. Running an example in the *tensorflow* container: Run the tensorflow container. Point your browser to http://localhost:8888. You will be prompted for a password. Use `root` for the password. In the file browser that is presented in the Jupyter notebook, open the `examples` directory and then open the  `TFX` directory. Open the notebook `tfx_metadata_integration.ipynb`. Read the description of the notebook. This notebook provides an example of how **Arangopipe** can be used with *tensorflow*. The utility of the multi-model feature of **ArangoDB** is leveraged in this example. [Tensorflow Data Validation](https://www.tensorflow.org/tfx/data_validation/get_started) is used to generate the summary statistics for a dataset. This *tensorflow* artifact can be stored in **Arangopipe** and reused as needed. This capability is illustrated in this notebook.
 
-6.  Execute this step after you have executed all the cells in the notebook discussed in the previous step. Point your browser to http:localhost:3000. Login to the Arangopipe user interface with username  root and password  `open sesame`. Select `Featursets` in the `Search Metadata` content pane. You should see the featureset logged with **Arangopipe** resulting from executing the notebook discussed in the previous step.
+6.  Execute this step after you have executed all the cells in the notebook discussed in the previous step. Point your browser to http://localhost:3000. Login to the Arangopipe user interface with username  root and password  `open sesame`. Select `Featursets` in the `Search Metadata` content pane. You should see the featureset logged with **Arangopipe** resulting from executing the notebook discussed in the previous step.
 
     <img src="tensorflow_example.png" height="400">
     
@@ -135,11 +139,13 @@ Arangopipe represents metadata as a graph. The nodes of the graph above are the 
 The data associated with the nodes and edges of the graph are stored as documents. The documents do not have a fixed structure and represent data using key-value pairs. This offers flexibility and permits users to decide the metadata elements that they would like to store. This also permits users to store metadata from any machine learning tech stack in Arangopipe.
 
 ## Installing Arangopipe API
-To install the **Arangopipe** API, you would need to do the following:
+If you would like to use **Arangopipe** with your pipelines, you would need to do the following:
 
-1. `pip install python-arango == 4.4.0`
+1. `pip install sklearn`
 
-2. `pip install arangopipe`
+2. `pip install python-arango == 4.4.0`
+
+3. `pip install arangopipe`
 
 
 ## Arangopipe User Interface Application
