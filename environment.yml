@@ -1,0 +1,15 @@
+name: arangoml_demo
+channels:
+  - conda-forge
+dependencies:
+  - python=3.7
+  - numpy
+  - toolz
+  - matplotlib
+  - hyperopt
+  - pandas
+  - sklearn
+  - pip
+  - pip:
+    - python-arango
+    - arangopipe

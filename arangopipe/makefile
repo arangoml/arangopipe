@@ -4,7 +4,7 @@ DOCKER_PASSWORD = <the_password>
 DOCKER_REPO = arangopipe
 DOCKER_SI_FILE = Dockerfile_TFFE
 DOCKER_SI_IMG_NAME = ap_tensor_flow
-TEST_PYPI_PASSWORD = <the_password>
+TEST_PYPI_PASSWORD = arangopipe
 
 python_arangopipe:$(SRC)
 	python3 setup.py sdist bdist_wheel

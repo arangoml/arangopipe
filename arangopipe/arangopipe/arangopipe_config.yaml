@@ -2,9 +2,9 @@ arangodb:
   arangopipe_admin_password: arangopipe
   arangopipe_admin_username: arangopipe
   arangopipe_dbname: arangopipe
-  host: localhost
+  host: https://08cfad4c5915.arangodb.cloud:8529
   port: 8529
   root_user: root
-  root_user_password: open sesame
+  root_user_password: HHPDXVLHnCmFCAlKZktu
 mlgraph:
   graphname: enterprise_ml_graph
