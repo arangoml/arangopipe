@@ -11,5 +11,7 @@ dependencies:
   - scikit-learn
   - pip
   - pip:
+    - PyYAML==5.1.1
     - python-arango
     - arangopipe
+    
