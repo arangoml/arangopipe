@@ -8,7 +8,7 @@ dependencies:
   - matplotlib
   - hyperopt
   - pandas
-  - sklearn
+  - scikit-learn
   - pip
   - pip:
     - python-arango
