@@ -63,13 +63,24 @@ To get started with **Arangoipe** using a [Jupyter Notebook](https://jupyter.org
     
     ` docker run -p 6529:8529 -p 8888:8888 -p 3000:3000 -it arangopipe/ap_torch`
 
+
+
+3. Running an example in the *torch* container: Run the *torch* docker container. You will have to use the `docker ps` command and get to the shell in the container using the `docker exec` command similar to the step above. Change directory to the `examples/pytorch` directory. The *torch* container provides an example of a linear regression model that uses **Arangopipe** to log experiment metadata. The experiment meta data includes information about the dataset, featureset and optimization settings used to run the *pytorch* model. Once you are in the shell of the *torch* container, you run the driver program that runs the torch model and logs the experiment meta-data to *arangopipe*. The details are shown in the figure below.
+
+ 
+    <img src="run_torch_driver.png" height="400">
+
+4. Execute this step after the model development step above has completed. Point your browser `http:localhost:3000'. Login into the **Arangopipe** user interface with username `root` and password `open sesame`. Select `Models` in the `Search Metadata` content pane. You should see the model you developed in the previous step. The details are shown in the figure below.
+
+    <img src="pytorch_model_FE.png" height="400">
     
+5. You can generate test data to explore the **Arangopipe** user interface. Execute a `docker ps` command to get the ID of the running container. You can then get to a shell in the container using the `docker exec` command. Once you are in the container shell, you can generate test data to try **Arangopipe** using the `test_data_generator` utility provided with **Arangopipe**. The details are shown in the figure below.
 
-3. Point your browser to:  `http://localhost:8888` to get to a **Jupyter** notebook. The default notebook password is _root_
+    <!--- ![Test Data Generation](test_data_generation.png) --->
+    <img src="test_data_generation.png" height="400">
+Read the section, "Arangopipe User Interface Application", for details about the features of the **Arangopipe** user interface.
 
-4. Point your browser to: `http://localhost:6529` to get to the **ArangoDB** web user interface.
-
-5. Browse the documentation and examples provided using the file browser available from the **Jupyter** notebook.
+6. The *tensorflow* and *torch* containers contain examples of using **Arangopipe** with common tools in a machine learning stack. To get the details of where these examples are located in the container, use the links below. These links provide a brief description of each example.
 
     Tensorflow:
 
@@ -78,6 +89,11 @@ To get started with **Arangoipe** using a [Jupyter Notebook](https://jupyter.org
     Torch:
 
     [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/arangoml/arangopipe/0.1?filepath=arangopipe%2Farangopipe_examples_torch.ipynb)
+ 
+
+7. To access the notebook examples provided with the docker container, point your browser to:  `http://localhost:8888` to get to a **Jupyter** notebook. The default notebook password is _root_
+
+8. Point your browser to: `http://localhost:6529` to get to the **ArangoDB** web user interface. The `root` password is `open sesame`.
 
 
 
@@ -112,25 +128,11 @@ Arangopipe represents metadata as a graph. The nodes of the graph above are the 
 The data associated with the nodes and edges of the graph are stored as documents. The documents do not have a fixed structure and represent data using key-value pairs. This offers flexibility and permits users to decide the metadata elements that they would like to store. This also permits users to store metadata from any machine learning tech stack in Arangopipe.
 
 ## Installing Arangopipe
-**Arangopipe** is available as a docker image. Docker containers for both _tensorflow_ and _torch_ are available. To run Arangopipe:
+To install the **Arangopipe** API, you would need to do the following:
 
-1.  Start the ArangoML container. For _tensorflow_:
+1. `pip install python-arango == 4.4.0`
 
-    `docker run -it -p 6529:8529 -p 8888:8888 ap_tensor_flow:0.1`
-
-    for _torch_:
-    
-    `docker run -it -p 6529:8529 -p 8888:8888 ap_torch:0.1`
-
-2. Execute a `docker ps` command to get the ID of the running container. You can then get to a shell in the container using the `docker exec` command. Once you are in the container shell, you can generate test data to try **Arangopipe** using the `test_data_generator` utility provided with **Arangopipe**. The details are shown in the figure below.
-
-    <!--- ![Test Data Generation](test_data_generation.png) --->
-    <img src="test_data_generation.png" height="400">
-
-    You can then point your browser to `http://localhost:8888`. When prompted for a password, enter     `root` You will then see an examples notebook that explains how the examples are laid out in the directory. The examples illustrate how arangopipe can work with various tools in a machine learning stack. Examples of integration with _hyperopt_, _scikitlearn_, _tensorflow_, _torch_ and _mlflow_ are provided. 
-
-3. To use the **Arangopipe** user interface, point your browser to `http://localhost:3000`. To sign into the user interface, use a username of `root` and `open sesame` as password (note, there is a space between open and sesame). You neeed to complete the steps above to use the user interface. The features of the user interface are provided in the next section.
-
+2. `pip install arangopipe`
 
 
 ## Arangopipe User Interface Application
