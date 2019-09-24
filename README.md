@@ -65,7 +65,7 @@ To facilitate an easy start, docker containers for *torch* and *tensorflow* are 
 
 
 
-3. Running an example in the *torch* container: Run the *torch* docker container. You will have to use the `docker ps` command and get to the shell in the container using the `docker exec` command similar to the step above. Change directory to the `examples/pytorch` directory. The *torch* container provides an example of a linear regression model that uses **Arangopipe** to log experiment metadata. The experiment meta data includes information about the dataset, featureset and optimization settings used to run the *pytorch* model. Once you are in the shell of the *torch* container, you run the driver program that runs the torch model and logs the experiment meta-data to *arangopipe*. The details are shown in the figure below.
+3. Running an example in the *torch* container: Run the *torch* docker container. You will have to use the `docker ps` command and get to the shell in the container using the `docker exec` command. Change directory to the `examples/pytorch` directory. The *torch* container provides an example of a linear regression model that uses **Arangopipe** to log experiment metadata. The experiment meta data includes information about the dataset, featureset and optimization settings used to run the *pytorch* model. Once you are in the shell of the *torch* container, run the driver program that develops the torch model and logs the experiment meta-data to *arangopipe*. The details are shown in the figure below.
 
  
     <img src="run_torch_driver.png" height="400">
@@ -84,9 +84,9 @@ To facilitate an easy start, docker containers for *torch* and *tensorflow* are 
 
     <!--- ![Test Data Generation](test_data_generation.png) --->
     <img src="test_data_generation.png" height="400">
-Read the section, "Arangopipe User Interface Application", for details about the features of the **Arangopipe** user interface.
+  Read the section, "Arangopipe User Interface Application", for details about the features of the **Arangopipe** user interface.
 
-6. The *tensorflow* and *torch* containers contain examples of using **Arangopipe** with common tools in a machine learning stack. To get the details of where these examples are located in the container, use the links below. These links provide a brief description of each example.
+6. The *tensorflow* and *torch* containers contain examples of using **Arangopipe** with common tools in a machine learning stack. Examples that show **Arangopipe** can be used with *hyperopt*, *sklearn* and *mlfow* are provided. To get the details of where these examples are located in the container, use the links below. These links provide a brief description of each example.
 
     Tensorflow:
 
