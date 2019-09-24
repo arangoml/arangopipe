@@ -84,7 +84,8 @@ To facilitate an easy start, docker containers for *torch* and *tensorflow* are 
 
     <!--- ![Test Data Generation](test_data_generation.png) --->
     <img src="test_data_generation.png" height="400">
-  Read the section, "Arangopipe User Interface Application", for details about the features of the **Arangopipe** user interface.
+
+    Read the section, "Arangopipe User Interface Application", for details about the features of the **Arangopipe** user interface.
 
 6. The *tensorflow* and *torch* containers contain examples of using **Arangopipe** with common tools in a machine learning stack. Examples that show **Arangopipe** can be used with *hyperopt*, *sklearn* and *mlfow* are provided. To get the details of where these examples are located in the container, use the links below. These links provide a brief description of each example.
 
