@@ -21,7 +21,7 @@ import Highlighter from 'react-highlight-words';
 
 class Query extends React.Component {
   state = {
-    
+    currentQuery: ''
   };
 
   componentDidMount() {
@@ -29,6 +29,21 @@ class Query extends React.Component {
     this.refs.aceEditor.editor.getSession().setMode(aqlMode);
     this.refs.aceEditor.editor.getSession().setUseWrapMode(true);
     this.refs.aceEditor.editor.resize();
+
+    console.log(this.refs.aceEditor.editor)
+  }
+
+  newQuery = e => {
+    e.preventDefault();
+    this.setState({
+      currentQuery: ''
+    })
+  }
+
+  onChange(newQuery){
+    this.setState({
+      currentQuery: newQuery
+    })
   }
 
   render() {
@@ -38,7 +53,7 @@ class Query extends React.Component {
         <Card title="Query Management" bordered={false}>
           <div>
             <Button icon="star" type="primary">Queries</Button> &nbsp;
-            <Button type="dashed">New</Button> &nbsp;
+            <Button type="dashed" onClick={this.newQuery}>New</Button> &nbsp;
             <Button icon="save" type="light">Save as</Button> 
           </div>
           <Divider style={{margin: '15px 0'}}/>
@@ -52,6 +67,7 @@ class Query extends React.Component {
                 onChange={this.onChange}
                 fontSize = {20}
                 name="AQL_EDITOR"
+                value={this.state.currentQuery}
                 editorProps={{
                     $blockScrolling: true
                 }}

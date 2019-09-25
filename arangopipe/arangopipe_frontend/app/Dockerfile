@@ -4,6 +4,7 @@ RUN mkdir -p /srv/app/arangoml-ui
 WORKDIR /srv/app/arangoml-ui
 
 COPY package.json /srv/app/arangoml-ui
+COPY package-lock.json /srv/app/arangoml-ui
 
 RUN npm install
 
