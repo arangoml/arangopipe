@@ -57,11 +57,11 @@ To facilitate an easy start, docker containers for *torch* and *tensorflow* are 
 
 2. Start the container of your choice (*tensorflow* or *torch*):
 
-    ` docker run -p 6529:8529 -p 8888:8888 -p 3000:3000 -it arangopipe/ap_tensor_flow`  (_tensorflow_)
+    ` docker run -p 6529:8529 -p 8888:8888 -p 3000:3000 -it arangopipe/ap_tensor_flow:0.1`  (_tensorflow_)
     
     or, for _torch_,
     
-    ` docker run -p 6529:8529 -p 8888:8888 -p 3000:3000 -it arangopipe/ap_torch`
+    ` docker run -p 6529:8529 -p 8888:8888 -p 3000:3000 -it arangopipe/ap_torch:0.1`
 
 
 
