@@ -8,6 +8,7 @@
     "jquery": "^3.4.1",
     "node-sass": "^4.12.0",
     "react": "^16.2.0",
+    "react-ace": "^7.0.4",
     "react-app-rewired": "^1.5.0",
     "react-dom": "^16.2.0",
     "react-highlight-words": "^0.16.0",
