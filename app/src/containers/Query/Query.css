@@ -20,3 +20,11 @@
   color: #8c5454;
   font-size: 14px;
 }
+
+.scroll {
+	height: 300px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	padding-right: 2px;
+	border: 1px solid #c6c6c6;
+}
