@@ -18,3 +18,8 @@ export const DOCUMENT = {
   GRAPH: 'GRAPH'
 }
 
+export const QUERY = {
+  QUERY_ALL: 'QUERY_ALL',
+  SAVED_QUERY: 'SAVED_QUERY'
+}
+

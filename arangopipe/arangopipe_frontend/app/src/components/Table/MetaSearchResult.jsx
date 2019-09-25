@@ -61,7 +61,6 @@ const MetaSearchTable = (props) => {
   return (<div>
             <Table columns={columns} 
              dataSource={data} 
-             onChange={this.handleChange} 
              bordered={true}
              scroll={{x:true}}/>
 

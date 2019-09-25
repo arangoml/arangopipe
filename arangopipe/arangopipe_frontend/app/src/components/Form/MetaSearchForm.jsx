@@ -108,7 +108,7 @@ class MyForm extends React.Component {
     const equalError = isFieldTouched('equal') && getFieldError('equal');
 
     return (
-      <Form layout="inline" onSubmit={this.handleSubmit} style={{textAlign:'center'}}>
+      <Form layout="inline" onSubmit={this.handleSubmit} style={{textAlign:'right'}}>
         <Form.Item label="Find" validateStatus={datasetError ? 'error' : ''} help={datasetError || ''}>
           {getFieldDecorator('collection', {
             initialValue: 'deployment',
