@@ -51,21 +51,22 @@ class App extends React.Component{
   }
 
   componentWillMount(){
-     // if(!this.props.auth.is_authed){
-     //   window.location = '/login'
-     // } else {
-     //   this.getCurrentUser()
-     // }
-     console.log(this.props)
+     if(!this.props.auth.is_authed){
+       window.location = '/login'
+     } else {
+       this.getCurrentUser()
+     }
   }
 
   render() {
     const username = this.props.auth.user || '';
     const avatarPath = require('../../assets/avatar.jpeg')
 
+    const currentPage = this.props.location.pathname.split('/')[1]
+
     return (
         <Layout style={{ minHeight: '100vh' }}>
-          <Sidebar collapsed={this.state.collapsed}/>
+          <Sidebar collapsed={this.state.collapsed} currentPage={currentPage}/>
           <Layout>
 
             <Header className="header">

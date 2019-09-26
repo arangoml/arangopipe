@@ -28,3 +28,7 @@
 	padding-right: 2px;
 	border: 1px solid #c6c6c6;
 }
+
+.ant-switch {
+	background-color: #1890ffeb !important; 
+}

@@ -10,15 +10,18 @@ import './Query.css'
 import 'brace/theme/xcode';
 
 import AqlMode from './AqlMode'
-import MetaSearchResult from "../../components/Table/MetaSearchResult"
+import QueryResultTable from "../../components/Table/QueryResult"
+import { QUERY } from '../../reducers/type'
 
 import {
   getDefaultQuery,
-  reSaveQuery
+  reSaveQuery,
+  executeQuery,
+  explainQuery
 } from '../../actions/query'
 
-import { Table, Input, Button, Icon, Row, Col, Popconfirm, 
-          Tag, Divider, Card, Menu, Tooltip, notification } from 'antd';
+import { Table, Input, Button, Icon, Row, Col, Popconfirm, Alert,
+          Tag, Divider, Card, Menu, Tooltip, notification, Switch } from 'antd';
 import Highlighter from 'react-highlight-words';
 
 
@@ -27,7 +30,8 @@ class Query extends React.Component {
     currentQuery: '',
     openSavedQuery: false,
     saveEnabel: false,
-    queryNo: null
+    queryNo: null,
+    changeView: false
   };
 
   componentWillMount() {
@@ -77,7 +81,6 @@ class Query extends React.Component {
   //-------------------------------------
 
   showQuery = (value, no, enable) => {
-
     this.setState({
       saveEnabel: enable,
       currentQuery: value,
@@ -155,8 +158,46 @@ class Query extends React.Component {
     });
   }
 
-  render() {
 
+  //-------------------
+  // Execute Query
+  //-------------------
+
+  executeQuery = () => {
+    const query = this.refs.aceEditor.editor.getSession().getValue()
+    this.setState({
+      currentQuery: query
+    })
+    this.props.executeQuery(query)
+  }
+
+  
+
+
+  //-------------------
+  // Explain Query
+  //-------------------
+
+  explainQuery = () => {
+    const query = this.refs.aceEditor.editor.getSession().getValue()
+    this.setState({
+      currentQuery: query
+    })
+    this.props.explainQuery(query)
+  }
+
+
+  //----------------------------------
+  // Change View to Table or JSON
+  //----------------------------------
+
+  changeView = (checked) => {
+    this.setState({
+      changeView: checked
+    })
+  }
+
+  render() {
     // Get Saved Query Item List
     const SavedQueryList = this.props.saved_query.map((item, index) => 
         <Menu.Item key={index} onClick={() => this.showQuery(item.value, index, true)}>
@@ -164,10 +205,10 @@ class Query extends React.Component {
             <span className='query-title'>{item.name}</span>
             <span className='query-buttons'>
               <Tooltip placement="bottom" title='Explain Query'>
-                <Button shape='circle' icon='message'/>
+                <Button shape='circle' icon='message' onClick={this.explainQuery}/>
               </Tooltip>
               <Tooltip placement="bottom" title='Execute Query'>
-                <Button shape='circle' icon='play-circle'/>
+                <Button shape='circle' icon='play-circle' onClick={this.executeQuery}/>
               </Tooltip>
 
               <Tooltip placement="bottom" title='Delete Query'>
@@ -192,7 +233,6 @@ class Query extends React.Component {
             <span className='query-title'>{item.name}</span>
           </div>
         </Menu.Item>)
-
 
     return(
       <div>
@@ -249,28 +289,87 @@ class Query extends React.Component {
             </Row>
 
             <div style={{textAlign: 'right', marginTop: 10}}>
-                <Button icon="message" type="default" >Explain</Button> &nbsp;
-                <Button icon="play-circle" type="primary" >Execute</Button> 
+              {(this.props.result || this.props.explain) && 
+                <Button icon="delete" type="dashed" onClick={this.props.clearResult}>Clear Results</Button>} &nbsp;
+              <Button icon="message" type="default" onClick={this.explainQuery}>Explain</Button> &nbsp;
+              <Button icon="play-circle" type="primary" onClick={this.executeQuery}>Execute</Button> 
             </div>   
           </Card>
-
-        <div style={{marginTop: 20}}>
-          <Card title="Query Result" bordered={true}>
-            <MetaSearchResult />
+        {this.props.error && <Alert
+          description={this.props.error}
+          type="error"
+          showIcon
+          closable
+          style={{marginTop: 20}}
+        />}
+        {this.props.explain && <Card title={
+            <div>
+              <Tag color='geekblue'>Query Explain</Tag>
+            </div>} 
+            bordered={true}
+            style={{marginTop: 20}}>
+            <AceEditor
+              ref="aceEditor1"
+              style={{border: '1px solid #b3b3b5'}}
+              mode= 'text'
+              width = '100%'
+              height = '300px'
+              theme="xcode"
+              fontSize = {16}
+              name="AQL_EDITOR"
+              wrapEnabled = {true}
+              readOnly={true}
+              value={this.props.explain}
+              editorProps={{
+                  $blockScrolling: true
+              }}
+            /></Card>}
+        {!this.props.error && this.props.result && <div style={{marginTop: 20}}>
+          <Card title={
+            <div>
+              <Tag color='geekblue'>Query Result</Tag> &nbsp;&nbsp;&nbsp;&nbsp;
+              <Icon type="calculator" /><span> {this.props.result.length} elements</span>
+              &nbsp;&nbsp;&nbsp;
+              <Icon type="clock-circle" /> <span> 
+                {Math.round(this.props.extra.stats.executionTime * 1000000)/1000} ms</span>
+            </div>} 
+            bordered={true} 
+            extra={<Switch checkedChildren="TABLE" unCheckedChildren="JSON" onChange={this.changeView}/>}>
+            
+            {!this.state.changeView && <QueryResultTable data={this.props.result}/>}
+            {this.state.changeView && <AceEditor
+                  style={{border: '1px solid #b3b3b5'}}
+                  mode="json"
+                  width = '100%'
+                  height = '300px'
+                  theme="xcode"
+                  fontSize = {16}
+                  name="AQL_EDITOR"
+                  wrapEnabled = {true}
+                  readOnly={true}
+                  value={JSON.stringify(this.props.result, null, '\t')}
+                  editorProps={{
+                      $blockScrolling: true
+                  }}
+                />}
           </Card>
-        </div>
+        </div>}
+        
       </div>
     )
   }
 }
 
 const mapStateToProps = state => ({
-  ...state.query
+  ...state.query,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   getDefaultQuery,
-  reSaveQuery
+  reSaveQuery,
+  executeQuery,
+  explainQuery,
+  clearResult: () => dispatch({type: QUERY.CLEAR})
 }, dispatch);
 
 export default connect(
