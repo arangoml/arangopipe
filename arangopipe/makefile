@@ -3,7 +3,7 @@ DOCKER_FILE = Dockerfile
 DOCKER_PASSWORD = <the_password>
 DOCKER_REPO = arangopipe
 DOCKER_SI_FILE = Dockerfile_TFFE
-DOCKER_SI_IMG_NAME = ap_tensor_flow
+DOCKER_SI_IMG_NAME = fe_melvi_changes
 TEST_PYPI_PASSWORD = <the_password>
 
 python_arangopipe:$(SRC)

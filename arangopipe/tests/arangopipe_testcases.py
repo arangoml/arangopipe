@@ -19,8 +19,8 @@ class TestArangopipe(unittest.TestCase):
         
     def setUp(self):
         self.config = ArangoPipeConfig()
-        self.config.set_dbconnection(hostname = "localhost", port = 8529,\
-                                root_user = "root",\
+        self.config.set_dbconnection(hostname = "http://localhost:8529",\
+                                     root_user = "root",\
                                 root_user_password = "open sesame")
         self.admin = ArangoPipeAdmin(config = self.config)
         self.ap = ArangoPipe(config = self.config)

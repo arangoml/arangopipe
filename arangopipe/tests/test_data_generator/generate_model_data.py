@@ -77,8 +77,8 @@ def eval_metrics(actual, pred):
 
 def generate_runs(clean = False):
     conn_config = ArangoPipeConfig()
-    conn_config.set_dbconnection(hostname = "localhost", port = 8529,\
-                                root_user = "root", root_user_password = "open sesame")
+    conn_config.set_dbconnection(hostname = "http://localhost:8529",
+                                 root_user = "root", root_user_password = "open sesame")
     admin = ArangoPipeAdmin(config = conn_config)
     ap = ArangoPipe(config = conn_config)
     
