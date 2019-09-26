@@ -12,7 +12,7 @@ const QueryReducer = (state = initState, action) => {
     case QUERY.QUERY_ALL:
 
       state.default_query = payload.dquery
-      state.saved_query = payload.squery
+      state.saved_query = payload.squery || []
 
       return {
         ...state
@@ -22,6 +22,18 @@ const QueryReducer = (state = initState, action) => {
       state.saved_query = payload || []
 
       return { ...state }
+
+    case QUERY.QUERY_RESULT:
+      return { ...state, ...payload }
+
+    case QUERY.QUERY_EXPLAIN:
+      return { ...state, explain: payload || null }
+
+    case QUERY.CLEAR:
+      return { ...state, explain: null, result: null }
+
+    case QUERY.ERROR:
+      return { ...state, error: payload || null }
 
     default:
         return state

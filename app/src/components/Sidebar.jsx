@@ -24,7 +24,9 @@ class Sidebar extends React.Component{
               </Link>
             </div>
             <hr/>
-            <Menu theme="dark" defaultSelectedKeys={[this.props.initItem || 'home']} mode="inline">
+            <Menu theme="dark" 
+              defaultSelectedKeys={[this.props.currentPage || 'home']}
+              mode="inline">
               <Menu.Item key="home">
                 <Link to="/">
                   <Icon type="home" />

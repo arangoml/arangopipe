@@ -1,4 +1,4 @@
-import { QUERY, GRAPH } from '../../reducers/type'
+import { QUERY } from '../../reducers/type'
 import AUTHAPI from '../AUTHAPI'
 import moment from 'moment';
 import { message } from 'antd'
@@ -45,6 +45,51 @@ export const reSaveQuery = (query) => {
         return dispatch({ type: QUERY.SAVED_QUERY, payload: res.data.extra.queries })
       }).catch(err => {
         throw err
+      })
+  }
+}
+
+//Execute Query
+export const executeQuery = (query) => {
+  return (dispatch) => {
+    let data = {
+      method: 'POST',
+      url: '_api/cursor',
+      data: ({
+        id: "currentFrontendQuery",
+        options: {profile: true},
+        query: query
+      })
+    }
+
+    return AUTHAPI(data).then(res => {
+        if(!res.data.error){
+          return dispatch({ type: QUERY.QUERY_RESULT, payload: res.data })
+        }
+      }).catch(err => {
+        return dispatch({ type: QUERY.ERROR, payload: err.data.errorMessage })
+      })
+  }
+}
+
+//Explain Query
+export const explainQuery = (query) => {
+  return (dispatch) => {
+    let data = {
+      method: 'POST',
+      url: '_admin/aardvark/query/explain',
+      data: ({
+        id: "currentFrontendQuery",
+        query: query
+      })
+    }
+
+    return AUTHAPI(data).then(res => {
+        if(!res.data.error){
+          return dispatch({ type: QUERY.QUERY_EXPLAIN, payload: res.data.msg })
+        }
+      }).catch(err => {
+        return dispatch({ type: QUERY.ERROR, payload: err.data.errorMessage })
       })
   }
 }
