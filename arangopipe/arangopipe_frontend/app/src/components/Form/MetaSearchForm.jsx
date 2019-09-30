@@ -159,7 +159,6 @@ class MyForm extends React.Component {
 const MetaSearchForm = Form.create({ name: 'horizontal_login' })(MyForm);
 
 const mapStateToProps = state => ({
-  
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

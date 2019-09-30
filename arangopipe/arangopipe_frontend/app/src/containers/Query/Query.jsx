@@ -334,10 +334,26 @@ class Query extends React.Component {
                 {Math.round(this.props.extra.stats.executionTime * 1000000)/1000} ms</span>
             </div>} 
             bordered={true} 
-            extra={<Switch checkedChildren="TABLE" unCheckedChildren="JSON" onChange={this.changeView}/>}>
-            
-            {!this.state.changeView && <QueryResultTable data={this.props.result}/>}
-            {this.state.changeView && <AceEditor
+            extra={typeof(this.props.result[0])==='object'?<Switch checkedChildren="JSON" unCheckedChildren="TABLE" onChange={this.changeView}/>:''}>
+            {typeof(this.props.result[0])!=='object' && <AceEditor
+                  style={{border: '1px solid #b3b3b5'}}
+                  mode="json"
+                  width = '100%'
+                  height = '300px'
+                  theme="xcode"
+                  fontSize = {16}
+                  name="AQL_EDITOR"
+                  wrapEnabled = {true}
+                  readOnly={true}
+                  value={JSON.stringify(this.props.result, null, '\t')}
+                  editorProps={{
+                      $blockScrolling: true
+                  }}
+                />
+
+            }
+            {this.state.changeView && typeof(this.props.result[0])==='object' && <QueryResultTable data={this.props.result}/>}
+            {!this.state.changeView && typeof(this.props.result[0])==='object' && <AceEditor
                   style={{border: '1px solid #b3b3b5'}}
                   mode="json"
                   width = '100%'

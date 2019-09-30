@@ -8,6 +8,15 @@ export const FIND_OPTIONS = {
   'Serving Performance' : 'servingperf'
 };
 
+export const PROJECT = 'project'
+
+export const SUMMERY_ASSETS = {
+  'Deployments' : 'deployment',
+  'Datasets' : 'datasets',
+  'Featuresets' : 'featuresets',
+  'Models' : 'models',
+  'Experiments' : 'run'
+};
 
 export const WITH_OPTIONS = {
   'deployment': {'Tag': 'tag'},

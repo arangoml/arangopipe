@@ -51,9 +51,25 @@ export const getGraphData = (query) => {
 
         return dispatch({ type: DOCUMENT.GRAPH, payload: data })
     })
-    
+  }
+}
 
-    
+//Get Project Names
+export const getProjectName = (query) => {
+  return (dispatch) => {
+    if(query !== ''){
+      let data = {
+        method: 'POST',
+        url: '_api/cursor',
+        data: { "query" : query}
+      }
+
+      return AUTHAPI(data).then(res => {
+        return dispatch({ type: DOCUMENT.PROJECT_NAME, payload: res.data.result })
+      }).catch(err => {
+        throw err
+      })
+    }
   }
 }
 

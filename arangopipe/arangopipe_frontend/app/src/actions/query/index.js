@@ -67,7 +67,8 @@ export const executeQuery = (query) => {
           return dispatch({ type: QUERY.QUERY_RESULT, payload: res.data })
         }
       }).catch(err => {
-        return dispatch({ type: QUERY.ERROR, payload: err.data.errorMessage })
+        if(err.data.error)
+          return dispatch({ type: QUERY.ERROR, payload: err.data.errorMessage })
       })
   }
 }

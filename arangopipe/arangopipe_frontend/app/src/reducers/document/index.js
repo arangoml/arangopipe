@@ -21,6 +21,12 @@ const DocumentReducer = (state = initState, action) => {
         graph: payload
       }
 
+    case DOCUMENT.PROJECT_NAME:
+      return {
+        ...state,
+        projects: payload
+      }
+
     default:
         return state
   }
