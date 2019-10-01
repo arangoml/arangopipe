@@ -32,8 +32,9 @@ const QueryResultTable = (props) => {
     });
   }
 
-  let data = (props.data || []).map(d => {
-      d.key = d['_key']
+  let data = (props.data || []).map((d, index) => {
+      if(typeof(d) === 'object' )
+        d.key = index
       return d
     })
 
