@@ -54,6 +54,7 @@ export const getGraphData = (query) => {
   }
 }
 
+
 //Get Project Names
 export const getProjectName = (query) => {
   return (dispatch) => {
@@ -71,5 +72,34 @@ export const getProjectName = (query) => {
       })
     }
   }
+}
+
+
+//Get Assets Count
+export const getAssetsCount = (query) => {
+    let apis = []
+
+    apis = query.map(q => {
+      if(q !== ''){
+        return {
+          method: 'POST',
+          url: '_api/cursor',
+          data: { "query" : q}
+        }
+      }
+    })
+
+
+    return Promise.all([apis.map(api => AUTHAPI(api))]).then(async res => {
+        let data = []
+      
+        for (var index = 0; index < res[0].length; index += 1) {
+          await res[0][index].then(r => {
+            data.push(r.data.result)
+          })
+        }
+
+        return data
+    })
 }
 
