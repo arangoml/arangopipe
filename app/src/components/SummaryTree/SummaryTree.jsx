@@ -4,7 +4,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import {
-  getProjectName
+  getProjectName,
+  getAssetsCount
 } from '../../actions/document'
 
 import { PROJECT, SUMMERY_ASSETS } from "../../constants/searchOptions";
@@ -12,39 +13,124 @@ import { PROJECT, SUMMERY_ASSETS } from "../../constants/searchOptions";
 const { TreeNode } = Tree;
 
 class SummaryTree extends React.Component {
-  onSelect = (selectedKeys, info) => {
-    // console.log('selected', selectedKeys, info);
-  };
 
+  state = {
+    treeData: []
+  }
 
-  componentDidMount() {
-    // To disabled submit button at the beginning.
+  //Get Project names when page is loaded
+  componentDidMount(){
     this.getProjectName()
   }
 
-  getProjectName(){
+  //Get Project Name
+  async getProjectName(){
     let query = `FOR p in ${PROJECT}
     RETURN DISTINCT p.name`
 
-    this.props.getProjectName(query)
+    await this.props.getProjectName(query)  
   }
 
-  render() {
-    const Trees = (this.props.projects || []).map((name, p_index) => {
-      return(
-        <TreeNode key={p_index} title="Home Value Estimator" key={'0-0-'+p_index}>
-          {Object.keys(SUMMERY_ASSETS).map((key, c1_index) => {
-            return(<TreeNode key={c1_index} 
-              title={key} 
-              key={'0-0-'+p_index+'-'+c1_index} />)
-          })}
-        </TreeNode>)
-    })
 
+  //Make queries for getting count of assets and run 
+  makeQueryAndRun = project => {
+    const dataset_query = `FOR p in project
+                            FILTER p.name == '${project}'
+                            FOR m in 1..1 OUTBOUND p project_models
+                                FOR r in 1..1 OUTBOUND m run_models
+                                    FOR d in 1..1 OUTBOUND r run_datasets
+                                        COLLECT WITH COUNT INTO numDatasets
+                                        RETURN numDatasets`
+
+    const featureset_query = `FOR p in project
+                                FILTER p.name == '${project}'
+                                FOR m in 1..1 OUTBOUND p project_models
+                                    FOR r in 1..1 OUTBOUND m run_models
+                                        FOR d in 1..1 OUTBOUND r run_featuresets
+                                            COLLECT WITH COUNT INTO numFeaturesets
+                                            RETURN numFeaturesets`
+
+    const model_query = `FOR p in project
+                          FILTER p.name == '${project}'
+                          FOR m in 1..1 OUTBOUND p project_models
+                              COLLECT WITH COUNT INTO numModels
+                              RETURN numModels`
+
+    const experiement_query = `FOR p in project
+                                FILTER p.name == '${project}'
+                                FOR m in 1..1 OUTBOUND p project_models
+                                    FOR run in 1..1 OUTBOUND m run_models
+                                        COLLECT WITH COUNT INTO numExperiments
+                                        RETURN numExperiments`
+
+    const deployment_query = `FOR p in project
+                                FILTER p.name == '${project}'
+                                FOR m in 1..1 OUTBOUND p project_models
+                                    FOR dep in 1..1 INBOUND m deployment_model
+                                        COLLECT WITH COUNT INTO numDeployments
+                                        RETURN numDeployments`
+
+    return getAssetsCount([dataset_query, featureset_query, 
+      model_query, experiement_query, deployment_query])
+  }
+
+
+  //Get Assets Count when expand the tree
+  onLoadData = treeNode =>
+    new Promise(resolve => {
+
+      if (treeNode.props.children) {
+        resolve();
+        return;
+      }
+
+      setTimeout(() => {
+        treeNode.props.dataRef.children = []
+        this.makeQueryAndRun(treeNode.props.title).then(res => {
+            Object.keys(SUMMERY_ASSETS).map((key, index) => {
+              treeNode.props.dataRef.children.push({
+                title: `${key} (${res[index][0]})`, key: key, isLeaf: true
+              })
+            })
+
+            this.setState({
+              treeData: [...this.state.treeData],
+            });
+            resolve();
+        }).catch((err) => {
+            Object.keys(SUMMERY_ASSETS).map((key, index) => {
+              treeNode.props.dataRef.children.push({
+                title: `${key} (0)`, key: key, isLeaf: true
+              })
+            })
+
+            this.setState({
+              treeData: [...this.state.treeData],
+            });
+            resolve();
+        })
+
+        
+      }, 300);
+  });
+
+
+  //Generate Tree Nodes
+  renderTreeNodes = data =>
+    data.map(item => {
+      if (item.children) {
+        return (
+          <TreeNode title={item.title} key={item.key} dataRef={item}>
+            {this.renderTreeNodes(item.children)}
+          </TreeNode>
+        );
+      }
+      return <TreeNode key={item.key} {...item} dataRef={item} />;
+  });
+
+  render() {
     return (
-      <Tree showLine onSelect={this.onSelect} style={{overflowX: 'auto'}}>
-          {Trees}
-      </Tree>
+      <Tree loadData={this.onLoadData} showLine >{this.renderTreeNodes(this.props.projects || [])}</Tree>
     );
   }
 }
