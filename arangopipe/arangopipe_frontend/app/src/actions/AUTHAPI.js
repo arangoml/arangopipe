@@ -29,10 +29,10 @@ AUTHAPI.interceptors.response.use(
     else Promise.reject(response)
   },
   error => {
-    // if(error.response === undefined || error.response.statusText === 'Unauthorized'){
-    //   window.location = '/login'
-    //   return false
-    // }
+    if(error.response === undefined || error.response.statusText === 'Unauthorized'){
+      window.location = '/login'
+      return false
+    }
 
     return Promise.reject(error.response)
   },

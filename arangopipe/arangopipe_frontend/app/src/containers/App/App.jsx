@@ -51,11 +51,11 @@ class App extends React.Component{
   }
 
   componentWillMount(){
-     if(!this.props.auth.is_authed){
-       window.location = '/login'
-     } else {
-       this.getCurrentUser()
-     }
+     // if(!this.props.auth.is_authed){
+     //   window.location = '/login'
+     // } else {
+     //   this.getCurrentUser()
+     // }
   }
 
   render() {

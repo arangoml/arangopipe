@@ -67,7 +67,7 @@ export const executeQuery = (query) => {
           return dispatch({ type: QUERY.QUERY_RESULT, payload: res.data })
         }
       }).catch(err => {
-        if(err.data.error)
+        if(err)
           return dispatch({ type: QUERY.ERROR, payload: err.data.errorMessage })
       })
   }
@@ -90,7 +90,8 @@ export const explainQuery = (query) => {
           return dispatch({ type: QUERY.QUERY_EXPLAIN, payload: res.data.msg })
         }
       }).catch(err => {
-        return dispatch({ type: QUERY.ERROR, payload: err.data.errorMessage })
+        if(err)
+          return dispatch({ type: QUERY.ERROR, payload: err.data.errorMessage })
       })
   }
 }

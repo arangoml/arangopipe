@@ -18,6 +18,8 @@ class TreeGraphForm extends React.Component {
     visible: 'hidden'
   }
 
+
+  //Drawing Graph
   drawGraph(engine, format, graph) {
     window.URL = window.URL || window.webkitURL;
 

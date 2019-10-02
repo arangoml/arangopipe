@@ -234,6 +234,14 @@ class Query extends React.Component {
           </div>
         </Menu.Item>)
 
+    const NewAlert = () => <Alert
+          description={this.props.error}
+          type="error"
+          showIcon
+          closable
+          style={{marginTop: 20}}
+        />
+
     return(
       <div>
           <Card title="Running Query" bordered={true}>
@@ -295,13 +303,7 @@ class Query extends React.Component {
               <Button icon="play-circle" type="primary" onClick={this.executeQuery}>Execute</Button> 
             </div>   
           </Card>
-        {this.props.error && <Alert
-          description={this.props.error}
-          type="error"
-          showIcon
-          closable
-          style={{marginTop: 20}}
-        />}
+        {this.props.error && <NewAlert/>}
         {this.props.explain && <Card title={
             <div>
               <Tag color='geekblue'>Query Explain</Tag>

@@ -17,7 +17,7 @@ class Sidebar extends React.Component{
     return (
         <Sider collapsed={this.props.collapsed}>
             <div className='logo' style={{height: 55}}>
-              <Link to="/" style={{color: 'white'}}>
+              <Link to="" style={{color: 'white'}} onClick={() => {window.location = '/'}}>
                 <img alt="logo" 
                   src={this.props.collapsed?smallLogoPath:logoPath} 
                   style={{width: this.props.collapsed?40:160}}/>
