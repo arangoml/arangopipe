@@ -34,8 +34,7 @@ if __name__ == "__main__":
 
     proj_info = {"name": "Wine-Quality-Regression-Modelling"}
     conn_config = ArangoPipeConfig()
-    conn_config.set_dbconnection(hostname = "localhost", port = 8529,\
-                                root_user = "root", root_user_password = "open sesame")
+    conn_config.set_dbconnection(hostname = "http://localhost:8529", root_user = "root", root_user_password = "open sesame")
     admin = ArangoPipeAdmin(config = conn_config)
     proj_reg = admin.register_project(proj_info)
 

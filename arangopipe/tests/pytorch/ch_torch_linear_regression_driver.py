@@ -95,7 +95,7 @@ def run_driver():
     
     # Store experiment results in Arangopipe
     conn_config = ArangoPipeConfig()
-    conn_config.set_dbconnection(hostname = "localhost", port = 8529,\
+    conn_config.set_dbconnection(hostname = "http://localhost:8529",\
                                 root_user = "root", root_user_password = "open sesame")
     proj_info = {"name": "Housing_Price_Estimation_Project"}
     admin = ArangoPipeAdmin(config = conn_config)

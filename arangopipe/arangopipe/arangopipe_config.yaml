@@ -5,6 +5,6 @@ arangodb:
   host: http://localhost:8529
   port: 8529
   root_user: root
-  root_user_password: HHPDXVLHnCmFCAlKZktu
+  root_user_password: open sesame
 mlgraph:
   graphname: enterprise_ml_graph
