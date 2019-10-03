@@ -33,24 +33,31 @@ class Sidebar extends React.Component{
                   <span>Home</span>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="user">
-                <Link to="/user">
-                  <Icon type="user" />
-                  <span>User</span>
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="deployment">
-                <Link to="/deployment">
-                  <Icon type="desktop" />
-                  <span>Deployment</span>
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="project">
-                <Link to="/project">
-                  <Icon type="pie-chart" />
-                  <span>Project</span>
-                </Link>
-              </Menu.Item>
+              {this.props.isAdmin && 
+                <Menu.Item key="user">
+                  <Link to="/user">
+                    <Icon type="user" />
+                    <span>User</span>
+                    </Link>
+                </Menu.Item>
+              }
+              
+              {this.props.isAdmin && 
+                <Menu.Item key="deployment">
+                  <Link to="/deployment">
+                    <Icon type="desktop" />
+                    <span>Deployment</span>
+                  </Link>
+                </Menu.Item>
+              }
+              {this.props.isAdmin && 
+                <Menu.Item key="project">
+                  <Link to="/project">
+                    <Icon type="pie-chart" />
+                    <span>Project</span>
+                  </Link>
+                </Menu.Item>
+              }
               <Menu.Item key="query">
                 <Link to="/query">
                   <Icon type="fire" />

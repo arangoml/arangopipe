@@ -13,8 +13,11 @@ const { Option } = Select;
 
 
 class TreeGraphForm extends React.Component {
+
   state = {
     graph: null,
+    engine: 'dot',
+    format: 'svg',
     visible: 'hidden'
   }
 
@@ -168,7 +171,7 @@ class TreeGraphForm extends React.Component {
       renderGraph();
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const d_tag = this.props.deploymentTag.trim()
     const queries = []
 
@@ -185,7 +188,7 @@ class TreeGraphForm extends React.Component {
     this.props.getGraphData(queries)
   }
 
-  componentWillReceiveProps(props, state){
+  componentWillReceiveProps(props){
 
     if (this.props != props) {
       let gdata = Object.assign([], props.gdata)
@@ -212,27 +215,34 @@ class TreeGraphForm extends React.Component {
             }`
 
           this.setState({
-            graph: tree
+            graph: tree,
+            visible: 'visible'
           })
+          
       }
 
     }
   }
 
-  handleSubmit = e => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        this.setState({
-          visible: 'visible'
-        })
-        this.drawGraph(values.engine, values.format, this.state.graph)
-      }
-    });
+
+  handleEngineChange = value => {
+    this.setState({
+      engine: value
+    })
   };
+
+  handleFormatChange = value => {
+    this.setState({
+      format: value
+    })
+  };
+
 
   render() {
     const { getFieldDecorator } = this.props.form;
+
+    if(this.state.graph != null)
+      this.drawGraph(this.state.engine, this.state.format, this.state.graph)
 
     return (
       <div className="graph">
@@ -245,13 +255,13 @@ class TreeGraphForm extends React.Component {
           style={{ top: 20 }}
           footer={[]}
         >
-            <Form layout="inline" onSubmit={this.handleSubmit} style={{textAlign:'center'}}>
+            <Form layout="inline" style={{textAlign:'center'}}>
               <Form.Item label='Engine'>
                 {getFieldDecorator('engine', {
                     initialValue: 'dot', 
                     rules: [{ required: true, message: 'Please input your Password!' }],
                   })(
-                    <Select style={{ width: 250 }}>
+                    <Select style={{ width: 250 }} onChange={this.handleEngineChange}>
                       <Option value="circo">circo</Option>
                       <Option value="dot">dot</Option>
                       <Option value="fdp">fdp</Option>
@@ -266,7 +276,7 @@ class TreeGraphForm extends React.Component {
                     initialValue: 'svg', 
                     rules: [{ required: true, message: 'Please input your Password!' }],
                   })(
-                    <Select style={{ width: 250 }}>
+                    <Select style={{ width: 250 }} onChange={this.handleFormatChange}>
                       <Option value="svg">svg</Option>
                       <Option value="png-image-element">png-image-element</Option>
                       <Option value="json">json</Option>
@@ -277,11 +287,7 @@ class TreeGraphForm extends React.Component {
                   )}
               </Form.Item>
               
-              <Form.Item>
-                <Button type="primary" htmlType="submit" icon='line-chart'>
-                  Generate
-                </Button>
-              </Form.Item>
+             
             </Form>
             <Divider style={{marginTop: 10}}/>
             <div id="review" style={{visibility: this.state.visible}}>

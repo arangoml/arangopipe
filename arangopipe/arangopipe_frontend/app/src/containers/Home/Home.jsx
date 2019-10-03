@@ -1,14 +1,6 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import {
-  getUploadedDocuments,
-  processDocument,
-  deleteDocument,
-  saveToCSV,
-  clearDB
-} from '../../actions/document'
 
 import { Table, Input, Button, Icon, Row, Col, Card, Divider, Modal } from 'antd';
 import Highlighter from 'react-highlight-words';

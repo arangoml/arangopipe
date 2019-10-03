@@ -1,5 +1,5 @@
 
-import { QUERY, GRAPH } from '../type'
+import { QUERY } from '../type'
 
 
 const initState = {default_query: [], saved_query: []}

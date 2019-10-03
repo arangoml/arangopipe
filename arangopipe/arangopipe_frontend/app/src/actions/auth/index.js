@@ -13,7 +13,19 @@ export const signin = (obj) => {
     return API(data).then(res => {
       localStorage.setItem('token', res.data.jwt);
 
-      return dispatch({ type: USER.SIGNED_IN, payload: res.data.username })
+      let get_dbs = {
+        method: 'GET',
+        url: '_api/database/user?_='+Date.now()
+      }
+
+      const username = res.data.user
+
+      return AUTHAPI(get_dbs).then(res => {
+        return dispatch({ 
+          type: USER.SIGNED_IN, 
+          payload: { name: username, isAdmin: res.data.result.includes('_system') }})
+      })
+
     }).catch(err => {
       message.error('Wrong ID or Password!');
       throw err
@@ -24,15 +36,27 @@ export const signin = (obj) => {
 
 export const currentUser = () => {
   return (dispatch) => {
-    let data = {
+    let get_token = {
       method: 'GET',
       url: '_admin/aardvark/whoAmI?_='+Date.now()
     }
-    return AUTHAPI(data).then(res => {
-      console.log('success')
-      return dispatch({ type: USER.SIGNED_IN, payload: res.data.user })
+
+    return AUTHAPI(get_token).then(res => {
+      
+      let get_dbs = {
+        method: 'GET',
+        url: '_api/database/user?_='+Date.now()
+      }
+
+      const username = res.data.user
+
+      return AUTHAPI(get_dbs).then(res => {
+        return dispatch({ 
+          type: USER.SIGNED_IN, 
+          payload: { name: username, isAdmin: res.data.result.includes('_system') }})
+      })
+      
     }).catch(err => {
-      console.log(err)
       localStorage.removeItem('token');
       return dispatch({ type: USER.SIGNED_OUT })
     })
