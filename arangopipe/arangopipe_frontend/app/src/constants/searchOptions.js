@@ -1,3 +1,15 @@
+//Used in Summery Tree
+export const PROJECT = 'project'
+export const SUMMERY_ASSETS = {
+  'Datasets' : 'datasets',
+  'Featuresets' : 'featuresets',
+  'Models' : 'models',
+  'Experiments' : 'run',
+  'Deployments' : 'deployment',
+};
+
+
+
 export const FIND_OPTIONS = {
   'Deployments' : 'deployment',
   'Datasets' : 'datasets',
@@ -8,7 +20,6 @@ export const FIND_OPTIONS = {
   'Serving Performance' : 'servingperf'
 };
 
-
 export const WITH_OPTIONS = {
   'deployment': {'Tag': 'tag'},
   'datasets': {'Name': 'name', 'Tag': 'tag', 'Deployment': 'deployment'},
@@ -18,10 +29,6 @@ export const WITH_OPTIONS = {
   'devperf': {'Deployment': 'deployment'},
   'servingperf': {'Deployment': 'deployment'}
 }
-
-// FOR dep IN deployment
-//     FILTER dep.tag == "Deployment_HPE_2019-07-12 to 2019-06-12"
-//     return dep
 
 export const DEPLOY_QUERY = {
   'datasets': {'where': 'run', 'filter': 'deployment_tag', 'at': 'run_datasets', 'get':''},

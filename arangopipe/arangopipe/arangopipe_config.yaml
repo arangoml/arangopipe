@@ -2,7 +2,7 @@ arangodb:
   arangopipe_admin_password: arangopipe
   arangopipe_admin_username: arangopipe
   arangopipe_dbname: arangopipe
-  host: localhost
+  host: http://localhost:8529
   port: 8529
   root_user: root
   root_user_password: open sesame

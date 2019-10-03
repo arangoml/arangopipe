@@ -9,7 +9,7 @@ Created on Thu Apr 25 09:30:33 2019
 from arango import ArangoClient
 import logging
 from arangopipe.arangopipe_config import ArangoPipeConfig
-
+from arangopipe.custom_http_client import CustomHTTPClient
 
 
 # create logger with 'spam_application'
@@ -58,9 +58,8 @@ class ArangoPipeAdmin:
         
          
     def create_db(self):
-        client = ArangoClient(protocol='http',\
-                              host=self.cfg['arangodb']['host'],\
-                              port=self.cfg['arangodb']['port'])
+        client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
+                              http_client=CustomHTTPClient())
 
         # Connect to "_system" database as root user.
         # This returns an API wrapper for "_system" database.
@@ -191,9 +190,8 @@ class ArangoPipeAdmin:
     
     def delete_arangomldb(self):
 
-        client = ArangoClient(protocol='http',\
-                              host=self.cfg['arangodb']['host'],\
-                              port=self.cfg['arangodb']['port'])
+        client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
+                              http_client=CustomHTTPClient())
 
         sys_db = client.db('_system',\
                            username=self.cfg['arangodb']['root_user'],\
@@ -206,9 +204,8 @@ class ArangoPipeAdmin:
         return
     
     def register_deployment(self, dep_tag):
-        client = ArangoClient(protocol='http',\
-                              host=self.cfg['arangodb']['host'],\
-                              port=self.cfg['arangodb']['port'])
+        client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
+                              http_client=CustomHTTPClient())
         db = client.db(name =self.cfg['arangodb']['arangopipe_dbname'],\
                        username = self.cfg['arangodb']['arangopipe_admin_username'],\
                        password = self.cfg['arangodb']['arangopipe_admin_password'])

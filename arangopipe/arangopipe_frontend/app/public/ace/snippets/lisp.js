@@ -1,9 +1,7 @@
-define("ace/snippets/lisp",["require","exports","module"],function(e,t,n){"use strict";t.snippetText="",t.scope="lisp"});
-                (function() {
-                    window.require(["ace/snippets/lisp"], function(m) {
-                        if (typeof module == "object" && typeof exports == "object" && module) {
-                            module.exports = m;
-                        }
-                    });
-                })();
-            
+define(function(require, exports, module) {
+"use strict";
+
+exports.snippetText = require("../requirejs/text!./lisp.snippets");
+exports.scope = "lisp";
+
+});

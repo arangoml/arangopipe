@@ -21,6 +21,17 @@ const DocumentReducer = (state = initState, action) => {
         graph: payload
       }
 
+    case DOCUMENT.PROJECT_NAME:
+    
+      let treeData = payload.map(d => {
+        return {title: d, key:d}
+      })
+
+      return {
+        ...state,
+        projects: treeData
+      }
+
     default:
         return state
   }
