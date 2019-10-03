@@ -1,5 +1,5 @@
 
-import { DOCUMENT, GRAPH } from '../type'
+import { DOCUMENT } from '../type'
 
 
 const initState = {}

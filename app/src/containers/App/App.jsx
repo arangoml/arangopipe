@@ -16,10 +16,9 @@ import Project from '../Project/Project';
 import Query from '../Query/Query';
 
 import './App.css'
-import config from '../../utils/config'
 
-import { Layout, Menu, Avatar, Affix, Drawer, Button, Icon, Breadcrumb, Input } from 'antd';
-const { Header, Content, Footer, Sider } = Layout;
+import { Layout, Menu, Avatar, Affix, Drawer, Button, Icon, Input } from 'antd';
+const { Header, Content, Footer } = Layout;
 const { SubMenu } = Menu;
 const { Search } = Input;
 
@@ -50,7 +49,7 @@ class App extends React.Component{
     await this.props.currentUser()
   }
 
-  componentWillMount(){
+  componentDidMount(){
      if(!this.props.auth.is_authed){
        window.location = '/login'
      } else {
@@ -60,13 +59,14 @@ class App extends React.Component{
 
   render() {
     const username = this.props.auth.user || '';
+    const isAdmin = this.props.auth.isAdmin || false;
     const avatarPath = require('../../assets/avatar.jpeg')
 
     const currentPage = this.props.location.pathname.split('/')[1]
 
     return (
         <Layout style={{ minHeight: '100vh' }}>
-          <Sidebar collapsed={this.state.collapsed} currentPage={currentPage}/>
+          <Sidebar collapsed={this.state.collapsed} currentPage={currentPage} isAdmin={isAdmin}/>
           <Layout>
 
             <Header className="header">

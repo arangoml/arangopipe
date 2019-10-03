@@ -1,7 +1,7 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+
 
 import brace from 'brace';
 import AceEditor from 'react-ace';
@@ -20,9 +20,8 @@ import {
   explainQuery
 } from '../../actions/query'
 
-import { Table, Input, Button, Icon, Row, Col, Popconfirm, Alert,
-          Tag, Divider, Card, Menu, Tooltip, notification, Switch } from 'antd';
-import Highlighter from 'react-highlight-words';
+import { Button, Icon, Row, Col, Popconfirm, Alert,
+          Tag, Card, Menu, Tooltip, notification, Switch } from 'antd';
 
 
 class Query extends React.Component {
