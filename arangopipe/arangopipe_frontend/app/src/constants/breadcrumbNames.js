@@ -6,5 +6,6 @@ export const BREADCRUMB_NAMES = {
   '/users/2/detail': 'Detail',
   '/user': 'User',
   '/deployment': 'Deployment', 
-  '/project': 'Project'
+  '/project': 'Project',
+  '/query' : 'Query'
 };

@@ -9,7 +9,7 @@ Created on Sat Apr 13 08:35:58 2019
 from arango import ArangoClient
 import logging
 from arangopipe.arangopipe_config import ArangoPipeConfig
-
+from arangopipe.custom_http_client import CustomHTTPClient
 
 # create logger with 'spam_application'
 logger = logging.getLogger('arangopipe_logger')
@@ -58,9 +58,8 @@ class ArangoPipe:
     def lookup_dataset(self, dataset_name):
             
         """ Return a dataset identifier given a name. This can be used to get the dataset id that is used to log run information associated with execution of the pipeline."""
-        client = ArangoClient(protocol='http',\
-                              host=self.cfg['arangodb']['host'],\
-                              port=self.cfg['arangodb']['port'])
+        client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
+                              http_client=CustomHTTPClient())
         db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
                        username=self.cfg['arangodb']['arangopipe_admin_username'],\
                        password=self.cfg['arangodb']['arangopipe_admin_password'])
@@ -77,9 +76,8 @@ class ArangoPipe:
     def lookup_featureset(self, feature_set_name):
                 
         """ Return a featureset identifier given a name. This can be used to get the featureset id that is used to log run information associated with execution of the pipeline."""
-        client = ArangoClient(protocol='http',\
-                              host=self.cfg['arangodb']['host'],\
-                              port=self.cfg['arangodb']['port'])
+        client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
+                              http_client=CustomHTTPClient())
         db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
                        username=self.cfg['arangodb']['arangopipe_admin_username'],\
                        password=self.cfg['arangodb']['arangopipe_admin_password'])
@@ -95,9 +93,8 @@ class ArangoPipe:
     def lookup_model(self, model_name):
             
         """ Return a model identifier given a name. This can be used to get the model id that is used to log run information associated with execution of the pipeline."""
-        client = ArangoClient(protocol='http',\
-                              host=self.cfg['arangodb']['host'],\
-                              port=self.cfg['arangodb']['port'])
+        client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
+                              http_client=CustomHTTPClient())
         db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
                        username=self.cfg['arangodb']['arangopipe_admin_username'],\
                        password=self.cfg['arangodb']['arangopipe_admin_password'])
@@ -113,9 +110,8 @@ class ArangoPipe:
     def lookup_modelparams(self, tag_value):
             
         """ Return a model parameter result given a tag."""
-        client = ArangoClient(protocol='http',\
-                              host=self.cfg['arangodb']['host'],\
-                              port=self.cfg['arangodb']['port'])
+        client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
+                              http_client=CustomHTTPClient())
         db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
                        username=self.cfg['arangodb']['arangopipe_admin_username'],\
                        password=self.cfg['arangodb']['arangopipe_admin_password'])
@@ -132,9 +128,8 @@ class ArangoPipe:
     def lookup_modelperf(self, tag_value):
             
         """ Return a model dev performance given a tag."""
-        client = ArangoClient(protocol='http',\
-                              host=self.cfg['arangodb']['host'],\
-                              port=self.cfg['arangodb']['port'])
+        client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
+                              http_client=CustomHTTPClient())
         db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
                        username=self.cfg['arangodb']['arangopipe_admin_username'],\
                        password=self.cfg['arangodb']['arangopipe_admin_password'])
@@ -152,9 +147,8 @@ class ArangoPipe:
 
     def init_graph(self):
         """ Initialize a graph when an instance of ArangoPipe is provisioned. """
-        client = ArangoClient(protocol='http',\
-                              host=self.cfg['arangodb']['host'],\
-                              port=self.cfg['arangodb']['port'])
+        client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
+                              http_client=CustomHTTPClient())
     
         # Connect to "_system" database as root user.
         # This returns an API wrapper for "_system" database.
@@ -186,9 +180,8 @@ class ArangoPipe:
         models = self.emlg.vertex_collection("models")
         model_reg = models.insert(mi)
         
-        client = ArangoClient(protocol='http',\
-                              host=self.cfg['arangodb']['host'],\
-                              port=self.cfg['arangodb']['port'])
+        client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
+                              http_client=CustomHTTPClient())
         db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
                        username=self.cfg['arangodb']['arangopipe_admin_username'],\
                        password=self.cfg['arangodb']['arangopipe_admin_password'])
@@ -325,9 +318,8 @@ class ArangoPipe:
         servingperf = self.emlg.vertex_collection("servingperf")
         sp_reg = servingperf.insert(sp)
         # Locate the deployment record
-        client = ArangoClient(protocol='http',\
-                              host=self.cfg['arangodb']['host'],\
-                              port=self.cfg['arangodb']['port'])
+        client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
+                              http_client=CustomHTTPClient())
         db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
                        username=self.cfg['arangodb']['arangopipe_admin_username'],\
                        password=self.cfg['arangodb']['arangopipe_admin_password'])

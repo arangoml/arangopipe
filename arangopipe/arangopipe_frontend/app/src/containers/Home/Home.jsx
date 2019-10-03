@@ -28,27 +28,31 @@ class Home extends React.Component {
     visible: false
   };
 
-
+  //Show Graph Modal
   showModal = () => {
     this.setState({
       visible: true,
     });
   };
 
+
+  //
   handleOk = e => {
-    console.log(e);
     this.setState({
       visible: false,
     });
   };
 
+
+  //Close Graph Modal
   handleCancel = e => {
-    console.log(e);
     this.setState({
       visible: false,
     });
   };
 
+
+  //Set Filter
   setCurrentFilter(filter, equal) {
     this.setState({
       currentFilter: filter,
@@ -61,12 +65,12 @@ class Home extends React.Component {
 
     return(
       <Row gutter={20}>
-        <Col sm={9} md={6} xs={24}>
-          <Card title="ML Projects Summary" bordered={true}>
+        <Col sm={24} md={6} xs={24}>
+          <Card title="ML Projects Summary" bordered={true} style={{marginBottom: 20}}>
             <SummaryTree/>
           </Card>
         </Col>
-        <Col sm={15} md={18} xs={24}>
+        <Col sm={24} md={18} xs={24}>
           <Card title="Search Metadata" bordered={true}>
             <MetaSearchForm 
               setFilter = {(filter, equal) => this.setCurrentFilter(filter, equal)}/>
@@ -97,7 +101,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-
 }, dispatch);
 
 export default connect(

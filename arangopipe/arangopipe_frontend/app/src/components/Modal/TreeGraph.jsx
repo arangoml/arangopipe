@@ -1,7 +1,7 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Modal, Button, Select, Form, Spin, Divider, Empty } from 'antd';
+import { Modal, Button, Select, Form, Divider, Empty } from 'antd';
 import {
   getGraphData
 } from '../../actions/document'
@@ -18,6 +18,8 @@ class TreeGraphForm extends React.Component {
     visible: 'hidden'
   }
 
+
+  //Drawing Graph
   drawGraph(engine, format, graph) {
     window.URL = window.URL || window.webkitURL;
 
@@ -26,10 +28,8 @@ class TreeGraphForm extends React.Component {
       reviewer = document.getElementById("review"),
       scale = window.devicePixelRatio || 1,
       // editor = ace.edit("editor"),
-      lastHD = -1,
       worker = null,
-      parser = new DOMParser(),
-      showError = null;
+      parser = new DOMParser();
 
 
       function show_status(text, hide) {
@@ -142,10 +142,10 @@ class TreeGraphForm extends React.Component {
         reviewer.classList.remove("working");
         reviewer.classList.remove("error");
 
-        if (format == "svg") {
+        if (format === "svg") {
           var svg = parser.parseFromString(result, "image/svg+xml");
           reviewer.appendChild(svg.documentElement);
-        } else if (format == "png-image-element") {
+        } else if (format === "png-image-element") {
           var resultWithPNGHeader = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(result)));
           svgXmlToImage(resultWithPNGHeader, function (err, image) {
             

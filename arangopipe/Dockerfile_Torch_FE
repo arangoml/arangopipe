@@ -13,8 +13,10 @@ MAINTAINER Joerg Schad <info@arangodb.com>
 ENV GIT_PYTHON_REFRESH=quiet
 RUN apt-get update
 RUN apt-get install -y python-pip
-RUN pip install mlflow hyperopt sklearn2 jsonpickle python-arango==4.4.0
-RUN pip install -i https://test.pypi.org/simple/ arangopipe
+#RUN pip install mlflow hyperopt sklearn2 jsonpickle python-arango==4.4.0
+#RUN pip install -i https://test.pypi.org/simple/ arangopipe
+RUN pip install mlflow hyperopt sklearn2 jsonpickle python-arango
+RUN pip install arangopipe
 RUN mkdir -p /workspace
 RUN pip install jupyter
 RUN pip install matplotlib

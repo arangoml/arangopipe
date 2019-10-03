@@ -1,9 +1,7 @@
-define("ace/snippets/html_ruby",["require","exports","module"],function(e,t,n){"use strict";t.snippetText="",t.scope="html_ruby"});
-                (function() {
-                    window.require(["ace/snippets/html_ruby"], function(m) {
-                        if (typeof module == "object" && typeof exports == "object" && module) {
-                            module.exports = m;
-                        }
-                    });
-                })();
-            
+define(function(require, exports, module) {
+"use strict";
+
+exports.snippetText = require("../requirejs/text!./html_ruby.snippets");
+exports.scope = "html_ruby";
+
+});

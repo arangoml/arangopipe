@@ -22,6 +22,12 @@
   font-size: 20px !important;
 }
 
+
+.ace_content {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
 .logo {
   padding: 10px;
   padding-top: 20px;

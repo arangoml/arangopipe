@@ -1,9 +1,7 @@
-define("ace/snippets/ejs",["require","exports","module"],function(e,t,n){"use strict";t.snippetText="",t.scope="ejs"});
-                (function() {
-                    window.require(["ace/snippets/ejs"], function(m) {
-                        if (typeof module == "object" && typeof exports == "object" && module) {
-                            module.exports = m;
-                        }
-                    });
-                })();
-            
+define(function(require, exports, module) {
+"use strict";
+
+exports.snippetText = require("../requirejs/text!./ejs.snippets");
+exports.scope = "ejs";
+
+});

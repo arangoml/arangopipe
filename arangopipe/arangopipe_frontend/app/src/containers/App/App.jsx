@@ -13,6 +13,7 @@ import BreadcrumbHeader from "../../components/BreadcrumbHeader";
 import Sidebar from "../../components/Sidebar";
 import User from '../User/User';
 import Project from '../Project/Project';
+import Query from '../Query/Query';
 
 import './App.css'
 import config from '../../utils/config'
@@ -61,9 +62,11 @@ class App extends React.Component{
     const username = this.props.auth.user || '';
     const avatarPath = require('../../assets/avatar.jpeg')
 
+    const currentPage = this.props.location.pathname.split('/')[1]
+
     return (
         <Layout style={{ minHeight: '100vh' }}>
-          <Sidebar collapsed={this.state.collapsed}/>
+          <Sidebar collapsed={this.state.collapsed} currentPage={currentPage}/>
           <Layout>
 
             <Header className="header">
@@ -115,6 +118,7 @@ class App extends React.Component{
                   <Route path="/deployment" component={Deployment} />
                   <Route path="/user" component={User} />
                   <Route path="/project" component={Project} />
+                  <Route path="/query" component={Query} />
               </main>
             </Content>
             <Footer style={{ textAlign: 'center' }}>ArangoML Pipeline ©2019 in Germany</Footer>
