@@ -80,7 +80,7 @@ To facilitate an easy start, docker containers for *torch* and *tensorflow* are 
    
 
 
-3. Running an example in the *torch* container: Run the *torch* docker container. You will have to use the `docker ps` command and get to the shell in the container using the `docker exec` command. Change directory to the `examples/pytorch` directory. The *torch* container provides an example of a linear regression model that uses **Arangopipe** to log experiment metadata. The experiment meta data includes information about the dataset, featureset and optimization settings used to run the *pytorch* model. Once you are in the shell of the *torch* container, run the driver program that develops the torch model and logs the experiment meta-data to *arangopipe*. To run the driver program, launch an `ipython` shell. In the shell, execute the following:
+3. Running an example in the *torch* container: The _pytorch_ example is a python script. To run it, you will have to use the `docker ps` command and get to the shell in the container using the `docker exec` command. These steps are similar to what you would have done in the previous step to generate test data. Change directory to the `examples/pytorch` directory. The *torch* container provides an example of a linear regression model that uses **Arangopipe** to log experiment metadata. The experiment meta data includes information about the dataset, featureset and optimization settings used to run the *pytorch* model. Once you are in the shell of the *torch* container, run the driver program that develops the torch model and logs the experiment meta-data to *arangopipe*. To run the driver program, launch an `ipython` shell. In the shell, execute the following:
     1. `from ch_torch_linear_regression_driver import run_driver`
     2. `run_driver()`
 
@@ -91,7 +91,7 @@ To facilitate an easy start, docker containers for *torch* and *tensorflow* are 
 4. Execute this step after the model development step above has completed. Point your browser http:localhost:3000. Login to the Arangopipe user interface with username  root and password  `open sesame`. Select `Models` in the `Search Metadata` content pane. You should see the model you developed in the previous step. The details are shown in the figure below.
 
  
-    <img src="run_torch_driver.png" height="400">
+    <img src="pytorch_model_FE.png" height="400">
 
 5. Explore Arangopipe [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/arangoml/arangopipe/0.1?filepath=arangopipe%2Farangopipe_examples_torch.ipynb). Examples that show **Arangopipe** can be used with *hyperopt*, *sklearn* and *mlfow* are provided. To get the details of where these examples are located in the container, use the binder link above. To access the notebook examples provided with the docker container, point your browser to:  `http://localhost:8888` to get to a **Jupyter** notebook. The default notebook password is _root_
 
