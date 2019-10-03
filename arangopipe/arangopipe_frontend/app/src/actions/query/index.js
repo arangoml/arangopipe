@@ -1,7 +1,5 @@
 import { QUERY } from '../../reducers/type'
 import AUTHAPI from '../AUTHAPI'
-import moment from 'moment';
-import { message } from 'antd'
 
 
 //Get Default Query

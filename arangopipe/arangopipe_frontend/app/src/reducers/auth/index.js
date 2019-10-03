@@ -2,7 +2,11 @@
 import { USER } from '../type'
 
 
-const initState = { is_authed: localStorage.getItem('token') ? true : false, user: '' };
+const initState = { 
+  is_authed: localStorage.getItem('token') ? true : false, 
+  user: '', 
+  isAdmin: false 
+};
 
 
 const AuthReducer = (state = initState, action) => {
@@ -12,7 +16,8 @@ const AuthReducer = (state = initState, action) => {
 
     case USER.SIGNED_IN:
       state.is_authed  = true;
-      state.user = payload;
+      state.user = payload.name;
+      state.isAdmin = payload.isAdmin;
 
       return {
         ...state,

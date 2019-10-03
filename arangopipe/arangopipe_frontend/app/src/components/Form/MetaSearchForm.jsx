@@ -7,7 +7,7 @@ import {
 } from '../../actions/document'
 
 
-import { Form, Icon, Input, Button, Select } from 'antd';
+import { Form, Input, Button, Select } from 'antd';
 import { FIND_OPTIONS, WITH_OPTIONS, DEPLOY_QUERY } from "../../constants/searchOptions";
 
 const { Option } = Select;
