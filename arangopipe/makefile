@@ -11,7 +11,7 @@ python_arangopipe:$(SRC)
 upload_test_pypi:
 	twine upload --repository-url https://test.pypi.org/legacy/  -u rajiv.sambasivan -p $(TEST_PYPI_PASSWORD) dist/*
 docker_APSI_build:$(DOCKER_SI_FILE)
-	docker build --no-cache -t $(DOCKER_SI_IMG_NAME) -f $(DOCKER_SI_FILE) .
+	docker build --no-cache  -t $(DOCKER_SI_IMG_NAME) -f $(DOCKER_SI_FILE) .
 docker_publish_SI_latest:
 	@echo 'starting docker SI build...'
 	docker login --username arangopipe --password $(DOCKER_PASSWORD)
