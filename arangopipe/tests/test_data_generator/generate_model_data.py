@@ -154,6 +154,4 @@ def generate_runs(clean = False):
         ap.log_serving_perf(ex_servingperf, deployment_tag, user_id)
         
     return
-        
-    
  

@@ -12,17 +12,11 @@ FROM continuumio/miniconda3
 MAINTAINER Joerg Schad <info@arangodb.com>
 ENV GIT_PYTHON_REFRESH=quiet
 RUN apt-get update
-RUN apt-get install -y python-pip
-#RUN pip install mlflow hyperopt sklearn2 jsonpickle python-arango==4.4.0
-#RUN pip install -i https://test.pypi.org/simple/ arangopipe
-RUN pip install mlflow hyperopt sklearn2 jsonpickle python-arango
-RUN pip install arangopipe
+RUN apt-get install -y python-pip curl
+RUN pip install mlflow hyperopt sklearn2 jsonpickle python-arango arangopipe jupyter matplotlib PyYAML==5.1.1
 RUN mkdir -p /workspace
-RUN pip install jupyter
-RUN pip install matplotlib
-RUN pip install PyYAML==5.1.1
 RUN conda install pytorch cudatoolkit=10.0 -c pytorch 
-#RUN git clone git@github.com:arangoml/arangopipe.git /workspace
+
 WORKDIR /
 COPY --from=0 / .
 WORKDIR /workspace/experiments
