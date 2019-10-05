@@ -1,6 +1,8 @@
 # CHANGELOG
 
-## 0.2 [Unreleased]
+## 0.3 [Unreleased]
+
+## 0.2
 
 * Added Adhoc Query feature to the UI
 * Added Summary View feature to the UI
