@@ -57,7 +57,7 @@ To facilitate an easy start, docker containers for *torch* and *tensorflow* are 
 
 
 ## Start the container of your choice:
- 
+
  - [Torch](#torch)
  - [Tensorflow](#tensorflow)
 
@@ -73,19 +73,19 @@ To facilitate an easy start, docker containers for *torch* and *tensorflow* are 
 2. Running an example in the *torch* container: The _pytorch_ example is a python script. To run it:
     * Run the `docker ps` command to get the `CONTAINER ID` of the _pytorch_ container.
     * Run the command ` docker exec -it [ CONTAINER ID ] /bin/bash ` where  `CONTAINER ID` is obtained from the previous step.
-    * 
+    *
 Change directory to the `examples/pytorch` directory. The *torch* container provides an example of a linear regression model that uses **Arangopipe** to log experiment metadata. The experiment meta data includes information about the dataset, featureset and optimization settings used to run the *pytorch* model. To run the example, launch an `ipython` shell. In the shell, execute the following:
     1. `from ch_torch_linear_regression_driver import run_driver`
     2. `run_driver()`
 
     The details are shown in the figure below.
 
-    <img src="run_torch_driver.png" height="400">
+    <img src="assets/run_torch_driver.png" height="400">
 
 3. Execute this step after the model development step above has completed. Point your browser http:localhost:3000. Login to the Arangopipe user interface with username  root and password  `open sesame`. Select `Models` in the `Search Metadata` content pane. You should see the model you developed in the previous step. The details are shown in the figure below.
 
- 
-    <img src="pytorch_model_FE.png" height="400">
+
+    <img src="assets/pytorch_model_FE.png" height="400">
 
 4. Explore Arangopipe [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/arangoml/arangopipe/0.1?filepath=arangopipe%2Farangopipe_examples_torch.ipynb). Examples that show **Arangopipe** can be used with *hyperopt*, *sklearn* and *mlfow* are provided. To get the details of where these examples are located in the container, use the binder link above. To access the notebook examples provided with the docker container, point your browser to:  `http://localhost:8888` to get to a **Jupyter** notebook. The default notebook password is _root_
 
@@ -102,8 +102,8 @@ Change directory to the `examples/pytorch` directory. The *torch* container prov
 
 3.  Execute this step after you have executed all the cells in the notebook discussed in the previous step. Point your browser to http://localhost:3000. Login to the Arangopipe user interface with username  root and password  `open sesame`. Select `Featursets` in the `Search Metadata` content pane. You should see the featureset logged with **Arangopipe** resulting from executing the notebook discussed in the previous step.
 
-    <img src="tensorflow_example.png" height="400">
-    
+    <img src="assets/tensorflow_example.png" height="400">
+
 4. Explore Arangopipe [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/arangoml/arangopipe/0.1?filepath=arangopipe%2Farangopipe_examples.ipynb). Examples that show **Arangopipe** can be used with *hyperopt*, *sklearn* and *mlfow* are provided. To get the details of where these examples are located in the container, use the binder link above. To access the notebook examples provided with the docker container, point your browser to:  `http://localhost:8888` to get to a **Jupyter** notebook. The default notebook password is _root_
 
 5. Point your browser to: `http://localhost:6529` to get to the **ArangoDB** web user interface. The `root` password is `open sesame`.
@@ -111,7 +111,7 @@ Change directory to the `examples/pytorch` directory. The *torch* container prov
 
 
 ## Arangopipe Graph Model
-![Graph representation of Arangopipe entities](arangopipe_schema.png)
+![Graph representation of Arangopipe entities](assets/arangopipe_schema.png)
 
 ### Data Dictionary
 
@@ -154,32 +154,31 @@ If you would like to use **Arangopipe** with your pipelines, you would need to d
 ## Arangopipe User Interface Application
 Machine learning pipelines can use the **Arangopipe** API to update the **Arangopipe** database as they progress through their execution. Data scientists and ops personel, can use the **Arangopipe** UI to obtain information about deployed pipelines, trace the lineage of a deployment or track the details of a deployed asset (models, featuresets etc.). The **Arangopipe** UI offers a summary view of assets for each project tracked by **Arangopipe**. The summary view (content under "ML Projects Summary") is presented in the left navigation bar of the landing page of the user interface application. The administration features (associated with the "User", "Deployment" and "Project" links in the left navigation pane) are not available at this time and will be available shortly. The search feature, which can be used to track assets and view lineage information, is available at this time. The search feature can be accessed from the right hand pane of the landing page. This is shown below.
 
-<!--- ![Search Deployments](search_deployments_ann.png) -->
-<img src="search_deployments.png" height="600">
+
+<img src="assets/search_deployments.png" height="600">
 <figcaption> Figure 1: Arangopipe User Interface Application</figcaption>
 
 
 ### Searching for an Asset
 Assets (Featuresets, Datasets and Models) can be searched by the value of a property, for example the name, tag or deployment tag. An example of searching for a dataset by name is shown in the figure below.
 
-<img src="search_datasets.png" height="600">
+<img src="assets/search_datasets.png" height="600">
 <figcaption> Figure 2: Search for a dataset by name</figcaption>
 
 ### Tracing Asset Lineage
-To trace the lineage of a deployment, the user can make use of the search feature. Searching for deployments with no property value filter provides a list of all deployments for the project (see Figure 1).  After having selected the deployment of interest, if we are interested in a particualr asset, for example, the model associated with the deployment. We can search for models with the particular deployment tag. This is shown in the figure below. 
+To trace the lineage of a deployment, the user can make use of the search feature. Searching for deployments with no property value filter provides a list of all deployments for the project (see Figure 1).  After having selected the deployment of interest, if we are interested in a particualr asset, for example, the model associated with the deployment. We can search for models with the particular deployment tag. This is shown in the figure below.
 
- <img src="model_for_deployment.png" height="600">
+ <img src="assets/model_for_deployment.png" height="600">
 <figcaption> Figure 3: Search the model for a deployment</figcaption>
 
 If we are interested in the complete lineage, the graph representation of the lineage can be generated by clicking on the blue button with the graph icon (in the graph column of Figure 3). The graph is generated with the `graphviz` tool. This is illustrated in the figure below. You will have to click on the `Generate` button to generate the graph representation of the lineage.
 
- <img src="graph_representation.png" height="600">
+ <img src="assets/graph_representation.png" height="600">
 <figcaption> Figure 4: Search the model for a deployment</figcaption>
 
 In Figure 4, the dataset, featureset, model, model parameters, model performance in development, and most recent serving performance, is shown for the deployment of interest.
 
 ### Adhoc Queries
 To execute adhoc queries against **Arangopipe** use the *Query* feature from the left navigation bar. The details of using the query feature to submit a query to **Arangopipe** is shown in the figure below.
- <img src="adhoc_query.png" height="600">
+ <img src="assets/adhoc_query.png" height="600">
 <figcaption> Figure 4: Submit an adhoc query </figcaption>
-
