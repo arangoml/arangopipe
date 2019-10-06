@@ -73,14 +73,14 @@ To facilitate an easy start, docker containers for *torch* and *tensorflow* are 
 2. Running an example in the *torch* container: The _pytorch_ example is a python script. To run it:
     * Run the `docker ps` command to get the `CONTAINER ID` of the _pytorch_ container.
     * Run the command ` docker exec -it [ CONTAINER ID ] /bin/bash ` where  `CONTAINER ID` is obtained from the previous step.
-    *
+    
 Change directory to the `examples/pytorch` directory. The *torch* container provides an example of a linear regression model that uses **Arangopipe** to log experiment metadata. The experiment meta data includes information about the dataset, featureset and optimization settings used to run the *pytorch* model. To run the example, launch an `ipython` shell. In the shell, execute the following:
     1. `from ch_torch_linear_regression_driver import run_driver`
     2. `run_driver()`
 
-    The details are shown in the figure below.
+The details are shown in the figure below.
 
-    <img src="assets/run_torch_driver.png" height="400">
+<img src="assets/run_torch_driver.png" height="400">
 
 3. Execute this step after the model development step above has completed. Point your browser http:localhost:3000. Login to the Arangopipe user interface with username  root and password  `open sesame`. Select `Models` in the `Search Metadata` content pane. You should see the model you developed in the previous step. The details are shown in the figure below.
 
