@@ -82,7 +82,7 @@ The details are shown in the figure below.
 
 <img src="assets/run_torch_driver.png" height="400">
 
-3. Execute this step after the model development step above has completed. Point your browser http:localhost:3000. Login to the Arangopipe user interface with username  root and password  `open sesame`. Select `Models` in the `Search Metadata` content pane. You should see the model you developed in the previous step. The details are shown in the figure below.
+3. Execute this step after the model development step above has completed. Point your browser http:localhost:3000. Login to the Arangopipe user interface with username  `root` and password  `open sesame`. Select `Models` in the `Search Metadata` content pane. You should see the model you developed in the previous step. The details are shown in the figure below.
 
 
     <img src="assets/pytorch_model_FE.png" height="400">
