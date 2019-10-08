@@ -12,18 +12,18 @@ import { FIND_OPTIONS, WITH_OPTIONS, DEPLOY_QUERY } from "../../constants/search
 
 const { Option } = Select;
 
-const initCollection = 'deployment'
+const defaultCollection = 'deployment'
 
 
 class MyForm extends React.Component {
   state = {
-    currentCollection: initCollection
+    currentCollection: defaultCollection
   }
 
   componentDidMount() {
     // To disabled submit button at the beginning.
     this.props.form.validateFields();
-    this.makeQueryAndRun({collection: initCollection, with: null, equal: null})
+    this.makeQueryAndRun({collection: defaultCollection, with: null, equal: null})
   }
 
   hasErrors(fieldsError) {

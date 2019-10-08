@@ -179,6 +179,9 @@ class TreeGraphForm extends React.Component {
   
 
     if(filter === 'deployment' || collection === 'deployment') {
+
+
+      //Get graph data by deployment_tag
       query = `FOR d in deployment
         FILTER d.tag == '${equal}'
             
@@ -228,6 +231,8 @@ class TreeGraphForm extends React.Component {
               "dev_perf": dev_perf
             }`
     } else if(filter != 'deployment' && collection != 'deployment'){
+
+        //Get graph data by name or tag
         switch(collection){
           case 'datasets':
             query = `FOR ds in datasets
@@ -326,7 +331,6 @@ class TreeGraphForm extends React.Component {
                                   }
               `
             break;
-
           case 'models':
             query = `FOR m in models
                 FILTER m._key == '${key}'
@@ -378,7 +382,6 @@ class TreeGraphForm extends React.Component {
                                 }
                 `
             break;
-
         }
     }
 
@@ -389,7 +392,8 @@ class TreeGraphForm extends React.Component {
 
     if (this.props != props) {
       let gdata = Object.assign([], props.gdata)
-      console.log(props.gdata)
+
+      //Create Graph Nodes
       if(gdata.length > 0) {
         let tree = `digraph R {
               rankdir=LR

@@ -34,7 +34,6 @@ export const getGraphData = (query) => {
       }
 
       return AUTHAPI(data).then(res => {
-     
         return dispatch({ type: DOCUMENT.GRAPH, payload: res.data.result })
       }).catch(err => {
         throw err

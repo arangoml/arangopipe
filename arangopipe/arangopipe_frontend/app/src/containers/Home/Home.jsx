@@ -24,7 +24,6 @@ class Home extends React.Component {
 
   //Show Graph Modal
   showModal = (key) => {
-
     this.setState({
       selectedRow: key,
       visible: true
@@ -32,7 +31,7 @@ class Home extends React.Component {
   };
 
 
-  //
+ 
   handleOk = e => {
     this.setState({
       visible: false,

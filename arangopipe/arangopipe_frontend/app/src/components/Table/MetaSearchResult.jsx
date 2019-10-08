@@ -9,7 +9,6 @@ const capitalizeFLetter = (str) => {
 
 const MetaSearchTable = (props) => {
   const unallowedColumns = ['_id', '_key', '_rev', 'key']
-  const graphAllowedCollections = ['']
   const columns = []
 
   if((props.data || []).length > 0) {
