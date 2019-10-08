@@ -15,15 +15,19 @@ import './Home.css'
 
 class Home extends React.Component {
   state = {
+    currentCollection: null,
     currentFilter: null,
     equal: null,
-    visible: false
+    visible: false,
+    selectedRow: null
   };
 
   //Show Graph Modal
-  showModal = () => {
+  showModal = (key) => {
+
     this.setState({
-      visible: true,
+      selectedRow: key,
+      visible: true
     });
   };
 
@@ -44,9 +48,10 @@ class Home extends React.Component {
   };
 
 
-  //Set Filter
-  setCurrentFilter(filter, equal) {
+  //Set Collection and Filter and Search key from search form
+  setCurrentFilter(collection, filter, equal) {
     this.setState({
+      currentCollection: collection,
       currentFilter: filter,
       equal: equal
     })
@@ -57,15 +62,18 @@ class Home extends React.Component {
 
     return(
       <Row gutter={20}>
+
         <Col sm={24} md={6} xs={24}>
           <Card title="ML Projects Summary" bordered={true} style={{marginBottom: 20}}>
             <SummaryTree/>
           </Card>
         </Col>
+
         <Col sm={24} md={18} xs={24}>
           <Card title="Search Metadata" bordered={true}>
             <MetaSearchForm 
-              setFilter = {(filter, equal) => this.setCurrentFilter(filter, equal)}/>
+              setFilter = {(collection, filter, equal) => 
+                this.setCurrentFilter(collection, filter, equal)}/>
 
             <Divider dashed style={{margin: '15px 0'}}/>
 
@@ -79,10 +87,13 @@ class Home extends React.Component {
               <TreeGraph
                 handleOk={this.handleOk}
                 handleCancel={this.handleCancel}
-                deploymentTag={this.state.equal}/>}
-            
+                collection = {this.state.currentCollection}
+                filter = {this.state.currentFilter}
+                row_key = {this.state.selectedRow}
+                equal={this.state.equal}/>}
           </Card>
         </Col>
+
       </Row>
     )
   }

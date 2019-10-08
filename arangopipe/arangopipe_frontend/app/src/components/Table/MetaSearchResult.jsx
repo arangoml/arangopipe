@@ -9,6 +9,7 @@ const capitalizeFLetter = (str) => {
 
 const MetaSearchTable = (props) => {
   const unallowedColumns = ['_id', '_key', '_rev', 'key']
+  const graphAllowedCollections = ['']
   const columns = []
 
   if((props.data || []).length > 0) {
@@ -38,17 +39,18 @@ const MetaSearchTable = (props) => {
       
     });
 
-    if(props.filter ===  'deployment') {
+    if(props.filter !== null) {
       columns.push(
       {
         title: 'Graph',
         key: 'graph',
         align: 'center',
-        render: (text, record) => (
+        render: (text, record, index) => {
+          return(
           <span>
-            <Button type="primary" shape="circle" icon="line-chart" onClick={props.showGraph}/>
+            <Button type="primary" shape="circle" icon="line-chart" onClick={() => props.showGraph(record['_key'])}/>
           </span>
-        ),
+        )},
       })
     }
   }

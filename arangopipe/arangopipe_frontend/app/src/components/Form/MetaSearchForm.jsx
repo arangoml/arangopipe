@@ -12,16 +12,18 @@ import { FIND_OPTIONS, WITH_OPTIONS, DEPLOY_QUERY } from "../../constants/search
 
 const { Option } = Select;
 
+const initCollection = 'deployment'
+
 
 class MyForm extends React.Component {
   state = {
-    currentCollection: 'deployment'
+    currentCollection: initCollection
   }
 
   componentDidMount() {
     // To disabled submit button at the beginning.
     this.props.form.validateFields();
-    this.makeQueryAndRun({collection: 'deployment', with: null, equal: null})
+    this.makeQueryAndRun({collection: initCollection, with: null, equal: null})
   }
 
   hasErrors(fieldsError) {
@@ -32,8 +34,11 @@ class MyForm extends React.Component {
 
     let query = ''
 
+    //Get all data of selected collection
     if(values.collection !== null)
       query += `FOR d IN ${values.collection} `;
+
+    //Set Filter and Search key
     if(values.with !== null && values.equal !== null)
       if(values.with === 'deployment'){
         const where = DEPLOY_QUERY[values.collection || 'datasets'].where
@@ -50,7 +55,7 @@ class MyForm extends React.Component {
       query += 'RETURN d';
     
     this.props.getCollections(query)
-    this.props.setFilter(values.with, values.equal)
+    this.props.setFilter(values.collection, values.with, values.equal)
   } 
 
   handleSubmit = e => {
@@ -72,22 +77,29 @@ class MyForm extends React.Component {
     this.makeQueryAndRun({collection: value, with: null, equal: null})
   }
 
-  handleWithChange(value) {
-    
-  }
-
   resetSearchForm(e){
     e.preventDefault()
-    this.makeQueryAndRun({collection: this.props.form.getFieldValue('collection'), with: null, equal: null})
+    
+    this.makeQueryAndRun({
+      collection: this.props.form.getFieldValue('collection'), 
+      with: null, 
+      equal: null})
+
     this.props.form.setFieldsValue({
       with: null,
       equal: null
     })
+
     this.props.form.validateFields();
   }
 
   render() {
-    const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
+    const { 
+      getFieldDecorator, 
+      getFieldsError, 
+      getFieldError, 
+      isFieldTouched 
+    } = this.props.form;
 
     // Making Find Options from Constatns
     const find_ops = [];
@@ -109,26 +121,32 @@ class MyForm extends React.Component {
 
     return (
       <Form layout="inline" onSubmit={this.handleSubmit} style={{textAlign:'right'}}>
-        <Form.Item label="Find" validateStatus={datasetError ? 'error' : ''} help={datasetError || ''}>
+        <Form.Item label="Find" validateStatus={datasetError ? 'error' : ''} 
+            help={datasetError || ''}>
           {getFieldDecorator('collection', {
             initialValue: 'deployment',
           })(
-            <Select style={{ width: 200 }} onChange={(value) => {this.handleCollectionChange(value)}}>
+            <Select style={{ width: 200 }} 
+                    onChange={(value) => {this.handleCollectionChange(value)}}>
               {find_ops}
             </Select>
           )}
         </Form.Item>
-        <Form.Item label="With" validateStatus={withError ? 'error' : ''} help={withError || ''}>
+        <Form.Item label="With" validateStatus={withError ? 'error' : ''} 
+            help={withError || ''}>
           {getFieldDecorator('with', {
             initialValue: null,
             rules: [{ required: true, message: 'Please select!' }],
           })(
-            <Select style={{ width: 120 }} onChange={(value) => {this.handleWithChange(value)}} >
+            <Select style={{ width: 120 }} >
               {with_ops}
             </Select>
           )}
         </Form.Item>
-        <Form.Item label="Equal To" validateStatus={equalError ? 'error' : ''} help={equalError || ''}>
+        <Form.Item label="Equal To" 
+          validateStatus={equalError ? 'error' : ''} 
+          help={equalError || ''}>
+
           {getFieldDecorator('equal', {
             initialValue: null,
             rules: [{ required: true, message: 'Please select!' }],
@@ -137,17 +155,17 @@ class MyForm extends React.Component {
               type="text"
             />,
           )}
+
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit" 
-                disabled={this.hasErrors(getFieldsError())} icon="search">
+              disabled={this.hasErrors(getFieldsError())} icon="search">
             Search
           </Button>
         </Form.Item>
         <Form.Item>
           <Button type="light" htmlType="button" icon="rollback" 
-                
-                onClick={(e) => this.resetSearchForm(e)}>
+              onClick={(e) => this.resetSearchForm(e)}>
             Reset
           </Button>
         </Form.Item>
