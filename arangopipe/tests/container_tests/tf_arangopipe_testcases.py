@@ -21,7 +21,8 @@ class TestArangopipe(unittest.TestCase):
         self.config = ArangoPipeConfig()
         self.config.set_dbconnection(hostname = "http://localhost:8529",\
                                      root_user = "root",\
-                                root_user_password = "open sesame")
+                                root_user_password = "open sesame",\
+                                arangopipe_dbname = "arangopipe_test")
         self.admin = ArangoPipeAdmin(config = self.config)
         self.ap = ArangoPipe(config = self.config)
         self.provision_project()
@@ -131,7 +132,7 @@ class TestArangopipe(unittest.TestCase):
         return
     
     def dataset_shift_positive(self):
-        ds_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "covariate_shift/cal_housing.csv")
+        ds_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cal_housing.csv")
         df = pd.read_csv(ds_path)
         req_cols = df.columns.tolist()
         df = df[req_cols]
@@ -144,7 +145,7 @@ class TestArangopipe(unittest.TestCase):
         return score
 
     def dataset_shift_negative(self):
-        ds_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "covariate_shift/cal_housing.csv")
+        ds_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cal_housing.csv")
         df = pd.read_csv(ds_path)
         req_cols = df.columns.tolist()
         df = df[req_cols]
@@ -155,6 +156,30 @@ class TestArangopipe(unittest.TestCase):
         print ("Detaset shift score : ", score)
     
         return score
+    
+    def vertex_add_to_arangopipe(self):
+        self.admin.add_vertex_to_arangopipe('test_vertex_1')
+        
+        return 
+        
+    
+    def test_arangopipe_vertex_add(self):
+        self.vertex_add_to_arangopipe()
+        self.assertTrue(self.admin.has_vertex('test_vertex_1'))
+        
+        return
+    
+    def vertex_remove_from_arangopipe(self):
+        self.admin.add_vertex_to_arangopipe('test_vertex_t1')
+        self.admin.remove_vertex_from_arangopipe('test_vertex_t1', purge = True)
+        
+        return
+        
+    def test_arangopipe_vertex_remove(self):
+        self.vertex_remove_from_arangopipe()
+        self.assertFalse(self.admin.has_vertex('test_vertex_t1'))
+        
+        return
     
     def test_register_dataset(self):
         err_raised = False
@@ -318,48 +343,51 @@ class TestArangopipe(unittest.TestCase):
         self.assertTrue(score < 0.6)
         return
         
-    def test_arangopipe_vertex_add(self):
-        self.admin.add_vertex_to_arangopipe('test_vertex_1')
-        self.assertTrue(self.admin.has_vertex('test_vertex_1'))
-        
-        return
+
     
-    def test_arangopipe_vertex_remove(self):
-        self.admin.add_vertex_to_arangopipe('test_vertex_t1')
-        self.admin.remove_vertex_from_arangopipe('test_vertex_t1', purge = True)
-        self.assertFalse(self.admin.has_vertex('test_vertex_t1'))
-        
-        return
-        
-    
-    def test_arangopipe_edge_add(self):
+    def add_edge_to_arangopipe(self):
         self.admin.add_vertex_to_arangopipe('test_vertex_s')
         self.admin.add_vertex_to_arangopipe('test_vertex_d')
         self.admin.add_edge_definition_to_arangopipe('test_edge',\
                                                      'test_vertex_s', 'test_vertex_d')
+        return
+    
+    def test_arangopipe_edge_add(self):
+        self.add_edge_to_arangopipe()
         self.assertTrue(self.admin.has_edge('test_edge'))
         
         return
     
-    def test_arangopipe_edge_remove(self):
+    def remove_edge_from_arangopipe(self):
         self.admin.add_vertex_to_arangopipe('test_vertex_s1')
         self.admin.add_vertex_to_arangopipe('test_vertex_d1')
         self.admin.add_edge_definition_to_arangopipe('test_edge_1',\
                                                      'test_vertex_s1', 'test_vertex_d1')
         self.admin.remove_edge_definition_from_arangopipe('test_edge_1', purge = True)
+        
+        return
+        
+    def test_arangopipe_edge_remove(self):
+        self.remove_edge_from_arangopipe()
         self.assertFalse(self.admin.has_edge('test_edge_1'))
         
         return
     
-    def test_arangopipe_vertex_node_add(self):
+    def add_vertex_node(self):
         ni = None
         self.admin.add_vertex_to_arangopipe('test_vertex_s2')
         sd = {'name': "sample doc"}
         ni = self.ap.insert_into_vertex_type('test_vertex_s2', sd)
+        
+        return ni
+        
+        
+    def test_arangopipe_vertex_node_add(self):
+        ni = self.add_vertex_node()
         self.assertIsNotNone(ni)
         return
     
-    def test_arangopipe_edge_link_add(self):
+    def add_edge_link(self):
         ei= None
         self.admin.add_vertex_to_arangopipe('test_vertex_s3')
         self.admin.add_vertex_to_arangopipe('test_vertex_s4')
@@ -369,6 +397,12 @@ class TestArangopipe(unittest.TestCase):
         self.admin.add_edge_definition_to_arangopipe('test_edge',\
                                                 'test_vertex_s3', 'test_vertex_s4')
         ei = self.ap.insert_into_edge_type('test_edge', v1, v2)
+        
+        return ei
+        
+    
+    def test_arangopipe_edge_link_add(self):
+        ei = self.add_edge_link()
         self.assertIsNotNone(ei)
         return
     
