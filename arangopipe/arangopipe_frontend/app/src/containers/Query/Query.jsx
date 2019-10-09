@@ -335,8 +335,10 @@ class Query extends React.Component {
                 {Math.round(this.props.extra.stats.executionTime * 1000000)/1000} ms</span>
             </div>} 
             bordered={true} 
-            extra={typeof(this.props.result[0])==='object'?<Switch checkedChildren="JSON" unCheckedChildren="TABLE" onChange={this.changeView}/>:''}>
-            {typeof(this.props.result[0])!=='object' && <AceEditor
+            extra={(!Array.isArray(this.props.result[0]) && 
+              typeof(this.props.result[0]) === 'object')?
+              <Switch checkedChildren="JSON" unCheckedChildren="TABLE" onChange={this.changeView}/>:''}>
+            {(Array.isArray(this.props.result[0]) || typeof(this.props.result[0]) !== 'object') && <AceEditor
                   style={{border: '1px solid #b3b3b5'}}
                   mode="json"
                   width = '100%'
@@ -353,8 +355,12 @@ class Query extends React.Component {
                 />
 
             }
-            {this.state.changeView && typeof(this.props.result[0])==='object' && <QueryResultTable data={this.props.result}/>}
-            {!this.state.changeView && typeof(this.props.result[0])==='object' && <AceEditor
+            {this.state.changeView && !Array.isArray(this.props.result[0]) && 
+              typeof(this.props.result[0]) === 'object'
+              && <QueryResultTable data={this.props.result}/>}
+            {!this.state.changeView && !Array.isArray(this.props.result[0]) &&
+              typeof(this.props.result[0]) === 'object'
+              && <AceEditor
                   style={{border: '1px solid #b3b3b5'}}
                   mode="json"
                   width = '100%'

@@ -24,33 +24,21 @@ export const getCollections = (query) => {
 }
 
 export const getGraphData = (query) => {
+
   return (dispatch) => {
-    let apis = []
-
-    apis = query.map(q => {
-      if(q !== ''){
-        return {
-          method: 'POST',
-          url: '_api/cursor',
-          data: { "query" : q}
-        }
+    if(query !== ''){
+      let data = {
+        method: 'POST',
+        url: '_api/cursor',
+        data: { "query" : query}
       }
-    })
 
-
-    Promise.all([apis.map(api => AUTHAPI(api))]).then(async res => {
-        let data = []
-      
-        // res[0].map(d => {
-        for (var index = 0; index < res[0].length; index += 1) {
-          await res[0][index].then(r => {
-            data.push(r.data.result)
-          })
-        }
-        // })
-
-        return dispatch({ type: DOCUMENT.GRAPH, payload: data })
-    })
+      return AUTHAPI(data).then(res => {
+        return dispatch({ type: DOCUMENT.GRAPH, payload: res.data.result })
+      }).catch(err => {
+        throw err
+      })
+    }
   }
 }
 
