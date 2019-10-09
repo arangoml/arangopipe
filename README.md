@@ -87,9 +87,9 @@ The details are shown in the figure below.
 
     <img src="assets/pytorch_model_FE.png" height="400">
 
-4. Explore Arangopipe [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/arangoml/arangopipe/0.1?filepath=arangopipe%2Farangopipe_examples_torch.ipynb). Examples that show **Arangopipe** can be used with *hyperopt*, *sklearn* and *mlfow* are provided. To get the details of where these examples are located in the container, use the binder link above. To access the notebook examples provided with the docker container, point your browser to:  `http://localhost:8888` to get to a **Jupyter** notebook. The default notebook password is _root_
+4. Explore Arangopipe [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/arangoml/arangopipe/0.1?filepath=arangopipe%2Farangopipe_examples_torch.ipynb). Examples that show **Arangopipe** can be used with *hyperopt*, *sklearn* and *mlfow* are provided. To get the details of where these examples are located in the container, use the binder link above. To access the notebook examples provided with the docker container, point your browser to [http://localhost:8888](http://localhost:8888) to get to a **Jupyter** notebook. The default notebook password is _root_
 
-5. Point your browser to: `http://localhost:6529` to get to the **ArangoDB** web user interface. The `root` password is `open sesame`.
+5. Point your browser to [http://localhost:6529](http://localhost:6529) to get to the **ArangoDB** web user interface. The `root` password is `open sesame`.
 
 ### Tensorflow
 

@@ -38,17 +38,18 @@ const MetaSearchTable = (props) => {
       
     });
 
-    if(props.filter ===  'deployment') {
+    if(props.filter !== null) {
       columns.push(
       {
         title: 'Graph',
         key: 'graph',
         align: 'center',
-        render: (text, record) => (
+        render: (text, record, index) => {
+          return(
           <span>
-            <Button type="primary" shape="circle" icon="line-chart" onClick={props.showGraph}/>
+            <Button type="primary" shape="circle" icon="line-chart" onClick={() => props.showGraph(record['_key'])}/>
           </span>
-        ),
+        )},
       })
     }
   }
