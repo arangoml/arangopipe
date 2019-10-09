@@ -339,6 +339,43 @@ class ArangoPipe:
         dep_servingperf_reg = dep_servingperf_edge.insert(the_dep_servingperf_edge)
         return dep_servingperf_reg
     
+    def insert_into_vertex_type(self, vertex_type_name, document):
+        vertex_info = None
+        if self.emlg.has_vertex_collection(vertex_type_name):
+            vc = self.emlg.vertex_collection(vertex_type_name)
+            vertex_info = vc.insert(document)
+        else:
+            logger.error("Vertex, " + vertex_type_name + " does not exist in Arangopipe!")
+        
+        return vertex_info
+    
+    def insert_into_edge_type(self, edge_name, from_vdoc, to_vdoc, document = None):
+        edge_info = None
+        if self.emlg.has_edge_collection(edge_name):
+            try:
+                ec = self.emlg.edge_collection(edge_name)
+                edge_key = from_vdoc['_key'] + "-" + to_vdoc['_key']
+                if document is not None:
+                    document["_from"] = from_vdoc['_id']
+                    document["_to"] = to_vdoc['_id']
+                    document["_key"] = edge_key
+                    edge_info = ec.insert(document)
+                else:
+                    document = { "_from": from_vdoc['_id'],\
+                                "_to": to_vdoc['_id'],\
+                                "_key": edge_key }
+                    edge_info = ec.insert(document)
+            except Exception as e :
+                logger.error(e)
+        else:
+            logger.error("Edge, " + edge_name + " does not exist!")
+        
+        return edge_info
+    
+        
+        
+        
+    
 
         
         

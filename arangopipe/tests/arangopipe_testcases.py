@@ -318,7 +318,60 @@ class TestArangopipe(unittest.TestCase):
         self.assertTrue(score < 0.6)
         return
         
-
+    def test_arangopipe_vertex_add(self):
+        self.admin.add_vertex_to_arangopipe('test_vertex_1')
+        self.assertTrue(self.admin.has_vertex('test_vertex_1'))
+        
+        return
+    
+    def test_arangopipe_vertex_remove(self):
+        self.admin.add_vertex_to_arangopipe('test_vertex_t1')
+        self.admin.remove_vertex_from_arangopipe('test_vertex_t1', purge = True)
+        self.assertFalse(self.admin.has_vertex('test_vertex_t1'))
+        
+        return
+        
+    
+    def test_arangopipe_edge_add(self):
+        self.admin.add_vertex_to_arangopipe('test_vertex_s')
+        self.admin.add_vertex_to_arangopipe('test_vertex_d')
+        self.admin.add_edge_definition_to_arangopipe('test_edge',\
+                                                     'test_vertex_s', 'test_vertex_d')
+        self.assertTrue(self.admin.has_edge('test_edge'))
+        
+        return
+    
+    def test_arangopipe_edge_remove(self):
+        self.admin.add_vertex_to_arangopipe('test_vertex_s1')
+        self.admin.add_vertex_to_arangopipe('test_vertex_d1')
+        self.admin.add_edge_definition_to_arangopipe('test_edge_1',\
+                                                     'test_vertex_s1', 'test_vertex_d1')
+        self.admin.remove_edge_definition_from_arangopipe('test_edge_1', purge = True)
+        self.assertFalse(self.admin.has_edge('test_edge_1'))
+        
+        return
+    
+    def test_arangopipe_vertex_node_add(self):
+        ni = None
+        self.admin.add_vertex_to_arangopipe('test_vertex_s2')
+        sd = {'name': "sample doc"}
+        ni = self.ap.insert_into_vertex_type('test_vertex_s2', sd)
+        self.assertIsNotNone(ni)
+        return
+    
+    def test_arangopipe_edge_link_add(self):
+        ei= None
+        self.admin.add_vertex_to_arangopipe('test_vertex_s3')
+        self.admin.add_vertex_to_arangopipe('test_vertex_s4')
+        sd = {'name': "sample doc"}
+        v1 = self.ap.insert_into_vertex_type('test_vertex_s3', sd)
+        v2 = self.ap.insert_into_vertex_type('test_vertex_s4', sd)
+        self.admin.add_edge_definition_to_arangopipe('test_edge',\
+                                                'test_vertex_s3', 'test_vertex_s4')
+        ei = self.ap.insert_into_edge_type('test_edge', v1, v2)
+        self.assertIsNotNone(ei)
+        return
+    
     
     def tearDown(self):
         #pass
