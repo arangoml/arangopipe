@@ -264,6 +264,105 @@ class ArangoPipeAdmin:
         dep_model_reg = dep_model_edge.insert(the_dep_model_edge)
         return dep_model_reg
     
+    def add_vertex_to_arangopipe(self, vertex_to_create):
+        
+        if not self.db.has_graph(self.cfg['mlgraph']['graphname']):
+            self.emlg = self.db.create_graph(self.cfg['mlgraph']['graphname'])
+        else:
+            self.emlg = self.db.graph(self.cfg['mlgraph']['graphname'])
+        
+        #Check if vertex exists in the graph, if not create it
+        if not self.emlg.has_vertex_collection(vertex_to_create):
+             self.emlg.create_vertex_collection(vertex_to_create)
+        else:
+            logger.error("Vertex, " + vertex_to_create + " already exists!")
+        
+        return
+    
+    def remove_vertex_from_arangopipe(self, vertex_to_remove, purge = False):
+        
+        if not self.db.has_graph(self.cfg['mlgraph']['graphname']):
+            self.emlg = self.db.create_graph(self.cfg['mlgraph']['graphname'])
+        else:
+            self.emlg = self.db.graph(self.cfg['mlgraph']['graphname'])
+        
+        #Check if vertex exists in the graph, if not create it
+        if self.emlg.has_vertex_collection(vertex_to_remove):
+             self.emlg.delete_vertex_collection(vertex_to_remove, purge)
+             logger.info("Vertex collection " + vertex_to_remove + " has been deleted!")
+        else:
+            logger.error("Vertex, " + vertex_to_remove + " does not exist!")
+        
+        return
+    
+
+    
+    def add_edge_definition_to_arangopipe(self, edge_name, from_vertex_name, to_vertex_name):
+        
+        if not self.db.has_graph(self.cfg['mlgraph']['graphname']):
+            self.emlg = self.db.create_graph(self.cfg['mlgraph']['graphname'])
+        else:
+            self.emlg = self.db.graph(self.cfg['mlgraph']['graphname'])
+        
+        #Check if all data needed to create an edge exists, if so, create it
+        
+        if not self.emlg.has_vertex_collection(from_vertex_name):
+            logger.error("Source vertex, " + from_vertex_name +\
+                         " does not exist, aborting edge creation!")
+            return
+        elif not self.emlg.has_vertex_collection(to_vertex_name):
+            logger.error("Destination vertex, " + to_vertex_name +\
+                         " does not exist, aborting edge creation!")
+            return
+        
+        else:
+            if not self.emlg.has_edge_definition(edge_name):
+                self.emlg.create_edge_definition(edge_collection = edge_name,\
+                                                 from_vertex_collections=[from_vertex_name],\
+                                                 to_vertex_collections=[to_vertex_name] )
+            else:
+                logger.error("Edge, " + edge_name + " already exists!")
+        
+        return
+    
+    def remove_edge_definition_from_arangopipe(self, edge_name, purge = False):
+        
+        if not self.db.has_graph(self.cfg['mlgraph']['graphname']):
+            self.emlg = self.db.create_graph(self.cfg['mlgraph']['graphname'])
+        else:
+            self.emlg = self.db.graph(self.cfg['mlgraph']['graphname'])
+        
+
+        if self.emlg.has_edge_definition(edge_name):
+                self.emlg.delete_edge_definition(edge_name, purge)
+        
+        else:
+            logger.error("Edge definition " + edge_name + " does not exist!")
+        
+        return
+    
+    def has_vertex(self, vertex_name):
+                
+        if not self.db.has_graph(self.cfg['mlgraph']['graphname']):
+            self.emlg = self.db.create_graph(self.cfg['mlgraph']['graphname'])
+        else:
+            self.emlg = self.db.graph(self.cfg['mlgraph']['graphname'])
+            
+        result = self.emlg.has_vertex_collection(vertex_name)
+        return result
+    
+    def has_edge(self, edge_name):
+                
+        if not self.db.has_graph(self.cfg['mlgraph']['graphname']):
+            self.emlg = self.db.create_graph(self.cfg['mlgraph']['graphname'])
+        else:
+            self.emlg = self.db.graph(self.cfg['mlgraph']['graphname'])
+            
+        result = self.emlg.has_edge_definition(edge_name)
+        
+        return result
+        
+        
     
 
     

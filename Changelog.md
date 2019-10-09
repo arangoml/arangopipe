@@ -1,6 +1,9 @@
 # CHANGELOG
 
 ## 0.3 [Unreleased]
+* Added API for schema extension
+* Graph generation for all search functions added to the UI
+* Updated tensorflow docker image to use the 1.14 tag.
 
 ## 0.2
 
