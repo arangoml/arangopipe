@@ -12,6 +12,7 @@ import 'brace/theme/xcode';
 import AqlMode from './AqlMode'
 import QueryResultTable from "../../components/Table/QueryResult"
 import { QUERY } from '../../reducers/type'
+import { SAMPLE_QUERIES } from "../../constants/sampleQueries";
 
 import {
   getDefaultQuery,
@@ -93,21 +94,22 @@ class Query extends React.Component {
   //-------------------
 
   deleteQuery = (e, index) => {
-    e.preventDefault()
+    e.stopPropagation();
+
     let data = this.props.saved_query.filter((item, inx) => inx !== index)
 
+    this.refs.aceEditor.editor.getSession().setValue('')
+    this.setState({
+      currentQuery: '',
+      saveEnabel: false
+    })
+ 
     this.props.reSaveQuery(data)
     notification['success']({
       message: 'Delete query',
       description:
         'Selected query is deleted correctly.',
     });
-
-    this.refs.aceEditor.editor.getSession().setValue('')
-    this.setState({
-      currentQuery: ''
-    })
-
   }
 
 
@@ -170,8 +172,6 @@ class Query extends React.Component {
     this.props.executeQuery(query)
   }
 
-  
-
 
   //-------------------
   // Explain Query
@@ -233,6 +233,14 @@ class Query extends React.Component {
           </div>
         </Menu.Item>)
 
+    //Get Sample Query Item List
+    const SampleQueryList = SAMPLE_QUERIES.map((item, index) => 
+        <Menu.Item key={index+'s'} onClick={() => this.showQuery(item.value, index, false)}>
+          <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between'}}>
+            <span className='query-title'>{item.name}</span>
+          </div>
+        </Menu.Item>)
+
     const NewAlert = () => <Alert
           description={this.props.error}
           type="error"
@@ -248,7 +256,8 @@ class Query extends React.Component {
               <Button type={this.state.openSavedQuery?'primary': 'default'} 
                   onClick={this.openSavedQuery}>
                 <Icon type="star" theme={this.state.openSavedQuery? 'filled': ''}></Icon>
-                Queries({this.props.default_query.length + this.props.saved_query.length})
+                Queries({this.props.default_query.length + this.props.saved_query.length +
+                  SAMPLE_QUERIES.length})
               </Button> &nbsp;
 
               <Button icon="fire" type={!this.state.openSavedQuery?'primary': 'default'} 
@@ -273,8 +282,20 @@ class Query extends React.Component {
                   defaultOpenKeys={['sub1']}
                   mode="inline"
                 >
-                {SavedQueryList}
-                {DefaultQueryList}
+                <Menu.Item title="">
+                </Menu.Item>
+
+                { this.props.saved_query.length > 0 && 
+                  <Menu.ItemGroup title="Saved Query">
+                    {SavedQueryList}
+                  </Menu.ItemGroup>
+                }
+                <Menu.ItemGroup title="ArangoPipe Example">
+                  {SampleQueryList}
+                </Menu.ItemGroup>
+                <Menu.ItemGroup title="Common Example">
+                  {DefaultQueryList}
+                </Menu.ItemGroup>
                 </Menu></div>
               </Col>}
               <Col sm={this.state.openSavedQuery?17: 24}>
