@@ -9,6 +9,7 @@ const capitalizeFLetter = (str) => {
 
 const MetaSearchTable = (props) => {
   const unallowedColumns = ['_id', '_key', '_rev', 'key']
+  const alternativeColumns = {'run_id': 'Experiment ID', 'generated_by':'GeneratedBy'}
   const columns = []
 
   if((props.data || []).length > 0) {
@@ -24,7 +25,7 @@ const MetaSearchTable = (props) => {
       if(!unallowedColumns.includes(key)) {
         let newColumn = {
           key: key,
-          title: capitalizeFLetter(key),
+          title: alternativeColumns[key]?alternativeColumns[key]:capitalizeFLetter(key),
           dataIndex: key,
           sorter: (a, b) => {
             if(typeof(a[key]) == 'string')
@@ -63,7 +64,8 @@ const MetaSearchTable = (props) => {
             <Table columns={columns} 
              dataSource={data} 
              bordered={true}
-             scroll={{x:true}}/>
+             scroll={{x:true}}
+             pagination={{ pageSize: 5 }}/>
 
           </div>)
 }

@@ -12,11 +12,9 @@ FROM tensorflow/tensorflow:1.14.0-py3
 
 MAINTAINER Joerg Schad <info@arangodb.com>
 ENV GIT_PYTHON_REFRESH=quiet
-RUN apt-get update
-RUN apt-get install -y python-pip python-pip curl
 
-RUN pip install  mlflow hyperopt sklearn2 jsonpickle python-arango arangopipe jupyter matplotlib tensorflow-data-validation PyYAML==5.1.1  
-
+RUN apt-get update && apt-get install -y python-pip curl
+RUN pip install mlflow hyperopt sklearn2 jsonpickle python-arango arangopipe jupyter matplotlib tensorflow-data-validation PyYAML==5.1.1
 RUN mkdir -p /workspace
 
 WORKDIR /

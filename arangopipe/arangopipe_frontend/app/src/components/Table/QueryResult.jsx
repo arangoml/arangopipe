@@ -20,6 +20,7 @@ const QueryResultTable = (props) => {
           key: key,
           title: capitalizeFLetter(key),
           dataIndex: key,
+          maxWidth: 100,
           sorter: (a, b) => {
             if(typeof(a[key]) == 'string')
               return a[key].localeCompare(b[key])
@@ -51,7 +52,8 @@ const QueryResultTable = (props) => {
             <Table columns={columns} 
              dataSource={data} 
              bordered={true}
-             scroll={{x:true}}/>
+             scroll={{x:true}}
+             pagination={{ pageSize: 5 }} />
 
           </div>)
 }
