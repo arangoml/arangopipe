@@ -14,10 +14,7 @@ from arangopipe.rf_dataset_shift_detector import RF_DatasetShiftDetector
 import os
 import pandas as pd
 import sys, traceback
-import tensorflow_data_validation as tfdv
-from google.protobuf import json_format
-from tensorflow_metadata.proto.v0 import statistics_pb2
-from tensorflow_metadata.proto.v0 import schema_pb2
+from ch_torch_linear_regression_driver import run_driver
 
 class TestArangopipe(unittest.TestCase):
         
@@ -161,49 +158,28 @@ class TestArangopipe(unittest.TestCase):
     
         return score
    
-    def run_tf_test(self):
-        print("Running tf workflow test!")
-        DATA_DIR = "./"
-        TRAIN_DATA = os.path.join(DATA_DIR, 'cal_housing.csv')
-        train_stats = tfdv.generate_statistics_from_csv(TRAIN_DATA, delimiter=',')
-        schema = tfdv.infer_schema(train_stats)
-        enc_stats = json_format.MessageToJson(train_stats)
-        enc_schema = json_format.MessageToJson(schema)
-        data = pd.read_csv('cal_housing.csv')
-        ds_info = {"name" : "cal_housing_dataset",\
-                   "description": "data about housing in California",\
-           "encoded_stats": enc_stats,\
-           "encoded_schema": enc_schema,\
-           "source": "UCI ML Repository" }
-        ds_reg = self.ap.register_dataset(ds_info)
-        featureset = data.dtypes.to_dict()
-        featureset = {k:str(featureset[k]) for k in featureset}
-        featureset["name"] = "wine_no_transformations"
-        fs_reg = self.ap.register_featureset(featureset, ds_reg["_key"])
-        dataset = self.ap.lookup_dataset("cal_housing_dataset")
-        retrieved_stats = dataset["encoded_stats"]
-        retrieved_schema = dataset["encoded_schema"]
-        #print("Retrieved stats: " + str(retrieved_stats))
-        print("Completed tf workflow test!")
+    def torch_test(self):
+        print("Running test for pytorch...")
+        run_driver()
+        print("Pytorch test completed!")
         return
     
-    def test_tf_workflow(self):
+    def test_torch_workflow(self):
         err_raised = False
         try:
-            self.run_tf_test()
+            self.torch_test()
         except:
             err_raised = True
             print ('-'*60)
             traceback.print_exc(file=sys.stdout)
             print ('-'*60)
             self.assertTrue(err_raised,\
-                            'Exception raised while looking up dataset')
+                            'Exception raised while provisioning project')
+        
         self.assertFalse(err_raised)
-        return
         
         return
-    
-    
+            
             
     
     def vertex_add_to_arangopipe(self):

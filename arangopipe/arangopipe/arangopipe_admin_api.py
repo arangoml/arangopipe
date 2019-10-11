@@ -3,7 +3,7 @@
 """
 Created on Thu Apr 25 09:30:33 2019
 
-@author: admin2
+@author: Rajiv Sambasivan
 """
 
 from arango import ArangoClient
