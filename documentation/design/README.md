@@ -1,4 +1,5 @@
 
+
 # Overview
 The Arangopipe UI is a single page application for its user community. <br>
 The Arangopipe user community consists of the following groups:<br>
@@ -175,6 +176,84 @@ arangopipe/arangopipe_frontend/app/src/constants/utils.js
 export const DATABASE = 'arangopipe'
 export const API_ROOT_URL = "http://localhost:6529/_db/arangopipe/";
 ````
+#### Interacting with ArangoDB and Invoke AQL
+````
+The application interacts with ArangoDB using its APIs. The below example shows the main APIs that application use. 
+
+- Sign In ( http://localhost:6529/_db/arangopipe/_open/auth )
+
+  Method: 'POST'
+  Request: { username: 'root', password: 'open sesame' }
+  Response: { jwt: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxx' } 
+  
+  
+- Get Current User ( http://localhost:6529/_db/arangopipe/_admin/aardvark/whoAmI )
+  
+  Method: 'GET'
+  Response: { user: 'root' }
+
+
+- Execute Query ( http://localhost:6529/_db/arangopipe/_api/cursor)
+
+  Method: 'POST'
+  Request: {
+			  id: "currentFrontendQuery",
+			  options: {profile: true},
+			  query: 'FOR p in project
+						 FILTER p.name == "Home_Value_Assessor"
+						 FOR m in 1..1 OUTBOUND p project_models
+						    FOR r in 1..1 OUTBOUND m run_models
+						       FOR d in 1..1 OUTBOUND r run_datasets
+						          COLLECT WITH COUNT INTO numDatasets
+						          RETURN {numDatasets}'
+			}
+  Response: { result: [{numDataSets: 22}] }
+
+
+- Explain Query ( http://localhost:6529/_db/arangopipe/_admin/aardvark/query/explain )
+
+  Method: 'POST'
+  Request: {
+			  id: "currentFrontendQuery",
+			  query: 'FOR p in project
+						   FILTER p.name == "Home_Value_Assessor"
+						   RETURN p'
+		   } 
+  Response: { msg: 'XXXXXXXXXXXX'}
+
+
+- Get Saved Queries ( http://localhost:6529/_db/arangopipe/_api/user/root )
+ 
+  Method: 'GET'
+  Response: { extra: { 
+                       queries: [
+	                     {name: 'Get Project', value: 'FOR p IN project ...'}, 
+	                     {name: 'Get Model', value: 'FOR m IN models...'}, 
+	                     ...
+	                   ]
+	                 }
+	        }
+
+
+- Save Queries ( http://localhost:6529/_db/arangopipe/_api/user/root )
+ 
+  Method: 'PATCH'
+  Request: { extra: { queries: [
+                         {'name': 'xxx', value: 'xxxxx xxx'},
+                         {'name': 'xxx', value: 'xxxxx xxx'}
+                         ...
+                      ]
+                    } 
+           }
+  Response: { extra: { queries: [
+                         {'name': 'xxx', value: 'xxxxx xxx'},
+                         {'name': 'xxx', value: 'xxxxx xxx'}
+                         ...
+                      ]
+                    } 
+           }
+````
+
 
 ## Getting Started
 ### Running with Docker Compose
@@ -232,3 +311,4 @@ If you aren’t satisfied with the build tool and configuration choices, you can  
 
 
   
+
