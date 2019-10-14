@@ -68,8 +68,16 @@ class ArangoPipe:
                 'FOR doc IN datasets FILTER doc.name == @value RETURN doc',
                 bind_vars={'value': dataset_name})
         dataset_keys = [doc for doc in cursor]
+        
+        dataset_info = None
+        if len(dataset_keys) == 0:
+            logger.error("The dataset by name: " + dataset_name +\
+                         " was not found in Arangopipe!")
+        else:
+            dataset_info = dataset_keys[0]
+            
     
-        return dataset_keys[0]
+        return dataset_info
     
 
 
@@ -85,9 +93,15 @@ class ArangoPipe:
         cursor = db.aql.execute(
                 'FOR doc IN featuresets FILTER doc.name == @value RETURN doc',
                 bind_vars={'value': feature_set_name})
+        featureset_info = None
         feature_set_keys = [doc for doc in cursor]
-    
-        return feature_set_keys[0]
+        if len(feature_set_keys) == 0:
+            logger.error("The featureset by name: " + feature_set_name +\
+                         " was not found in Arangopipe!")
+        else:
+            featureset_info = feature_set_keys[0]
+            
+        return featureset_info
 
 
     def lookup_model(self, model_name):
@@ -102,9 +116,16 @@ class ArangoPipe:
         cursor = db.aql.execute(
                 'FOR doc IN models FILTER doc.name == @value RETURN doc',
                 bind_vars={'value': model_name})
+        model_info = None
         model_keys = [doc for doc in cursor]
-    
-        return model_keys[0]
+        
+        if len(model_keys) == 0:
+            logger.error("The model by name: " + model_name +\
+                         " was not found in Arangopipe!")
+        else:
+            model_info = model_keys[0]
+        
+        return model_info
     
     
     def lookup_modelparams(self, tag_value):
@@ -121,9 +142,14 @@ class ArangoPipe:
                     FILTER r.tag == @value \
                         FOR mp IN 1..1 OUTBOUND r run_modelparams\
                             RETURN mp ', bind_vars={'value': tag_value})
+        mp_info = None
         mp_keys = [doc for doc in cursor]
-    
-        return mp_keys[0]
+        if len(mp_keys) == 0:
+            logger.error("The model params for tag: " + tag_value +\
+                         " was not found in Arangopipe!")
+        else:
+            mp_info = mp_keys[0]
+        return mp_info
     
     def lookup_modelperf(self, tag_value):
             
@@ -139,9 +165,15 @@ class ArangoPipe:
                     FILTER r.tag == @value \
                         FOR dp IN 1..1 OUTBOUND r run_devperf\
                             RETURN dp ', bind_vars={'value': tag_value})
-        dp_keys = [doc for doc in cursor]
-    
-        return dp_keys[0]
+        mperf_info = None
+        mperf_keys = [doc for doc in cursor]
+        if len(mperf_keys) == 0:
+            logger.error("The model performance for tag: " + tag_value +\
+                         " was not found in Arangopipe!")
+        else:
+            mperf_info = mperf_keys[0]
+            
+        return mperf_info
 
 
 
