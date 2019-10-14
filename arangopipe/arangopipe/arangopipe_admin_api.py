@@ -3,7 +3,7 @@
 """
 Created on Thu Apr 25 09:30:33 2019
 
-@author: admin2
+@author: Rajiv Sambasivan
 """
 
 from arango import ArangoClient
@@ -198,8 +198,8 @@ class ArangoPipeAdmin:
                            password=self.cfg['arangodb']['root_user_password'])
 
   
-        if sys_db.has_database('arangopipe'):
-            sys_db.delete_database('arangopipe')
+        if sys_db.has_database(self.cfg['arangodb']['arangopipe_dbname']):
+            sys_db.delete_database(self.cfg['arangodb']['arangopipe_dbname'])
 
         return
     

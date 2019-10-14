@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Spyder Editor
-@author: admin2
-This is a temporary script file.
+@author: Rajiv Sambasivan
 """
 import logging
 

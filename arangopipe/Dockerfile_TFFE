@@ -27,6 +27,8 @@ COPY tests/hyperopt/ examples/hyperopt/
 COPY tests/mlflow/ examples/mlflow/
 COPY tests/test_data_generator/ examples/test_data_generator/
 COPY tests/TFX/ examples/TFX/
+COPY tests/container_tests/tf_arangopipe_testcases.py examples/container_tests/
+COPY tests/container_tests/cal_housing.csv examples/container_tests/
 COPY arangopipe_examples.ipynb .
 ENV PYTHONPATH=`pwd`:$PYTHONPATH
 RUN jupyter notebook --generate-config --allow-root

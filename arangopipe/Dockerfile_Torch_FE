@@ -27,7 +27,9 @@ COPY tests/mlflow/ examples/mlflow/
 COPY tests/test_data_generator/ examples/test_data_generator/
 COPY tests/pytorch/ examples/pytorch/
 COPY arangopipe_examples_torch.ipynb .
-ENV PYTHONPATH=`pwd`:$PYTHONPATH
+COPY tests/container_tests/torch_arangopipe_testcases.py examples/container_tests/
+COPY tests/covariate_shift/cal_housing.csv examples/container_tests/
+ENV PYTHONPATH=`pwd`:$PYTHONPATH:/workspace/experiments/examples/pytorch
 RUN jupyter notebook --generate-config --allow-root
 RUN echo "c.NotebookApp.password = u'sha1:6a3f528eec40:6e896b6e4828f525a6e20e5411cd1c8075d68619'" >> /root/.jupyter/jupyter_notebook_config.py
 
