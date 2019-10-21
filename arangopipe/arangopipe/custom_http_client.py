@@ -14,7 +14,6 @@ from arango.http import HTTPClient
 
 class CustomHTTPClient(HTTPClient):
     """My custom HTTP client with cool features."""
-
     def __init__(self):
         # Initialize your logger.
         self._logger = logging.getLogger('my_logger')
@@ -63,4 +62,3 @@ class CustomHTTPClient(HTTPClient):
             status_text=response.reason,
             raw_body=response.text,
         )
-
