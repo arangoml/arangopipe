@@ -6,11 +6,11 @@ Created on Wed Aug 28 15:16:13 2019
 @author: Rajiv Sambasivan
 """
 import unittest
-from arangopipe.arangopipe_admin_api import ArangoPipeAdmin
-from arangopipe.arangopipe_api import ArangoPipe
-from arangopipe.arangopipe_config import ArangoPipeConfig
+from arangopipe_admin_api import ArangoPipeAdmin
+from arangopipe_api import ArangoPipe
+from arangopipe_config import ArangoPipeConfig
 import datetime
-from arangopipe.rf_dataset_shift_detector import RF_DatasetShiftDetector
+from rf_dataset_shift_detector import RF_DatasetShiftDetector
 import os
 import pandas as pd
 import sys, traceback

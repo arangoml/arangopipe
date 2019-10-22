@@ -8,7 +8,7 @@ Created on Fri Aug  9 17:10:33 2019
 from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from arangopipe.dataset_shift_detector import DatasetShiftDetector
+from dataset_shift_detector import DatasetShiftDetector
 
 
 class RF_DatasetShiftDetector(DatasetShiftDetector):
