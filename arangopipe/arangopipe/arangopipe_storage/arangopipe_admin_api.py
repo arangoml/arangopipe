@@ -8,8 +8,8 @@ Created on Thu Apr 25 09:30:33 2019
 
 from arango import ArangoClient
 import logging
-from arangopipe_config import ArangoPipeConfig
-from custom_http_client import CustomHTTPClient
+from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig
+from arangopipe.arangopipe_storage.custom_http_client import CustomHTTPClient
 
 # create logger with 'spam_application'
 logger = logging.getLogger('arangopipe_admin_logger')

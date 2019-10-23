@@ -17,4 +17,3 @@ class CH_LinearRegression(torch.nn.Module):
     def forward(self, x):
         out = self.linear(x)
         return out
-

@@ -13,10 +13,10 @@ from sklearn.linear_model import ElasticNet
 
 import mlflow
 import mlflow.sklearn
-from arangopipe.arangopipe_api import ArangoPipe
+from arangopipe.arangopipe_storage.arangopipe_api import ArangoPipe
 import datetime
-from arangopipe.arangopipe_admin_api import ArangoPipeAdmin
-from arangopipe.arangopipe_config import ArangoPipeConfig
+from arangopipe.arangopipe_storage.arangopipe_admin_api import ArangoPipeAdmin
+from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig
 
 
 def eval_metrics(actual, pred):
@@ -26,21 +26,21 @@ def eval_metrics(actual, pred):
     return rmse, mae, r2
 
 
-
 if __name__ == "__main__":
     warnings.filterwarnings("ignore")
     np.random.seed(40)
     conn_config = ArangoPipeConfig()
     conn_config.set_dbconnection(hostname = "http://localhost:8529",\
                                 root_user = "root", root_user_password = "open sesame")
-    ap = ArangoPipe(config = conn_config)
+    ap = ArangoPipe(config=conn_config)
     # Read the wine-quality csv file (make sure you're running this from the root of MLflow!)
-    wine_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "wine-quality.csv")
+    wine_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                             "wine-quality.csv")
     data = pd.read_csv(wine_path)
 
     ds_reg = ap.lookup_dataset("wine dataset")
     fs_reg = ap.lookup_featureset("wine_no_transformations")
-    
+
     # Split the data into training and test sets. (0.75, 0.25) split.
     train, test = train_test_split(data)
 
@@ -67,8 +67,11 @@ if __name__ == "__main__":
         print("  MAE: %s" % mae)
         print("  R2: %s" % r2)
 
-        
-        model_params = {"l1_ratio": l1_ratio, "alpha": alpha, "run_id": str(ruuid)}
+        model_params = {
+            "l1_ratio": l1_ratio,
+            "alpha": alpha,
+            "run_id": str(ruuid)
+        }
         model_perf = {"rmse": rmse, "r2": r2, "mae": mae, "run_id": str(ruuid),\
                       "timestamp": str(datetime.datetime.now())}
         run_info = {"dataset" : ds_reg["_key"],\
@@ -81,7 +84,7 @@ if __name__ == "__main__":
                     "project": "Wine-Quality-Assessment",\
                     "tag_for_deployment": True,\
                     "deployment_tag": "Wine_Elastic_Net_Regression"}
-      
+
         ap.log_run(run_info)
-       
+
         mlflow.sklearn.log_model(lr, "model")
