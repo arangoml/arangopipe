@@ -2,16 +2,22 @@ SRC = arangopipe/*.py
 DOCKER_FILE = Dockerfile
 DOCKER_PASSWORD = <the_password>
 DOCKER_REPO = arangopipe
-DOCKER_SI_FILE = Dockerfile_TFFE
-DOCKER_SI_IMG_NAME = ap_tensor_flow
+DOCKER_SI_FILE = Dockerfile_Torch_FE
+DOCKER_SI_IMG_NAME = ap_torch
 TEST_PYPI_PASSWORD = <the_password>
 
 python_arangopipe:$(SRC)
+	find ./arangopipe -name '*.py' -print0 | xargs -0 yapf -i
+	find ./arangopipe/arangopipe_storage -name '*.py' -print0 | xargs -0 yapf -i
+	find ./arangopipe/arangopipe_analytics -name '*.py' -print0 | xargs -0 yapf -i
+	find ./tests/mlflow -name '*.py' -print0 | xargs -0 yapf -i
+	find ./tests/pytorch -name '*.py' -print0 | xargs -0 yapf -i
+	find ./tests/test_data_generator -name '*.py' -print0 | xargs -0 yapf -i
 	python3 setup.py sdist bdist_wheel
 upload_test_pypi:
 	twine upload --repository-url https://test.pypi.org/legacy/  -u rajiv.sambasivan -p $(TEST_PYPI_PASSWORD) dist/*
 docker_APSI_build:$(DOCKER_SI_FILE)
-	docker build  --nocache -t $(DOCKER_SI_IMG_NAME) -f $(DOCKER_SI_FILE) .
+	docker build  --no-cache -t $(DOCKER_SI_IMG_NAME) -f $(DOCKER_SI_FILE) .
 docker_publish_SI_latest:
 	@echo 'starting docker SI build...'
 	docker login --username arangopipe --password $(DOCKER_PASSWORD)
