@@ -32,7 +32,7 @@ logger.addHandler(ch)
 
 class ArangoPipeAdmin:
     def __init__(self, user_name="authorized_user", config=None,
-                 persist=False):
+                 persist=False, dbconnection=None):
         self.user_name = user_name
         self.db = None
 
@@ -43,8 +43,12 @@ class ArangoPipeAdmin:
             self.cfg = config.cfg
             if persist:
                 config.dump_data()
-        self.create_db()
-        self.create_enterprise_ml_graph()
+        if dbconnection is None:
+            self.create_db()
+        else:
+            self.connect_db(dbconnection)
+        if connection.collections_created():
+          self.create_enterprise_ml_graph()
 
     def set_connection_params(self, config):
         self.cfg = config
@@ -54,7 +58,20 @@ class ArangoPipeAdmin:
     def get_config(self):
         apc = ArangoPipeConfig()
         return apc.get_cfg()
-
+   
+    # Connect 
+    def connect_db(self, dbconnection):
+        client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
+                              http_client=CustomHTTPClient())
+        
+        # Connect to arangopipe database as administrative user.
+        #This returns an API wrapper for "test" database.
+        db = client.db(dbconnection.arangopipe_dbname,\
+                       username=dbconnection.arangopipe_admin_username,\
+                       password=dbconnection.arangopipe_admin_password)
+        self.db = db
+        
+    
     def create_db(self):
         client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
                               http_client=CustomHTTPClient())
@@ -78,6 +95,7 @@ class ArangoPipeAdmin:
                                  database = self.cfg['arangodb']['arangopipe_dbname'], permission = "rw")
 
         # Connect to arangopipe database as administrative user.
+        # TODO this could be a different user from admin to distinguish the system/admin user from the db user
         #This returns an API wrapper for "test" database.
         db = client.db(self.cfg['arangodb']['arangopipe_dbname'],\
                        username=self.cfg['arangodb']['arangopipe_admin_username'],\
