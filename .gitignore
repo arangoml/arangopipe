@@ -11,4 +11,6 @@ arangopipe/build/
 # Python egg metadata, regenerated from source files by setuptools.
 arangopipe/*.egg-info
 # vscode artifacts and files
-.vscode/
+.vs*/*
+#ipynb checkpoints
+.ipynb_checkpoints
