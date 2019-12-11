@@ -12,3 +12,4 @@ arangopipe/build/
 arangopipe/*.egg-info
 #ipynb checkpoints
 .ipynb_checkpoints
+*/.ipynb_checkpoints/*
