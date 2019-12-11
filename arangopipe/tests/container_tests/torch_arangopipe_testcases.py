@@ -15,17 +15,26 @@ import os
 import pandas as pd
 import sys, traceback
 from ch_torch_linear_regression_driver import run_driver
+from arangopipe.arangopipe_storage.managed_service_conn_parameters import ManagedServiceConnParam
 
 class TestArangopipe(unittest.TestCase):
         
     def setUp(self):
-        self.config = ArangoPipeConfig()
-        self.config.set_dbconnection(hostname = "http://localhost:8529",\
-                                     root_user = "root",\
-                                root_user_password = "open sesame",\
-                                arangopipe_dbname = "arangopipe_test")
-        self.admin = ArangoPipeAdmin(config = self.config)
-        self.ap = ArangoPipe(config = self.config)
+        conn_config = ArangoPipeConfig()
+        self.mscp = ManagedServiceConnParam()
+        conn_params = { self.mscp.DB_SERVICE_HOST : "localhost", \
+                self.mscp.DB_ROOT_USER : "root",\
+                self.mscp.DB_ROOT_USER_PASSWORD : "open sesame",\
+                self.mscp.DB_SERVICE_END_POINT : "apmdb",\
+                self.mscp.DB_SERVICE_NAME : "createDB",\
+                self.mscp.DB_SERVICE_PORT : 8529,\
+                self.mscp.DB_CONN_PROTOCOL : 'http'}
+
+        
+        conn_config = conn_config.create_connection_config(conn_params)
+        self.admin = ArangoPipeAdmin(reuse_connection = False, config = conn_config)
+        the_config = self.admin.get_config()
+        self.ap = ArangoPipe(config = the_config)
         self.provision_project()
 
     def provision_project(self):

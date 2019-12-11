@@ -10,3 +10,5 @@ arangopipe/build/
 /arangopipe/tests/mlflow/mlruns/
 # Python egg metadata, regenerated from source files by setuptools.
 arangopipe/*.egg-info
+# vscode artifacts and files
+.vscode/

@@ -4,7 +4,7 @@ DOCKER_PASSWORD = <the_password>
 DOCKER_REPO = arangopipe
 DOCKER_SI_FILE = Dockerfile_Torch_FE
 DOCKER_SI_IMG_NAME = ap_torch
-TEST_PYPI_PASSWORD = <the_password>
+TEST_PYPI_PASSWORD = arangopipe
 
 python_arangopipe:$(SRC)
 	find ./arangopipe -name '*.py' -print0 | xargs -0 yapf -i
