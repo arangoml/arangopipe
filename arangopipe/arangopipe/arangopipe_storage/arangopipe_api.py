@@ -50,7 +50,7 @@ class ArangoPipe:
         try:
             self.lookup_dataset("heart beat check")
         except AQLQueryExecuteError as e:
-            print("Error : " + str(e))
+            print("WARNING : " + str(e))
             logger.error(
                 "Your database was perhaps deleted, try a new connection")
             #logger.error("Error: " + str(e))

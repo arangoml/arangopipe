@@ -5,9 +5,8 @@ arangodb:
   DB_service_port: 8529
   arangodb_replication_factor: null
   conn_protocol: http
-  dbName: MLjrjolunrvmi9wnxdihs92i
-  email: somebody@some_company.com
-  password: MLhsna3yjz0bfuo7or46iojd
-  username: ML1ghpd9nucwi6avzypkj9kq
+  dbName: MLxeq3rmk4lpy85rhtnck0a
+  password: MLazw3hfgdigp3a9gqym23of
+  username: MLcu6jbrlvnqota0fbirzvs
 mlgraph:
   graphname: enterprise_ml_graph
