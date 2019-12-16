@@ -5,10 +5,8 @@ arangodb:
   DB_service_port: 8529
   arangodb_replication_factor: null
   conn_protocol: https
-  dbName: arangopipe
-  password: arangopipe
-  root_user: root
-  root_user_password: open sesame
-  username: arangopipe
+  dbName: MLngscz2uaqleochp7uvzkj
+  password: ML3bmi1fwpgugdawuki5fjug
+  username: ML3ygm23ysz93xb1ijp5j64s
 mlgraph:
   graphname: enterprise_ml_graph

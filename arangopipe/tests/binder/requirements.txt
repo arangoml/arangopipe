@@ -1,5 +1,6 @@
+--extra-index-url https://testpypi.python.org/simple
 python-arango
-arangopipe
+arangopipe==0.0.5.7
 pandas
 PyYAML==5.1.1
 sklearn2
