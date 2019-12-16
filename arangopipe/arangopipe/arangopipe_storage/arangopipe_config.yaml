@@ -1,12 +1,14 @@
 arangodb:
   DB_end_point: apmdb
-  DB_service_host: localhost
+  DB_service_host: d874fc3f1fa5.arangodb.cloud
   DB_service_name: createDB
   DB_service_port: 8529
   arangodb_replication_factor: null
-  conn_protocol: http
-  dbName: MLxeq3rmk4lpy85rhtnck0a
-  password: MLazw3hfgdigp3a9gqym23of
-  username: MLcu6jbrlvnqota0fbirzvs
+  conn_protocol: https
+  dbName: arangopipe
+  password: arangopipe
+  root_user: root
+  root_user_password: open sesame
+  username: arangopipe
 mlgraph:
   graphname: enterprise_ml_graph

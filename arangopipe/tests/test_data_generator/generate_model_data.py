@@ -87,12 +87,12 @@ def eval_metrics(actual, pred):
 def delete_users():
     print("Deleting users before test !")
     pl = ['_system', 'root', 'rajiv', 'node2vec_db_admin', 'susr']
-    host_connection = "http://localhost:8529"
+    host_connection = "https://d874fc3f1fa5.arangodb.cloud:8529"
     client = ArangoClient(hosts= host_connection,\
                         http_client=CustomHTTPClient())
     sys_db = client.db('_system',\
                        username="root",\
-                       password="open sesame")
+                       password="KzcHiaZMPcQWw3aaNdXt")
     ul = sys_db.users()
     unl = [tu['username'] for tu in ul]
     for u in unl:
@@ -105,12 +105,12 @@ def delete_users():
 def delete_arangopipe_db():
     print("Deleting users before test !")
 
-    host_connection = "http://localhost:8529"
+    host_connection = "https://d874fc3f1fa5.arangodb.cloud:8529"
     client = ArangoClient(hosts= host_connection,\
                         http_client=CustomHTTPClient())
     sys_db = client.db('_system',\
                        username="root",\
-                       password="open sesame")
+                       password="KzcHiaZMPcQWw3aaNdXt")
     try:
         if sys_db.has_database("arangopipe"):
             print(
@@ -133,7 +133,7 @@ def generate_runs(clean=False):
     delete_arangopipe_db()
     conn_config = ArangoPipeConfig()
     mscp = ManagedServiceConnParam()
-    conn_params = { mscp.DB_SERVICE_HOST : "localhost", \
+    conn_params = { mscp.DB_SERVICE_HOST : "d874fc3f1fa5.arangodb.cloud", \
                     mscp.DB_USER_NAME : "arangopipe",\
                     mscp.DB_PASSWORD : "arangopipe",\
                     mscp.DB_NAME : "arangopipe", \
@@ -142,7 +142,7 @@ def generate_runs(clean=False):
                     mscp.DB_SERVICE_END_POINT : "apmdb",\
                     mscp.DB_SERVICE_NAME : "createDB",\
                     mscp.DB_SERVICE_PORT : 8529,\
-                    mscp.DB_CONN_PROTOCOL : 'http'}
+                    mscp.DB_CONN_PROTOCOL : 'https'}
 
     conn_config = conn_config.create_connection_config(conn_params)
     admin = ArangoPipeAdmin(reuse_connection=False, config=conn_config)
