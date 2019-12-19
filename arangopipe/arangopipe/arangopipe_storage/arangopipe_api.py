@@ -154,17 +154,8 @@ class ArangoPipe:
 
     def init_graph(self):
         """ Initialize a graph when an instance of ArangoPipe is provisioned. """
-        db_serv_host = self.cfg['arangodb']['DB_service_host']
-        db_serv_port = self.cfg['arangodb']['DB_service_port']
-        db_name = self.cfg['arangodb']['dbName']
-        db_user_name = self.cfg['arangodb']['username']
-        db_passwd = self.cfg['arangodb']['password']
-        db_conn_protocol = self.cfg['arangodb'][self.mscp.DB_CONN_PROTOCOL]
-
-        host_conn_str =  db_conn_protocol +  "://" + \
-                        db_serv_host + ":" + str(db_serv_port)
-        client = ArangoClient(hosts= host_conn_str,\
-                              http_client=CustomHTTPClient())
+        client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
+                              http_client=CustomHTTPClient(username="root", password="9BZ8pewKqkLdJBh6rq9b"))
 
         self.db = client.db(name= db_name, \
                            username=db_user_name,\

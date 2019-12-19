@@ -14,15 +14,19 @@ from arango.http import HTTPClient
 
 class CustomHTTPClient(HTTPClient):
     """My custom HTTP client with cool features."""
-    def __init__(self):
+    def __init__(self, username, password):
         # Initialize your logger.
         self._logger = logging.getLogger('my_logger')
+        self.username = username
+        self.password = password
 
     def create_session(self, host):
         session = Session()
 
         # Add request header.
         session.headers.update({'x-my-header': 'true'})
+
+        session.auth = (self.username, self.password)
 
         # Enable retries.
         adapter = HTTPAdapter(max_retries=5)
@@ -48,8 +52,7 @@ class CustomHTTPClient(HTTPClient):
             params=params,
             data=data,
             headers=headers,
-            auth=auth,
-            verify=False  # Disable SSL verification
+            verify="ca-b9b556df.crt"
         )
         self._logger.debug('Got {}'.format(response.status_code))
 
