@@ -17,12 +17,12 @@ import sys, traceback
 
 
 class TestArangopipe(unittest.TestCase):
-        
+
     def setUp(self):
         self.config = ArangoPipeConfig()
-        self.config.set_dbconnection(hostname = "http://localhost:8529",\
-                                     root_user = "root",\
-                                root_user_password = "open sesame",\
+        self.config.set_dbconnection(hostname = "https://7828dc387b41.arangodb.cloud:8529/",\
+                                     root_user = "root",
+                                root_user_password = "9BZ8pewKqkLdJBh6rq9b",\
                                 arangopipe_dbname = "arangopipe_test")
         self.admin = ArangoPipeAdmin(config = self.config)
         self.ap = ArangoPipe(config = self.config)
@@ -40,37 +40,37 @@ class TestArangopipe(unittest.TestCase):
             print ('-'*60)
             self.assertTrue(err_raised,\
                             'Exception raised while provisioning project')
-        
+
         self.assertFalse(err_raised)
         return
-    
+
     def register_dataset(self):
         ds_info = {"name" : "wine_dataset",\
                    "description": "Wine quality ratings",\
                    "source": "UCI ML Repository" }
         ds_reg = self.ap.register_dataset(ds_info)
         return
-    
+
     def lookup_dataset(self):
         ds_reg = self.ap.lookup_dataset("wine_dataset")
         return
-    
+
     def lookup_featureset(self):
         fs_reg = self.ap.lookup_featureset("wine_no_transformations")
         return
-    
+
     def register_model(self):
-   
+
         model_info = {"name": "elastic_net_wine_model", \
                   "type": "elastic net regression"}
         model_reg = self.ap.register_model(model_info)
         return
-    
+
     def lookup_model(self):
-        
+
         model_reg = self.ap.lookup_model("elastic_net_wine_model")
         return
-    
+
     def log_run(self):
 
          ds_reg = self.ap.lookup_dataset("wine_dataset")
@@ -93,16 +93,16 @@ class TestArangopipe(unittest.TestCase):
                         "tag": "wine regression model test 1"}
          self.ap.log_run(run_info)
          return
-    
+
     def provision_deployment(self):
-    
+
         ret = self.admin.register_deployment("Wine_Elastic_Net_Regression")
-    
+
         return
-        
-    
+
+
     def register_featureset(self):
-        
+
         fs_info = {"fixed acidity": "float64",\
                    "volatile acidity": "float64",\
                    "citric acid": "float64",\
@@ -120,7 +120,7 @@ class TestArangopipe(unittest.TestCase):
         ds_reg = self.ap.lookup_dataset("wine_dataset")
         fs_reg = self.ap.register_featureset(fs_info, ds_reg["_key"])
         return
-    
+
     def log_servingperf(self):
         to_date = datetime.datetime.now()
         from_date = to_date - datetime.timedelta(days = 30)
@@ -129,9 +129,9 @@ class TestArangopipe(unittest.TestCase):
         dep_tag = "Wine_Elastic_Net_Regression"
         user_id = "prvileged user"
         ret = self.ap.log_serving_perf(ex_servingperf, dep_tag, user_id)
-       
+
         return
-    
+
     def dataset_shift_positive(self):
         ds_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cal_housing.csv")
         df = pd.read_csv(ds_path)
@@ -142,7 +142,7 @@ class TestArangopipe(unittest.TestCase):
         rfd = RF_DatasetShiftDetector()
         score = rfd.detect_dataset_shift(df1, df2)
         print ("Detaset shift score : ", score)
-        
+
         return score
 
     def dataset_shift_negative(self):
@@ -155,37 +155,37 @@ class TestArangopipe(unittest.TestCase):
         rfd = RF_DatasetShiftDetector()
         score = rfd.detect_dataset_shift(df1, df2)
         print ("Detaset shift score : ", score)
-    
-        return score
-   
 
-    
-            
-    
+        return score
+
+
+
+
+
     def vertex_add_to_arangopipe(self):
         self.admin.add_vertex_to_arangopipe('test_vertex_1')
-        
-        return 
-        
-    
+
+        return
+
+
     def test_arangopipe_vertex_add(self):
         self.vertex_add_to_arangopipe()
         self.assertTrue(self.admin.has_vertex('test_vertex_1'))
-        
+
         return
-    
+
     def vertex_remove_from_arangopipe(self):
         self.admin.add_vertex_to_arangopipe('test_vertex_t1')
         self.admin.remove_vertex_from_arangopipe('test_vertex_t1', purge = True)
-        
+
         return
-        
+
     def test_arangopipe_vertex_remove(self):
         self.vertex_remove_from_arangopipe()
         self.assertFalse(self.admin.has_vertex('test_vertex_t1'))
-        
+
         return
-    
+
     def test_register_dataset(self):
         err_raised = False
         try:
@@ -199,7 +199,7 @@ class TestArangopipe(unittest.TestCase):
                             'Exception raised while registering dataset')
         self.assertFalse(err_raised)
         return
-    
+
     def test_lookup_dataset(self):
         err_raised = False
         try:
@@ -214,7 +214,7 @@ class TestArangopipe(unittest.TestCase):
                             'Exception raised while looking up dataset')
         self.assertFalse(err_raised)
         return
-    
+
     def test_register_featureset(self):
         err_raised = False
         try:
@@ -229,7 +229,7 @@ class TestArangopipe(unittest.TestCase):
                             'Exception raised while registering featureset')
         self.assertFalse(err_raised)
         return
-    
+
     def test_lookup_featureset(self):
         err_raised = False
         try:
@@ -245,9 +245,9 @@ class TestArangopipe(unittest.TestCase):
                             'Exception raised while registering featureset')
         self.assertFalse(err_raised)
         return
-    
-    
-    
+
+
+
     def test_register_model(self):
         err_raised = False
         try:
@@ -261,7 +261,7 @@ class TestArangopipe(unittest.TestCase):
                             'Exception raised while registering model')
         self.assertFalse(err_raised)
         return
-    
+
     def test_lookup_model(self):
         err_raised = False
         try:
@@ -276,7 +276,7 @@ class TestArangopipe(unittest.TestCase):
                             'Exception raised while looking up model')
         self.assertFalse(err_raised)
         return
-    
+
     def test_log_run(self):
         err_raised = False
         try:
@@ -293,7 +293,7 @@ class TestArangopipe(unittest.TestCase):
                             'Exception raised while logging performance')
         self.assertFalse(err_raised)
         return
-    
+
     def test_provision_deployment(self):
         err_raised = False
         try:
@@ -302,7 +302,7 @@ class TestArangopipe(unittest.TestCase):
             self.register_model()
             self.log_run()
             self.provision_deployment()
-        
+
         except:
             err_raised = True
             print ('-'*60)
@@ -312,7 +312,7 @@ class TestArangopipe(unittest.TestCase):
                             'Exception raised while provisioning deployment')
         self.assertFalse(err_raised)
         return
-    
+
     def test_log_serving_performance(self):
         err_raised = False
         try:
@@ -322,7 +322,7 @@ class TestArangopipe(unittest.TestCase):
             self.log_run()
             self.provision_deployment()
             self.log_servingperf()
-        
+
         except:
             err_raised = True
             print ('-'*60)
@@ -332,66 +332,66 @@ class TestArangopipe(unittest.TestCase):
                             'Exception raised while logging serving performance')
         self.assertFalse(err_raised)
         return
-    
+
     def test_dataset_shift_positive(self):
-        
+
         score = self.dataset_shift_positive()
-        
+
         self.assertTrue(score > 0.8)
         return
-    
+
     def test_dataset_shift_negative(self):
 
         score = self.dataset_shift_negative()
-        
+
 
         self.assertTrue(score < 0.6)
         return
-        
 
-    
+
+
     def add_edge_to_arangopipe(self):
         self.admin.add_vertex_to_arangopipe('test_vertex_s')
         self.admin.add_vertex_to_arangopipe('test_vertex_d')
         self.admin.add_edge_definition_to_arangopipe('test_edge',\
                                                      'test_vertex_s', 'test_vertex_d')
         return
-    
+
     def test_arangopipe_edge_add(self):
         self.add_edge_to_arangopipe()
         self.assertTrue(self.admin.has_edge('test_edge'))
-        
+
         return
-    
+
     def remove_edge_from_arangopipe(self):
         self.admin.add_vertex_to_arangopipe('test_vertex_s1')
         self.admin.add_vertex_to_arangopipe('test_vertex_d1')
         self.admin.add_edge_definition_to_arangopipe('test_edge_1',\
                                                      'test_vertex_s1', 'test_vertex_d1')
         self.admin.remove_edge_definition_from_arangopipe('test_edge_1', purge = True)
-        
+
         return
-        
+
     def test_arangopipe_edge_remove(self):
         self.remove_edge_from_arangopipe()
         self.assertFalse(self.admin.has_edge('test_edge_1'))
-        
+
         return
-    
+
     def add_vertex_node(self):
         ni = None
         self.admin.add_vertex_to_arangopipe('test_vertex_s2')
         sd = {'name': "sample doc"}
         ni = self.ap.insert_into_vertex_type('test_vertex_s2', sd)
-        
+
         return ni
-        
-        
+
+
     def test_arangopipe_vertex_node_add(self):
         ni = self.add_vertex_node()
         self.assertIsNotNone(ni)
         return
-    
+
     def add_edge_link(self):
         ei= None
         self.admin.add_vertex_to_arangopipe('test_vertex_s3')
@@ -402,22 +402,22 @@ class TestArangopipe(unittest.TestCase):
         self.admin.add_edge_definition_to_arangopipe('test_edge',\
                                                 'test_vertex_s3', 'test_vertex_s4')
         ei = self.ap.insert_into_edge_type('test_edge', v1, v2)
-        
+
         return ei
-        
-    
+
+
     def test_arangopipe_edge_link_add(self):
         ei = self.add_edge_link()
         self.assertIsNotNone(ei)
         return
-    
-    
+
+
     def tearDown(self):
         #pass
         self.admin.delete_arangomldb()
         self.ap = None
         self.admin = None
         return
-    
+
 if __name__ == '__main__':
     unittest.main()

@@ -36,7 +36,7 @@ class ArangoPipeConfig:
 
     def set_dbconnection(self, hostname = "localhost", port = 8529,\
                          root_user = 'root', \
-                         root_user_password = 'open sesame',\
+                         root_user_password = '9BZ8pewKqkLdJBh6rq9b',\
                          arangopipe_dbname = "arangopipe"):
         self.cfg['arangodb']['root_user'] = root_user
         self.cfg['arangodb']['root_user_password'] = root_user_password

@@ -54,7 +54,7 @@ class ArangoPipe:
     def lookup_dataset(self, dataset_name):
         """ Return a dataset identifier given a name. This can be used to get the dataset id that is used to log run information associated with execution of the pipeline."""
         client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
-                              http_client=CustomHTTPClient())
+                              http_client=CustomHTTPClient(username="root", password="9BZ8pewKqkLdJBh6rq9b"))
         db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
                        username=self.cfg['arangodb']['arangopipe_admin_username'],\
                        password=self.cfg['arangodb']['arangopipe_admin_password'])
@@ -76,7 +76,7 @@ class ArangoPipe:
     def lookup_featureset(self, feature_set_name):
         """ Return a featureset identifier given a name. This can be used to get the featureset id that is used to log run information associated with execution of the pipeline."""
         client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
-                              http_client=CustomHTTPClient())
+                              http_client=CustomHTTPClient(username="root", password="9BZ8pewKqkLdJBh6rq9b"))
         db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
                        username=self.cfg['arangodb']['arangopipe_admin_username'],\
                        password=self.cfg['arangodb']['arangopipe_admin_password'])
@@ -97,7 +97,7 @@ class ArangoPipe:
     def lookup_model(self, model_name):
         """ Return a model identifier given a name. This can be used to get the model id that is used to log run information associated with execution of the pipeline."""
         client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
-                              http_client=CustomHTTPClient())
+                              http_client=CustomHTTPClient(username="root", password="9BZ8pewKqkLdJBh6rq9b"))
         db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
                        username=self.cfg['arangodb']['arangopipe_admin_username'],\
                        password=self.cfg['arangodb']['arangopipe_admin_password'])
@@ -119,7 +119,7 @@ class ArangoPipe:
     def lookup_modelparams(self, tag_value):
         """ Return a model parameter result given a tag."""
         client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
-                              http_client=CustomHTTPClient())
+                              http_client=CustomHTTPClient(username="root", password="9BZ8pewKqkLdJBh6rq9b"))
         db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
                        username=self.cfg['arangodb']['arangopipe_admin_username'],\
                        password=self.cfg['arangodb']['arangopipe_admin_password'])
@@ -141,7 +141,7 @@ class ArangoPipe:
     def lookup_modelperf(self, tag_value):
         """ Return a model dev performance given a tag."""
         client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
-                              http_client=CustomHTTPClient())
+                              http_client=CustomHTTPClient(username="root", password="9BZ8pewKqkLdJBh6rq9b"))
         db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
                        username=self.cfg['arangodb']['arangopipe_admin_username'],\
                        password=self.cfg['arangodb']['arangopipe_admin_password'])
@@ -164,7 +164,7 @@ class ArangoPipe:
     def init_graph(self):
         """ Initialize a graph when an instance of ArangoPipe is provisioned. """
         client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
-                              http_client=CustomHTTPClient())
+                              http_client=CustomHTTPClient(username="root", password="9BZ8pewKqkLdJBh6rq9b"))
 
         # Connect to "_system" database as root user.
         # This returns an API wrapper for "_system" database.
@@ -197,7 +197,7 @@ class ArangoPipe:
         model_reg = models.insert(mi)
 
         client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
-                              http_client=CustomHTTPClient())
+                              http_client=CustomHTTPClient(username="root", password="9BZ8pewKqkLdJBh6rq9b"))
         db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
                        username=self.cfg['arangodb']['arangopipe_admin_username'],\
                        password=self.cfg['arangodb']['arangopipe_admin_password'])
@@ -328,7 +328,7 @@ class ArangoPipe:
         sp_reg = servingperf.insert(sp)
         # Locate the deployment record
         client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
-                              http_client=CustomHTTPClient())
+                              http_client=CustomHTTPClient(username="root", password="9BZ8pewKqkLdJBh6rq9b"))
         db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
                        username=self.cfg['arangodb']['arangopipe_admin_username'],\
                        password=self.cfg['arangodb']['arangopipe_admin_password'])
