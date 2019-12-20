@@ -163,8 +163,8 @@ class ArangoPipe:
 
         host_conn_str =  db_conn_protocol +  "://" + \
                         db_serv_host + ":" + str(db_serv_port)
-        client = ArangoClient(hosts= host_conn_str,\
-                              http_client=CustomHTTPClient())
+        client = ArangoClient(hosts= 'https://7828dc387b41.arangodb.cloud:8529',\
+                              http_client=CustomHTTPClient('root', '9BZ8pewKqkLdJBh6rq9b'))
 
         self.db = client.db(name= db_name, \
                            username=db_user_name,\

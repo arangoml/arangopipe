@@ -1,13 +1,12 @@
 arangodb:
-  DB_end_point: apmdb
-  DB_service_host: d874fc3f1fa5.arangodb.cloud
+  DB_end_point: createDB
+  DB_service_host: 7828dc387b41.arangodb.cloud
   DB_service_name: createDB
   DB_service_port: 8529
   arangodb_replication_factor: null
   conn_protocol: https
-  dbName: MLurde3kbwr9f8jsezsn1rwr
-  email: somebody@some_company.com
-  password: MLig739z410za8ahjk3h9sd
-  username: MLa7191i62jrrsfxu2jbhnxb
+  dbName: MLlw9v0uy6m3h7ogcxqv6sp
+  password: MLftopazxcfegfk0qfioxmgj
+  username: MLmn6cdiy0xln7eg706a9rw8
 mlgraph:
   graphname: enterprise_ml_graph

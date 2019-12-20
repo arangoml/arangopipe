@@ -130,11 +130,10 @@ class ArangoPipeAdmin:
     def create_db(self, db_srv_host, db_srv_port, db_serv_name,\
                   db_end_point, db_dbName, db_user_name, db_password,\
                   db_conn_protocol):
-
         host_connection = db_conn_protocol + "://" + db_srv_host + ":" + str(
             db_srv_port)
         client = ArangoClient(hosts= host_connection,\
-                              http_client=CustomHTTPClient())
+                              http_client=CustomHTTPClient('root', '9BZ8pewKqkLdJBh6rq9b'))
         logger.debug("Connection reuse: " + str(self.reuse_connection))
         if not self.reuse_connection:
             API_ENDPOINT = host_connection + "/_db/_system/" + db_end_point + \
@@ -434,7 +433,7 @@ class ArangoPipeAdmin:
             return
 
         client = ArangoClient(hosts= host_connection,\
-                              http_client=CustomHTTPClient())
+                              http_client=CustomHTTPClient(root_user, root_user_password))
         if not '_system' in preserve:
             preserve.append('_system')
 
@@ -485,7 +484,7 @@ class ArangoPipeAdmin:
             return
 
         client = ArangoClient(hosts= host_connection,\
-                              http_client=CustomHTTPClient())
+                              http_client=CustomHTTPClient(root_user, root_user_password))
 
         sys_db = client.db('_system',\
                                username = root_user,\

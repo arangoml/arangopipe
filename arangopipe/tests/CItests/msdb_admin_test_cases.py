@@ -16,35 +16,32 @@ from arangopipe.arangopipe_storage.managed_service_conn_parameters import Manage
 from arango import ArangoClient, DatabaseListError
 
 
-    
-    
 class TestAdminMSDB(unittest.TestCase):
-    
     def setUp(self):
         #mshost: "5366b66b7d19.arangodb.cloud"
         self.delete_users()
         self.delete_arangopipe_db()
         conn_config = ArangoPipeConfig()
         self.mscp = ManagedServiceConnParam()
-        conn_params = { self.mscp.DB_SERVICE_HOST : "localhost", \
+        conn_params = { self.mscp.DB_SERVICE_HOST : "7828dc387b41.arangodb.cloud", \
                         self.mscp.DB_USER_NAME : "arangopipe",\
                         self.mscp.DB_PASSWORD : "arangopipe",\
                         self.mscp.DB_NAME : "arangopipe", \
                         self.mscp.DB_ROOT_USER : "root",\
-                        self.mscp.DB_ROOT_USER_PASSWORD : "open sesame",\
-                        self.mscp.DB_SERVICE_END_POINT : "apmdb",\
+                        self.mscp.DB_ROOT_USER_PASSWORD : "9BZ8pewKqkLdJBh6rq9b",\
+                        self.mscp.DB_SERVICE_END_POINT : "createDB",\
                         self.mscp.DB_SERVICE_NAME : "createDB",\
                         self.mscp.DB_SERVICE_PORT : 8529,\
-                        self.mscp.DB_CONN_PROTOCOL : 'http'}
-        
+                        self.mscp.DB_CONN_PROTOCOL : 'https'}
+
         conn_config = conn_config.create_connection_config(conn_params)
         self.admin = ArangoPipeAdmin(reuse_connection = False, config = conn_config)
-        
+
         return
 
     def test_delete_all_databases(self):
         err_raised = False
-        
+
         try:
             self.admin.delete_all_databases()
         except :
@@ -55,13 +52,13 @@ class TestAdminMSDB(unittest.TestCase):
             self.assertTrue(err_raised,
                             'Exception raised while registering dataset')
         self.assertFalse(err_raised)
-        
+
         return
-    
+
     def test_using_deleted_database(self):
         err_raised = False
         print("Running the test using a stale connection... ")
-        self.delete_arangopipe_db()         
+        self.delete_arangopipe_db()
         new_admin = ArangoPipeAdmin(reuse_connection = True)
         ap_config = new_admin.get_config()
 
@@ -72,51 +69,52 @@ class TestAdminMSDB(unittest.TestCase):
             print("Using a new connection...")
             mscp = ManagedServiceConnParam()
             conn_config = ArangoPipeConfig()
-            conn_params = { mscp.DB_SERVICE_HOST : "localhost", \
-                        mscp.DB_SERVICE_END_POINT : "apmdb",\
+            conn_params = { mscp.DB_SERVICE_HOST : "7828dc387b41.arangodb.cloud", \
+                        mscp.DB_SERVICE_END_POINT : "createDB",\
                         mscp.DB_SERVICE_NAME : "createDB",\
                         mscp.DB_SERVICE_PORT : 8529,\
-                        mscp.DB_CONN_PROTOCOL : 'http'}
+                        mscp.DB_CONN_PROTOCOL : 'https'}
             conn_config = conn_config.create_connection_config(conn_params)
             admin = ArangoPipeAdmin(reuse_connection = False, config = conn_config)
             ap_config = admin.get_config()
             ap = ArangoPipe(config = ap_config)
-            
+
         print ("Using new connection to look up a non existent dataset...")
         ap.lookup_dataset("non existent dataset")
         self.assertFalse(err_raised)
-        
+
         return
-        
-    
+
+
 
 
     def delete_users(self):
+
         print("Deleting users before test !")
         pl = ['_system', 'root', 'rajiv', 'node2vec_db_admin', 'susr']
-        host_connection = "http://localhost:8529"
+        host_connection = "https://7828dc387b41.arangodb.cloud:8529/"
         client = ArangoClient(hosts= host_connection,\
-                            http_client=CustomHTTPClient())
+                            http_client=CustomHTTPClient('root', '9BZ8pewKqkLdJBh6rq9b'))
         sys_db = client.db('_system',\
                            username="root",\
-                           password="open sesame")
+                           password="9BZ8pewKqkLdJBh6rq9b")
         ul = sys_db.users()
         unl = [ tu['username'] for tu in ul]
         for u in unl:
             if not u in pl:
                 sys_db.delete_user(u)
-    
+
         return
-    
+
     def delete_arangopipe_db(self):
         print("Deleting users before test !")
         pl = ['_system', 'root', 'rajiv', 'node2vec_db_admin', 'susr']
-        host_connection = "http://localhost:8529"
+        host_connection = "https://7828dc387b41.arangodb.cloud:8529/"
         client = ArangoClient(hosts= host_connection,\
-                            http_client=CustomHTTPClient())
+                            http_client=CustomHTTPClient('root', '9BZ8pewKqkLdJBh6rq9b'))
         sys_db = client.db('_system',\
                            username="root",\
-                           password="open sesame")
+                           password="9BZ8pewKqkLdJBh6rq9b")
         try:
             if sys_db.has_database("arangopipe"):
                 print("Before starting the test, cleaning up arangopipe instances...")
@@ -129,10 +127,10 @@ class TestAdminMSDB(unittest.TestCase):
             print("Error code: " + str(err.error_code) + " received !")
             print("Error Message: " + str(err.error_message))
 
-    
+
     def test_delete_database(self):
         err_raised = False
-        
+
         try:
             self.admin.delete_database("arangopipe")
         except :
@@ -143,16 +141,12 @@ class TestAdminMSDB(unittest.TestCase):
             self.assertTrue(err_raised,
                             'Exception raised while deleting database')
         self.assertFalse(err_raised)
-        
-        return 
 
-        
-        
+        return
+
+
+
 
 
 if __name__ == '__main__':
     unittest.main()
- 
-            
-
-        

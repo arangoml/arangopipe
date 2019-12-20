@@ -10,7 +10,8 @@ from requests import Session
 
 from arango.response import Response
 from arango.http import HTTPClient
-
+import os
+from os.path import dirname, join
 
 class CustomHTTPClient(HTTPClient):
     """My custom HTTP client with cool features."""
@@ -19,6 +20,9 @@ class CustomHTTPClient(HTTPClient):
         self._logger = logging.getLogger('my_logger')
         self.username = username
         self.password = password
+        self.cert_name = 'ca-b9b556df.crt'
+
+
 
     def create_session(self, host):
         session = Session()
@@ -44,7 +48,8 @@ class CustomHTTPClient(HTTPClient):
                      auth=None):
         # Add your own debug statement.
         self._logger.debug('Sending request to {}'.format(url))
-
+        ca_file = os.path.join(os.path.dirname(__file__),
+                                 "certs/" + self.cert_name)
         # Send a request.
         response = session.request(
             method=method,
@@ -52,7 +57,7 @@ class CustomHTTPClient(HTTPClient):
             params=params,
             data=data,
             headers=headers,
-            verify="ca-b9b556df.crt"
+            verify=ca_file
         )
         self._logger.debug('Got {}'.format(response.status_code))
 
