@@ -8,11 +8,13 @@ Created on Fri Jun 14 09:17:50 2019
 import os
 
 import yaml
+from arangopipe.arangopipe_storage.managed_service_conn_parameters import ManagedServiceConnParam
 
 
 class ArangoPipeConfig:
     def __init__(self):
-        self.cfg = self.read_data()
+        self.cfg = None
+        self.mscp = ManagedServiceConnParam()
 
     def read_data(self):
         file_name = os.path.join(os.path.dirname(__file__),
@@ -25,6 +27,8 @@ class ArangoPipeConfig:
         self.cfg = new_cfg
 
     def get_cfg(self):
+        if self.cfg is None:
+            self.cfg = self.read_data()
         return self.cfg
 
     def dump_data(self):
@@ -34,13 +38,13 @@ class ArangoPipeConfig:
             cfg = yaml.dump(self.cfg, file_descriptor)
         return cfg
 
-    def set_dbconnection(self, hostname = "localhost", port = 8529,\
-                         root_user = 'root', \
-                         root_user_password = '9BZ8pewKqkLdJBh6rq9b',\
-                         arangopipe_dbname = "arangopipe"):
-        self.cfg['arangodb']['root_user'] = root_user
-        self.cfg['arangodb']['root_user_password'] = root_user_password
-        self.cfg['arangodb']['host'] = hostname
-        self.cfg['arangodb']['port'] = port
-        self.cfg['arangodb']['arangopipe_dbname'] = arangopipe_dbname
-        return
+    def create_connection_config(self, conn_params):
+        self.cfg = {
+            'arangodb': {},
+            'mlgraph': {
+                'graphname': 'enterprise_ml_graph'
+            }
+        }
+        for key, value in conn_params.items():
+            self.cfg['arangodb'][key] = value
+        return self

@@ -13,20 +13,31 @@ import datetime
 from arangopipe.arangopipe_analytics.rf_dataset_shift_detector import RF_DatasetShiftDetector
 import os
 import pandas as pd
-import sys, traceback
+import sys
+import traceback
+from arangopipe.arangopipe_storage.managed_service_conn_parameters import ManagedServiceConnParam
 
 
 class TestArangopipe(unittest.TestCase):
 
     def setUp(self):
-        self.config = ArangoPipeConfig()
-        self.config.set_dbconnection(hostname = "https://7828dc387b41.arangodb.cloud:8529/",\
-                                     root_user = "root",
-                                root_user_password = "9BZ8pewKqkLdJBh6rq9b",\
-                                arangopipe_dbname = "arangopipe_test")
-        self.admin = ArangoPipeAdmin(config = self.config)
-        self.ap = ArangoPipe(config = self.config)
+        #mshost: "5366b66b7d19.arangodb.cloud"
+        config = ArangoPipeConfig()
+        msc = ManagedServiceConnParam()
+        conn_params = { msc.DB_SERVICE_HOST : "localhost", \
+                        msc.DB_SERVICE_END_POINT : "apmdb",\
+                        msc.DB_SERVICE_NAME : "createDB",\
+                        msc.DB_SERVICE_PORT : 8529,\
+                        msc.DB_CONN_PROTOCOL : 'http',\
+                        msc.DB_NOTIFICATION_EMAIL : 'somebody@some_company.com'}
+
+        config = config.create_connection_config(conn_params)
+        self.config = config
+        self.admin = ArangoPipeAdmin(reuse_connection = False, config= self.config)
+        ap_config = self.admin.get_config()
+        self.ap = ArangoPipe(config = ap_config)
         self.provision_project()
+        return
 
     def provision_project(self):
         err_raised = False
@@ -35,19 +46,19 @@ class TestArangopipe(unittest.TestCase):
             proj_reg = self.admin.register_project(proj_info)
         except:
             err_raised = True
-            print ('-'*60)
+            print('-'*60)
             traceback.print_exc(file=sys.stdout)
-            print ('-'*60)
-            self.assertTrue(err_raised,\
+            print('-'*60)
+            self.assertTrue(err_raised,
                             'Exception raised while provisioning project')
 
-        self.assertFalse(err_raised)
+        #cls.assertFalse(err_raised, )
         return
 
     def register_dataset(self):
-        ds_info = {"name" : "wine_dataset",\
-                   "description": "Wine quality ratings",\
-                   "source": "UCI ML Repository" }
+        ds_info = {"name": "wine_dataset",
+                   "description": "Wine quality ratings",
+                   "source": "UCI ML Repository"}
         ds_reg = self.ap.register_dataset(ds_info)
         return
 
@@ -61,8 +72,8 @@ class TestArangopipe(unittest.TestCase):
 
     def register_model(self):
 
-        model_info = {"name": "elastic_net_wine_model", \
-                  "type": "elastic net regression"}
+        model_info = {"name": "elastic_net_wine_model",
+                      "type": "elastic net regression"}
         model_reg = self.ap.register_model(model_info)
         return
 
@@ -73,26 +84,26 @@ class TestArangopipe(unittest.TestCase):
 
     def log_run(self):
 
-         ds_reg = self.ap.lookup_dataset("wine_dataset")
-         fs_reg = self.ap.lookup_featureset("wine_no_transformations")
-         model_reg = self.ap.lookup_model("elastic_net_wine_model")
-         model_params = { "l1_ratio": 0.1, "alpha": 0.2,\
-                         "run_id": "0ef73d9edf08487793c77a1742f4033e"}
-         model_perf = { "rmse": 0.7836984021909766, "r2": 0.20673590971167466,\
-                        "mae": 0.6142020452688988, "run_id": "0ef73d9edf08487793c77a1742f4033e",\
-                        "timestamp": "2019-06-06 12:52:11.190048"}
-         run_info = {"dataset" : ds_reg["_key"],\
-                        "featureset": fs_reg["_key"],\
-                        "run_id": "0ef73d9edf08487793c77a1742f4033e",\
-                        "model": model_reg["_key"],\
-                        "model-params": model_params,\
-                        "model-perf": model_perf,\
-                        "pipeline" : "Wine-Regression-Pipeline",\
-                        "project": "Wine-Quality-Assessment",\
-                        "deployment_tag": "Wine_Elastic_Net_Regression",\
-                        "tag": "wine regression model test 1"}
-         self.ap.log_run(run_info)
-         return
+        ds_reg = self.ap.lookup_dataset("wine_dataset")
+        fs_reg = self.ap.lookup_featureset("wine_no_transformations")
+        model_reg = self.ap.lookup_model("elastic_net_wine_model")
+        model_params = {"l1_ratio": 0.1, "alpha": 0.2,
+                        "run_id": "0ef73d9edf08487793c77a1742f4033e"}
+        model_perf = {"rmse": 0.7836984021909766, "r2": 0.20673590971167466,
+                      "mae": 0.6142020452688988, "run_id": "0ef73d9edf08487793c77a1742f4033e",
+                      "timestamp": "2019-06-06 12:52:11.190048"}
+        run_info = {"dataset": ds_reg["_key"],
+                    "featureset": fs_reg["_key"],
+                    "run_id": "0ef73d9edf08487793c77a1742f4033e",
+                    "model": model_reg["_key"],
+                    "model-params": model_params,
+                    "model-perf": model_perf,
+                    "pipeline": "Wine-Regression-Pipeline",
+                    "project": "Wine-Quality-Assessment",
+                    "deployment_tag": "Wine_Elastic_Net_Regression",
+                    "tag": "wine regression model test 1"}
+        self.ap.log_run(run_info)
+        return
 
     def provision_deployment(self):
 
@@ -100,21 +111,20 @@ class TestArangopipe(unittest.TestCase):
 
         return
 
-
     def register_featureset(self):
 
-        fs_info = {"fixed acidity": "float64",\
-                   "volatile acidity": "float64",\
-                   "citric acid": "float64",\
-                   "residual sugar": "float64",\
-                   "chlorides": "float64",\
-                   "free sulfur dioxide": "float64",\
-                   "total sulfur dioxide": "float64",\
-                   "density": "float64",\
-                   "pH": "float64",\
-                   "sulphates": "float64",\
-                   "alcohol": "float64",\
-                   "quality": "int64",\
+        fs_info = {"fixed acidity": "float64",
+                   "volatile acidity": "float64",
+                   "citric acid": "float64",
+                   "residual sugar": "float64",
+                   "chlorides": "float64",
+                   "free sulfur dioxide": "float64",
+                   "total sulfur dioxide": "float64",
+                   "density": "float64",
+                   "pH": "float64",
+                   "sulphates": "float64",
+                   "alcohol": "float64",
+                   "quality": "int64",
                    "name": "wine_no_transformations"
                    }
         ds_reg = self.ap.lookup_dataset("wine_dataset")
@@ -123,8 +133,8 @@ class TestArangopipe(unittest.TestCase):
 
     def log_servingperf(self):
         to_date = datetime.datetime.now()
-        from_date = to_date - datetime.timedelta(days = 30)
-        ex_servingperf = {"rmse": 0.822242, "r2": 0.12678, "mae": 0.62787,\
+        from_date = to_date - datetime.timedelta(days=30)
+        ex_servingperf = {"rmse": 0.822242, "r2": 0.12678, "mae": 0.62787,
                           "from_date": str(from_date), "to_date": str(to_date)}
         dep_tag = "Wine_Elastic_Net_Regression"
         user_id = "prvileged user"
@@ -133,7 +143,8 @@ class TestArangopipe(unittest.TestCase):
         return
 
     def dataset_shift_positive(self):
-        ds_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cal_housing.csv")
+        ds_path = os.path.join(os.path.dirname(
+            os.path.abspath(__file__)), "cal_housing.csv")
         df = pd.read_csv(ds_path)
         req_cols = df.columns.tolist()
         df = df[req_cols]
@@ -141,12 +152,13 @@ class TestArangopipe(unittest.TestCase):
         df2 = df.query("lat > -119")
         rfd = RF_DatasetShiftDetector()
         score = rfd.detect_dataset_shift(df1, df2)
-        print ("Detaset shift score : ", score)
+        print("Detaset shift score : ", score)
 
         return score
 
     def dataset_shift_negative(self):
-        ds_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cal_housing.csv")
+        ds_path = os.path.join(os.path.dirname(
+            os.path.abspath(__file__)), "cal_housing.csv")
         df = pd.read_csv(ds_path)
         req_cols = df.columns.tolist()
         df = df[req_cols]
@@ -154,19 +166,14 @@ class TestArangopipe(unittest.TestCase):
         df2 = df1.copy()
         rfd = RF_DatasetShiftDetector()
         score = rfd.detect_dataset_shift(df1, df2)
-        print ("Detaset shift score : ", score)
+        print("Detaset shift score : ", score)
 
         return score
-
-
-
-
 
     def vertex_add_to_arangopipe(self):
         self.admin.add_vertex_to_arangopipe('test_vertex_1')
 
         return
-
 
     def test_arangopipe_vertex_add(self):
         self.vertex_add_to_arangopipe()
@@ -176,7 +183,7 @@ class TestArangopipe(unittest.TestCase):
 
     def vertex_remove_from_arangopipe(self):
         self.admin.add_vertex_to_arangopipe('test_vertex_t1')
-        self.admin.remove_vertex_from_arangopipe('test_vertex_t1', purge = True)
+        self.admin.remove_vertex_from_arangopipe('test_vertex_t1', purge=True)
 
         return
 
@@ -192,10 +199,10 @@ class TestArangopipe(unittest.TestCase):
             self.register_dataset()
         except:
             err_raised = True
-            print ('-'*60)
+            print('-'*60)
             traceback.print_exc(file=sys.stdout)
-            print ('-'*60)
-            self.assertTrue(err_raised,\
+            print('-'*60)
+            self.assertTrue(err_raised,
                             'Exception raised while registering dataset')
         self.assertFalse(err_raised)
         return
@@ -207,10 +214,10 @@ class TestArangopipe(unittest.TestCase):
             self.lookup_dataset()
         except:
             err_raised = True
-            print ('-'*60)
+            print('-'*60)
             traceback.print_exc(file=sys.stdout)
-            print ('-'*60)
-            self.assertTrue(err_raised,\
+            print('-'*60)
+            self.assertTrue(err_raised,
                             'Exception raised while looking up dataset')
         self.assertFalse(err_raised)
         return
@@ -222,10 +229,10 @@ class TestArangopipe(unittest.TestCase):
             self.register_featureset()
         except:
             err_raised = True
-            print ('-'*60)
+            print('-'*60)
             traceback.print_exc(file=sys.stdout)
-            print ('-'*60)
-            self.assertTrue(err_raised,\
+            print('-'*60)
+            self.assertTrue(err_raised,
                             'Exception raised while registering featureset')
         self.assertFalse(err_raised)
         return
@@ -238,15 +245,13 @@ class TestArangopipe(unittest.TestCase):
             self.lookup_featureset()
         except:
             err_raised = True
-            print ('-'*60)
+            print('-'*60)
             traceback.print_exc(file=sys.stdout)
-            print ('-'*60)
-            self.assertTrue(err_raised,\
+            print('-'*60)
+            self.assertTrue(err_raised,
                             'Exception raised while registering featureset')
         self.assertFalse(err_raised)
         return
-
-
 
     def test_register_model(self):
         err_raised = False
@@ -254,10 +259,10 @@ class TestArangopipe(unittest.TestCase):
             self.register_model()
         except:
             err_raised = True
-            print ('-'*60)
+            print('-'*60)
             traceback.print_exc(file=sys.stdout)
-            print ('-'*60)
-            self.assertTrue(err_raised,\
+            print('-'*60)
+            self.assertTrue(err_raised,
                             'Exception raised while registering model')
         self.assertFalse(err_raised)
         return
@@ -269,10 +274,10 @@ class TestArangopipe(unittest.TestCase):
             self.lookup_model()
         except:
             err_raised = True
-            print ('-'*60)
+            print('-'*60)
             traceback.print_exc(file=sys.stdout)
-            print ('-'*60)
-            self.assertTrue(err_raised,\
+            print('-'*60)
+            self.assertTrue(err_raised,
                             'Exception raised while looking up model')
         self.assertFalse(err_raised)
         return
@@ -286,10 +291,10 @@ class TestArangopipe(unittest.TestCase):
             self.log_run()
         except:
             err_raised = True
-            print ('-'*60)
+            print('-'*60)
             traceback.print_exc(file=sys.stdout)
-            print ('-'*60)
-            self.assertTrue(err_raised,\
+            print('-'*60)
+            self.assertTrue(err_raised,
                             'Exception raised while logging performance')
         self.assertFalse(err_raised)
         return
@@ -305,10 +310,10 @@ class TestArangopipe(unittest.TestCase):
 
         except:
             err_raised = True
-            print ('-'*60)
+            print('-'*60)
             traceback.print_exc(file=sys.stdout)
-            print ('-'*60)
-            self.assertTrue(err_raised,\
+            print('-'*60)
+            self.assertTrue(err_raised,
                             'Exception raised while provisioning deployment')
         self.assertFalse(err_raised)
         return
@@ -325,10 +330,10 @@ class TestArangopipe(unittest.TestCase):
 
         except:
             err_raised = True
-            print ('-'*60)
+            print('-'*60)
             traceback.print_exc(file=sys.stdout)
-            print ('-'*60)
-            self.assertTrue(err_raised,\
+            print('-'*60)
+            self.assertTrue(err_raised,
                             'Exception raised while logging serving performance')
         self.assertFalse(err_raised)
         return
@@ -344,16 +349,13 @@ class TestArangopipe(unittest.TestCase):
 
         score = self.dataset_shift_negative()
 
-
         self.assertTrue(score < 0.6)
         return
-
-
 
     def add_edge_to_arangopipe(self):
         self.admin.add_vertex_to_arangopipe('test_vertex_s')
         self.admin.add_vertex_to_arangopipe('test_vertex_d')
-        self.admin.add_edge_definition_to_arangopipe('test_edge',\
+        self.admin.add_edge_definition_to_arangopipe('test_edge',
                                                      'test_vertex_s', 'test_vertex_d')
         return
 
@@ -366,9 +368,10 @@ class TestArangopipe(unittest.TestCase):
     def remove_edge_from_arangopipe(self):
         self.admin.add_vertex_to_arangopipe('test_vertex_s1')
         self.admin.add_vertex_to_arangopipe('test_vertex_d1')
-        self.admin.add_edge_definition_to_arangopipe('test_edge_1',\
+        self.admin.add_edge_definition_to_arangopipe('test_edge_1',
                                                      'test_vertex_s1', 'test_vertex_d1')
-        self.admin.remove_edge_definition_from_arangopipe('test_edge_1', purge = True)
+        self.admin.remove_edge_definition_from_arangopipe(
+            'test_edge_1', purge=True)
 
         return
 
@@ -386,25 +389,23 @@ class TestArangopipe(unittest.TestCase):
 
         return ni
 
-
     def test_arangopipe_vertex_node_add(self):
         ni = self.add_vertex_node()
         self.assertIsNotNone(ni)
         return
 
     def add_edge_link(self):
-        ei= None
+        ei = None
         self.admin.add_vertex_to_arangopipe('test_vertex_s3')
         self.admin.add_vertex_to_arangopipe('test_vertex_s4')
         sd = {'name': "sample doc"}
         v1 = self.ap.insert_into_vertex_type('test_vertex_s3', sd)
         v2 = self.ap.insert_into_vertex_type('test_vertex_s4', sd)
-        self.admin.add_edge_definition_to_arangopipe('test_edge',\
-                                                'test_vertex_s3', 'test_vertex_s4')
+        self.admin.add_edge_definition_to_arangopipe('test_edge',
+                                                     'test_vertex_s3', 'test_vertex_s4')
         ei = self.ap.insert_into_edge_type('test_edge', v1, v2)
 
         return ei
-
 
     def test_arangopipe_edge_link_add(self):
         ei = self.add_edge_link()
@@ -412,12 +413,6 @@ class TestArangopipe(unittest.TestCase):
         return
 
 
-    def tearDown(self):
-        #pass
-        self.admin.delete_arangomldb()
-        self.ap = None
-        self.admin = None
-        return
 
 if __name__ == '__main__':
     unittest.main()

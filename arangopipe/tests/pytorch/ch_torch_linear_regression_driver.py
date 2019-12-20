@@ -19,6 +19,7 @@ from arangopipe.arangopipe_storage.arangopipe_admin_api import ArangoPipeAdmin
 from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig
 import uuid
 import datetime
+from arangopipe.arangopipe_storage.managed_service_conn_parameters import ManagedServiceConnParam
 #from torch.utils.data.sampler import SubsetRandomSampler
 
 
@@ -97,12 +98,20 @@ def run_driver():
 
     # Store experiment results in Arangopipe
     conn_config = ArangoPipeConfig()
-    conn_config.set_dbconnection(hostname = "http://localhost:8529",\
-                                root_user = "root", root_user_password = "open sesame")
+    msc = ManagedServiceConnParam()
+    conn_params = { msc.DB_SERVICE_HOST : "localhost", \
+                        msc.DB_SERVICE_END_POINT : "apmdb",\
+                        msc.DB_SERVICE_NAME : "createDB",\
+                        msc.DB_SERVICE_PORT : 8529,\
+                        msc.DB_CONN_PROTOCOL : 'http',\
+                        msc.DB_NOTIFICATION_EMAIL : 'somebody@some_company.com'}
+
+    conn_config = conn_config.create_connection_config(conn_params)
     proj_info = {"name": "Housing_Price_Estimation_Project"}
-    admin = ArangoPipeAdmin(config=conn_config)
+    admin = ArangoPipeAdmin(reuse_connection=False, config=conn_config)
     proj_reg = admin.register_project(proj_info)
-    ap = ArangoPipe(conn_config)
+    ap_config = admin.get_config()
+    ap = ArangoPipe(config=ap_config)
     ruuid = str(uuid.uuid4().int)
     model_name = "pytorch-linear-reg" + "_dev_run_" + ruuid
     model_info = {"name": model_name, "type": "model-development"}

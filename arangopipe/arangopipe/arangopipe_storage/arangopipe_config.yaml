@@ -1,10 +1,13 @@
 arangodb:
-  arangopipe_admin_password: arangopipe
-  arangopipe_admin_username: arangopipe
-  arangopipe_dbname: arangopipe
-  host: https://7828dc387b41.arangodb.cloud:8529/
-  port: 8529
-  root_user: root
-  root_user_password: 9BZ8pewKqkLdJBh6rq9b
+  DB_end_point: apmdb
+  DB_service_host: d874fc3f1fa5.arangodb.cloud
+  DB_service_name: createDB
+  DB_service_port: 8529
+  arangodb_replication_factor: null
+  conn_protocol: https
+  dbName: MLurde3kbwr9f8jsezsn1rwr
+  email: somebody@some_company.com
+  password: MLig739z410za8ahjk3h9sd
+  username: MLa7191i62jrrsfxu2jbhnxb
 mlgraph:
   graphname: enterprise_ml_graph
