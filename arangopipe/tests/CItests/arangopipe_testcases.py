@@ -24,11 +24,11 @@ class TestArangopipe(unittest.TestCase):
         #mshost: "5366b66b7d19.arangodb.cloud"
         config = ArangoPipeConfig()
         msc = ManagedServiceConnParam()
-        conn_params = { msc.DB_SERVICE_HOST : "localhost", \
-                        msc.DB_SERVICE_END_POINT : "apmdb",\
+        conn_params = { msc.DB_SERVICE_HOST : "7828dc387b41.arangodb.cloud", \
+                        msc.DB_SERVICE_END_POINT : "createDB",\
                         msc.DB_SERVICE_NAME : "createDB",\
                         msc.DB_SERVICE_PORT : 8529,\
-                        msc.DB_CONN_PROTOCOL : 'http',\
+                        msc.DB_CONN_PROTOCOL : 'https',\
                         msc.DB_NOTIFICATION_EMAIL : 'somebody@some_company.com'}
 
         config = config.create_connection_config(conn_params)

@@ -85,11 +85,23 @@ def eval_metrics(actual, pred):
 
 
 def delete_users():
+    try:
+        root_user = self.cfg['arangodb'][self.mscp.DB_ROOT_USER]
+        root_user_password = self.cfg['arangodb'][
+            self.mscp.DB_ROOT_USER_PASSWORD]
+    except KeyError as k:
+        msg = "Root credentials are unvailable, try again " + \
+                 "with a new connection and credentials for root provided"
+        logger.error(msg)
+        logger.error("Credential information that is missing : " +
+                     k.args[0])
+        raise Exception("Key error associated with missing " + k.args[0])
+
     print("Deleting users before test !")
     pl = ['_system', 'root', 'rajiv', 'node2vec_db_admin', 'susr']
     host_connection = "https://d874fc3f1fa5.arangodb.cloud:8529"
     client = ArangoClient(hosts= host_connection,\
-                        http_client=CustomHTTPClient())
+                        http_client=CustomHTTPClient(root_user, root_user_password))
     sys_db = client.db('_system',\
                        username="root",\
                        password="KzcHiaZMPcQWw3aaNdXt")
@@ -103,11 +115,23 @@ def delete_users():
 
 
 def delete_arangopipe_db():
+    try:
+        root_user = self.cfg['arangodb'][self.mscp.DB_ROOT_USER]
+        root_user_password = self.cfg['arangodb'][
+            self.mscp.DB_ROOT_USER_PASSWORD]
+    except KeyError as k:
+        msg = "Root credentials are unvailable, try again " + \
+                 "with a new connection and credentials for root provided"
+        logger.error(msg)
+        logger.error("Credential information that is missing : " +
+                     k.args[0])
+        raise Exception("Key error associated with missing " + k.args[0])
+
     print("Deleting users before test !")
 
     host_connection = "https://d874fc3f1fa5.arangodb.cloud:8529"
     client = ArangoClient(hosts= host_connection,\
-                        http_client=CustomHTTPClient())
+                        http_client=CustomHTTPClient(root_user, root_user_password))
     sys_db = client.db('_system',\
                        username="root",\
                        password="KzcHiaZMPcQWw3aaNdXt")
