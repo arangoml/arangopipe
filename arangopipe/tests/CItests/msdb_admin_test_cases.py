@@ -19,20 +19,20 @@ from arango import ArangoClient, DatabaseListError
 class TestAdminMSDB(unittest.TestCase):
     def setUp(self):
         #mshost: "5366b66b7d19.arangodb.cloud"
-        self.delete_users()
-        self.delete_arangopipe_db()
         conn_config = ArangoPipeConfig()
         self.mscp = ManagedServiceConnParam()
         conn_params = { self.mscp.DB_SERVICE_HOST : "7828dc387b41.arangodb.cloud", \
-                        self.mscp.DB_USER_NAME : "arangopipe",\
-                        self.mscp.DB_PASSWORD : "arangopipe",\
-                        self.mscp.DB_NAME : "arangopipe", \
-                        self.mscp.DB_ROOT_USER : "root",\
-                        self.mscp.DB_ROOT_USER_PASSWORD : "9BZ8pewKqkLdJBh6rq9b",\
-                        self.mscp.DB_SERVICE_END_POINT : "createDB",\
-                        self.mscp.DB_SERVICE_NAME : "createDB",\
-                        self.mscp.DB_SERVICE_PORT : 8529,\
-                        self.mscp.DB_CONN_PROTOCOL : 'https'}
+        self.mscp.DB_USER_NAME : "arangopipe",\
+        self.mscp.DB_PASSWORD : "arangopipe",\
+        self.mscp.DB_NAME : "arangopipe", \
+        self.mscp.DB_ROOT_USER : "root",\
+        self.mscp.DB_ROOT_USER_PASSWORD : "9BZ8pewKqkLdJBh6rq9b",\
+        self.mscp.DB_SERVICE_END_POINT : "createDB",\
+        self.mscp.DB_SERVICE_NAME : "createDB",\
+        self.mscp.DB_SERVICE_PORT : 8529,\
+        self.mscp.DB_CONN_PROTOCOL : 'https'}
+        self.delete_users()
+        self.delete_arangopipe_db()
 
         conn_config = conn_config.create_connection_config(conn_params)
         self.admin = ArangoPipeAdmin(reuse_connection = False, config = conn_config)
@@ -73,7 +73,9 @@ class TestAdminMSDB(unittest.TestCase):
                         mscp.DB_SERVICE_END_POINT : "createDB",\
                         mscp.DB_SERVICE_NAME : "createDB",\
                         mscp.DB_SERVICE_PORT : 8529,\
-                        mscp.DB_CONN_PROTOCOL : 'https'}
+                        mscp.DB_CONN_PROTOCOL : 'https',\
+                        mscp.DB_ROOT_USER : 'root',
+                        mscp.DB_ROOT_USER_PASSWORD: '9BZ8pewKqkLdJBh6rq9b'}
             conn_config = conn_config.create_connection_config(conn_params)
             admin = ArangoPipeAdmin(reuse_connection = False, config = conn_config)
             ap_config = admin.get_config()

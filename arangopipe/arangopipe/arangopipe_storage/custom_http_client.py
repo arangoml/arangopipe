@@ -20,7 +20,9 @@ class CustomHTTPClient(HTTPClient):
         self._logger = logging.getLogger('my_logger')
         self.username = username
         self.password = password
-        self.cert_name = 'ca-b9b556df.crt'
+        # self.cert_name = 'ca-b9b556df.crt'
+        self.path_to_cert = os.path.join(os.path.dirname(__file__),
+                                 "certs/" + "ca-b9b556df.crt")
 
 
 
@@ -48,8 +50,8 @@ class CustomHTTPClient(HTTPClient):
                      auth=None):
         # Add your own debug statement.
         self._logger.debug('Sending request to {}'.format(url))
-        ca_file = os.path.join(os.path.dirname(__file__),
-                                 "certs/" + self.cert_name)
+#        ca_file = os.path.join(os.path.dirname(__file__),
+#                                 "certs/" + self.cert_name)
         # Send a request.
         response = session.request(
             method=method,
@@ -57,7 +59,7 @@ class CustomHTTPClient(HTTPClient):
             params=params,
             data=data,
             headers=headers,
-            verify=ca_file
+            verify=self.path_to_cert
         )
         self._logger.debug('Got {}'.format(response.status_code))
 

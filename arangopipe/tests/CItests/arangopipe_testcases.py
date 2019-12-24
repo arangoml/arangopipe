@@ -29,7 +29,9 @@ class TestArangopipe(unittest.TestCase):
                         msc.DB_SERVICE_NAME : "createDB",\
                         msc.DB_SERVICE_PORT : 8529,\
                         msc.DB_CONN_PROTOCOL : 'https',\
-                        msc.DB_NOTIFICATION_EMAIL : 'somebody@some_company.com'}
+                        msc.DB_NOTIFICATION_EMAIL : 'somebody@some_company.com',\
+                        msc.DB_ROOT_USER : "root",\
+                        msc.DB_ROOT_USER_PASSWORD : "9BZ8pewKqkLdJBh6rq9b"}
 
         config = config.create_connection_config(conn_params)
         self.config = config
