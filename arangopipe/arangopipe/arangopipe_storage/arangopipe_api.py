@@ -160,11 +160,13 @@ class ArangoPipe:
         db_user_name = self.cfg['arangodb']['username']
         db_passwd = self.cfg['arangodb']['password']
         db_conn_protocol = self.cfg['arangodb'][self.mscp.DB_CONN_PROTOCOL]
+        db_root_user = self.cfg['arangodb'][self.mscp.DB_ROOT_USER]
+        db_root_user_password = self.cfg['arangodb'][self.mscp.DB_ROOT_USER_PASSWORD]
 
         host_conn_str =  db_conn_protocol +  "://" + \
                         db_serv_host + ":" + str(db_serv_port)
         client = ArangoClient(hosts= 'https://7828dc387b41.arangodb.cloud:8529',\
-                              http_client=CustomHTTPClient('root', '9BZ8pewKqkLdJBh6rq9b'))
+                              http_client=CustomHTTPClient(db_root_user, db_root_user_password))
 
         self.db = client.db(name= db_name, \
                            username=db_user_name,\
