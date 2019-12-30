@@ -18,6 +18,9 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import uuid
 import numpy as np
 import logging
+from arangopipe.arangopipe_storage.managed_service_conn_parameters import ManagedServiceConnParam
+from arango import ArangoClient, DatabaseListError
+from arangopipe.arangopipe_storage.custom_http_client import CustomHTTPClient
 
 NUM_PERIODS = 22
 go_back_days = dt.timedelta(days=30)
@@ -81,13 +84,70 @@ def eval_metrics(actual, pred):
     return rmse, mae, r2
 
 
+def delete_users():
+    print("Deleting users before test !")
+    pl = ['_system', 'root', 'rajiv', 'node2vec_db_admin', 'susr']
+    host_connection = "https://d874fc3f1fa5.arangodb.cloud:8529"
+    client = ArangoClient(hosts= host_connection,\
+                        http_client=CustomHTTPClient())
+    sys_db = client.db('_system',\
+                       username="root",\
+                       password="KzcHiaZMPcQWw3aaNdXt")
+    ul = sys_db.users()
+    unl = [tu['username'] for tu in ul]
+    for u in unl:
+        if not u in pl:
+            sys_db.delete_user(u)
+
+    return
+
+
+def delete_arangopipe_db():
+    print("Deleting users before test !")
+
+    host_connection = "https://d874fc3f1fa5.arangodb.cloud:8529"
+    client = ArangoClient(hosts= host_connection,\
+                        http_client=CustomHTTPClient())
+    sys_db = client.db('_system',\
+                       username="root",\
+                       password="KzcHiaZMPcQWw3aaNdXt")
+    try:
+        if sys_db.has_database("arangopipe"):
+            print(
+                "Before starting the test, cleaning up arangopipe instances..."
+            )
+            sys_db.delete_database("arangopipe")
+        else:
+            print("Test Prep: The database arangopipe does not exist !")
+
+    except DatabaseListError as err:
+        print.error(err)
+        print("Error code: " + str(err.error_code) + " received !")
+        print("Error Message: " + str(err.error_message))
+
+    return
+
+
 def generate_runs(clean=False):
+    delete_users()
+    delete_arangopipe_db()
     conn_config = ArangoPipeConfig()
-    conn_config.set_dbconnection(hostname="http://localhost:8529",
-                                 root_user="root",
-                                 root_user_password="open sesame")
-    admin = ArangoPipeAdmin(config=conn_config)
-    ap = ArangoPipe(config=conn_config)
+    mscp = ManagedServiceConnParam()
+    conn_params = { mscp.DB_SERVICE_HOST : "d874fc3f1fa5.arangodb.cloud", \
+                    mscp.DB_USER_NAME : "arangopipe",\
+                    mscp.DB_PASSWORD : "arangopipe",\
+                    mscp.DB_NAME : "arangopipe", \
+                    mscp.DB_ROOT_USER : "root",\
+                    mscp.DB_ROOT_USER_PASSWORD : "open sesame",\
+                    mscp.DB_SERVICE_END_POINT : "apmdb",\
+                    mscp.DB_SERVICE_NAME : "createDB",\
+                    mscp.DB_SERVICE_PORT : 8529,\
+                    mscp.DB_CONN_PROTOCOL : 'https'}
+
+    conn_config = conn_config.create_connection_config(conn_params)
+    admin = ArangoPipeAdmin(reuse_connection=False, config=conn_config)
+    ap_config = admin.get_config()
+    ap = ArangoPipe(config=ap_config)
 
     if clean:
         admin.delete_arangomldb()

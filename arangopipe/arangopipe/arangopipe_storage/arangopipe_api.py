@@ -6,10 +6,11 @@ Created on Sat Apr 13 08:35:58 2019
 @author: Rajiv Sambasivan
 """
 
-from arango import ArangoClient
+from arango import ArangoClient, AQLQueryExecuteError
 import logging
 from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig
 from arangopipe.arangopipe_storage.custom_http_client import CustomHTTPClient
+from arangopipe.arangopipe_storage.managed_service_conn_parameters import ManagedServiceConnParam
 
 # create logger with 'spam_application'
 logger = logging.getLogger('arangopipe_logger')
@@ -37,15 +38,25 @@ class ArangoPipe:
         (3) Register your featureset with ArangoPipe
         (4) Register you model with ArangoPipe
 """
-    def __init__(self, config=None, persist=False):
+    def __init__(self, config):
+        self.cfg = config.get_cfg()
         self.emlg = None
-        if config is None:
-            self.cfg = self.get_config()
-        else:
-            self.cfg = config.cfg
-            if persist:
-                config.dump_data()
+        self.db = None
+        self.mscp = ManagedServiceConnParam()
         self.init_graph()
+        self.heart_beat()
+
+    def heart_beat(self):
+        try:
+            self.lookup_dataset("heart beat check")
+        except AQLQueryExecuteError as e:
+            print("WARNING : " + str(e))
+            logger.error(
+                "Your database was perhaps deleted, try a new connection")
+            #logger.error("Error: " + str(e))
+            raise Exception("Your connection is stale, try a new connection!")
+
+        return
 
     def get_config(self):
         apc = ArangoPipeConfig()
@@ -53,13 +64,9 @@ class ArangoPipe:
 
     def lookup_dataset(self, dataset_name):
         """ Return a dataset identifier given a name. This can be used to get the dataset id that is used to log run information associated with execution of the pipeline."""
-        client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
-                              http_client=CustomHTTPClient())
-        db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
-                       username=self.cfg['arangodb']['arangopipe_admin_username'],\
-                       password=self.cfg['arangodb']['arangopipe_admin_password'])
+
         # Execute the query
-        cursor = db.aql.execute(
+        cursor = self.db.aql.execute(
             'FOR doc IN datasets FILTER doc.name == @value RETURN doc',
             bind_vars={'value': dataset_name})
         dataset_keys = [doc for doc in cursor]
@@ -75,13 +82,9 @@ class ArangoPipe:
 
     def lookup_featureset(self, feature_set_name):
         """ Return a featureset identifier given a name. This can be used to get the featureset id that is used to log run information associated with execution of the pipeline."""
-        client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
-                              http_client=CustomHTTPClient())
-        db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
-                       username=self.cfg['arangodb']['arangopipe_admin_username'],\
-                       password=self.cfg['arangodb']['arangopipe_admin_password'])
+
         # Execute the query
-        cursor = db.aql.execute(
+        cursor = self.db.aql.execute(
             'FOR doc IN featuresets FILTER doc.name == @value RETURN doc',
             bind_vars={'value': feature_set_name})
         featureset_info = None
@@ -96,13 +99,9 @@ class ArangoPipe:
 
     def lookup_model(self, model_name):
         """ Return a model identifier given a name. This can be used to get the model id that is used to log run information associated with execution of the pipeline."""
-        client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
-                              http_client=CustomHTTPClient())
-        db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
-                       username=self.cfg['arangodb']['arangopipe_admin_username'],\
-                       password=self.cfg['arangodb']['arangopipe_admin_password'])
+
         # Execute the query
-        cursor = db.aql.execute(
+        cursor = self.db.aql.execute(
             'FOR doc IN models FILTER doc.name == @value RETURN doc',
             bind_vars={'value': model_name})
         model_info = None
@@ -118,17 +117,13 @@ class ArangoPipe:
 
     def lookup_modelparams(self, tag_value):
         """ Return a model parameter result given a tag."""
-        client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
-                              http_client=CustomHTTPClient())
-        db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
-                       username=self.cfg['arangodb']['arangopipe_admin_username'],\
-                       password=self.cfg['arangodb']['arangopipe_admin_password'])
+
         # Execute the query
-        cursor = db.aql.execute('FOR r IN run\
+        cursor = self.db.aql.execute('FOR r IN run\
                     FILTER r.tag == @value \
                         FOR mp IN 1..1 OUTBOUND r run_modelparams\
                             RETURN mp ',
-                                bind_vars={'value': tag_value})
+                                     bind_vars={'value': tag_value})
         mp_info = None
         mp_keys = [doc for doc in cursor]
         if len(mp_keys) == 0:
@@ -140,17 +135,13 @@ class ArangoPipe:
 
     def lookup_modelperf(self, tag_value):
         """ Return a model dev performance given a tag."""
-        client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
-                              http_client=CustomHTTPClient())
-        db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
-                       username=self.cfg['arangodb']['arangopipe_admin_username'],\
-                       password=self.cfg['arangodb']['arangopipe_admin_password'])
+
         # Execute the query
-        cursor = db.aql.execute('FOR r IN run\
+        cursor = self.db.aql.execute('FOR r IN run\
                     FILTER r.tag == @value \
                         FOR dp IN 1..1 OUTBOUND r run_devperf\
                             RETURN dp ',
-                                bind_vars={'value': tag_value})
+                                     bind_vars={'value': tag_value})
         mperf_info = None
         mperf_keys = [doc for doc in cursor]
         if len(mperf_keys) == 0:
@@ -163,28 +154,24 @@ class ArangoPipe:
 
     def init_graph(self):
         """ Initialize a graph when an instance of ArangoPipe is provisioned. """
-        client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
+        db_serv_host = self.cfg['arangodb']['DB_service_host']
+        db_serv_port = self.cfg['arangodb']['DB_service_port']
+        db_name = self.cfg['arangodb']['dbName']
+        db_user_name = self.cfg['arangodb']['username']
+        db_passwd = self.cfg['arangodb']['password']
+        db_conn_protocol = self.cfg['arangodb'][self.mscp.DB_CONN_PROTOCOL]
+
+        host_conn_str =  db_conn_protocol +  "://" + \
+                        db_serv_host + ":" + str(db_serv_port)
+        client = ArangoClient(hosts= host_conn_str,\
                               http_client=CustomHTTPClient())
 
-        # Connect to "_system" database as root user.
-        # This returns an API wrapper for "_system" database.
-        sys_db = client.db('_system',\
-                           username=self.cfg['arangodb']['root_user'],\
-                           password=self.cfg['arangodb']['root_user_password'])
+        self.db = client.db(name= db_name, \
+                           username=db_user_name,\
+                           password=db_passwd)
 
-        if not sys_db.has_database(self.cfg['arangodb']['arangopipe_dbname']):
-            logger.error("arangopipe database has not been created.")
-            raise AttributeError("arangopipe database has not been created!")
-        else:
-            db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
-                           username=self.cfg['arangodb']['arangopipe_admin_username'],\
-                           password=self.cfg['arangodb']['arangopipe_admin_password'])
-            if db.has_graph(self.cfg['mlgraph']['graphname']):
-                self.emlg = db.graph(self.cfg['mlgraph']['graphname'])
-            else:
-                logger.error("ML tracking graph was not created. ")
-                raise AttributeError("ML tracking graph has not been created")
-        logger.info("Arango Pipe ML Graph initialized")
+        self.emlg = self.db.graph(self.cfg['mlgraph']['graphname'])
+
         return
 
 
@@ -196,13 +183,8 @@ class ArangoPipe:
         models = self.emlg.vertex_collection("models")
         model_reg = models.insert(mi)
 
-        client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
-                              http_client=CustomHTTPClient())
-        db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
-                       username=self.cfg['arangodb']['arangopipe_admin_username'],\
-                       password=self.cfg['arangodb']['arangopipe_admin_password'])
         # Execute the query
-        cursor = db.aql.execute(
+        cursor = self.db.aql.execute(
             'FOR doc IN project FILTER doc.name == @value RETURN doc',
             bind_vars={'value': project})
         project_keys = [doc for doc in cursor]
@@ -230,7 +212,7 @@ class ArangoPipe:
 
     def register_featureset(self, fs_info, dataset_id, \
                             user_id = "authorized_user"):
-        """ Register a featureset. The operation requires specifying a user id. If the user id is permitted to register a featureset, then the registration proceeds, otherwise an unauthorized operation is indicated. """
+        """ Register a featureset. ManagedServiceConnParamThe operation requires specifying a user id. If the user id is permitted to register a featureset, then the registration proceeds, otherwise an unauthorized operation is indicated. """
         fs = self.emlg.vertex_collection("featuresets")
         fs_reg = fs.insert(fs_info)
         logger.info("Recording featureset " + str(fs_reg))
@@ -326,14 +308,9 @@ class ArangoPipe:
         """ Log serving performance against a deployed model. The user making the request needs to be authorized to log this performance update. A serving performance vertex is created and is linked with its deployment vertex"""
         servingperf = self.emlg.vertex_collection("servingperf")
         sp_reg = servingperf.insert(sp)
-        # Locate the deployment record
-        client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
-                              http_client=CustomHTTPClient())
-        db = client.db(name=self.cfg['arangodb']['arangopipe_dbname'],\
-                       username=self.cfg['arangodb']['arangopipe_admin_username'],\
-                       password=self.cfg['arangodb']['arangopipe_admin_password'])
+
         # Execute the query
-        cursor = db.aql.execute(
+        cursor = self.db.aql.execute(
             'FOR doc IN deployment FILTER doc.tag == @value RETURN doc',
             bind_vars={'value': dep_tag})
         dep_docs = [doc for doc in cursor]

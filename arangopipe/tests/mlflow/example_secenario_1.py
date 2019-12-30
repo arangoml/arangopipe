@@ -18,6 +18,7 @@ from arangopipe.arangopipe_storage.arangopipe_api import ArangoPipe
 import datetime
 from arangopipe.arangopipe_storage.arangopipe_admin_api import ArangoPipeAdmin
 from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig
+from arangopipe.arangopipe_storage.managed_service_conn_parameters import ManagedServiceConnParam
 
 
 def eval_metrics(actual, pred):
@@ -31,15 +32,21 @@ if __name__ == "__main__":
 
     proj_info = {"name": "Wine-Quality-Regression-Modelling"}
     conn_config = ArangoPipeConfig()
-    conn_config.set_dbconnection(hostname="http://localhost:8529",
-                                 root_user="root",
-                                 root_user_password="open sesame")
-    admin = ArangoPipeAdmin(config=conn_config)
+    msc = ManagedServiceConnParam()
+    conn_params = { msc.DB_SERVICE_HOST : "localhost", \
+                    msc.DB_SERVICE_END_POINT : "apmdb",\
+                    msc.DB_SERVICE_NAME : "createDB",\
+                    msc.DB_SERVICE_PORT : 8529,
+                    msc.DB_CONN_PROTOCOL : 'http'}
+
+    conn_config = conn_config.create_connection_config(conn_params)
+    admin = ArangoPipeAdmin(reuse_connection=False, config=conn_config)
     proj_reg = admin.register_project(proj_info)
 
     warnings.filterwarnings("ignore")
     np.random.seed(40)
-    ap = ArangoPipe(conn_config)
+    ap_config = admin.get_config()
+    ap = ArangoPipe(config=ap_config)
 
     # Read the wine-quality csv file (make sure you're running this from the root of MLflow!)
     wine_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),

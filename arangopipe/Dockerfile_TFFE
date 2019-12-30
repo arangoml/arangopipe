@@ -7,6 +7,7 @@ WORKDIR /arangopipe_frontend
 COPY arangopipe_frontend/app/package.json /arangopipe_frontend
 COPY arangopipe_frontend/app/package-lock.json /arangopipe_frontend
 RUN npm install
+RUN npm install --global foxx-cli
 COPY arangopipe_frontend/app/ /arangopipe_frontend
 FROM tensorflow/tensorflow:1.14.0-py3
 
@@ -14,11 +15,12 @@ MAINTAINER Joerg Schad <info@arangodb.com>
 ENV GIT_PYTHON_REFRESH=quiet
 
 RUN apt-get update && apt-get install -y python-pip curl
-RUN pip install mlflow hyperopt sklearn2 jsonpickle python-arango arangopipe jupyter matplotlib tensorflow-data-validation PyYAML==5.1.1
+RUN pip install mlflow hyperopt sklearn2 jsonpickle python-arango jupyter matplotlib tensorflow-data-validation PyYAML==5.1.1 arangopipe==0.0.5.8
 RUN mkdir -p /workspace
 
 WORKDIR /
 COPY --from=0 / .
+COPY aisis-foxx/ aisis-foxx/
 WORKDIR /workspace/experiments
 COPY --from=frontend /arangopipe_frontend .
 COPY tests/AQL/ examples/AQL/
@@ -26,6 +28,7 @@ COPY tests/covariate_shift/ examples/covariate_shift/
 COPY tests/hyperopt/ examples/hyperopt/
 COPY tests/mlflow/ examples/mlflow/
 COPY tests/test_data_generator/ examples/test_data_generator/
+COPY tests/managed_services/connecting_to_arangodb_managed_services.ipynb examples/managed_services/
 COPY tests/TFX/ examples/TFX/
 COPY tests/container_tests/tf_arangopipe_testcases.py examples/container_tests/
 COPY tests/container_tests/cal_housing.csv examples/container_tests/
