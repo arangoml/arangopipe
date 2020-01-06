@@ -50,7 +50,7 @@ class CustomHTTPClient(HTTPClient):
                      auth=None):
         # Add your own debug statement.
         self._logger.debug('Sending request to {}'.format(url))
-        
+
         # Send a request.
         response = session.request(
             method=method,
