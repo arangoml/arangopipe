@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Apr 25 09:30:33 2019
-
 @author: Rajiv Sambasivan
 """
 
@@ -123,17 +122,7 @@ class ArangoPipeAdmin:
 
     def create_config(self):
         apc = ArangoPipeConfig()
-        return apc.get_cfg()
-
-    def create_db(self):
-        client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
-                              http_client=CustomHTTPClient(username="root", password="9BZ8pewKqkLdJBh6rq9b"))
-
-        # Connect to "_system" database as root user.
-        # This returns an API wrapper for "_system" database.
-        sys_db = client.db('_system',\
-                           username=self.cfg['arangodb']['root_user'],
-                           password=self.cfg['arangodb']['root_user_password'])
+        return apc
 
     def get_config(self):
         return self.config
@@ -251,24 +240,10 @@ class ArangoPipeAdmin:
 
     def delete_arangomldb(self):
 
-        client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
-                              http_client=CustomHTTPClient(username="root", password="9BZ8pewKqkLdJBh6rq9b"))
-
-        sys_db = client.db('_system',\
-                           username=self.cfg['arangodb']['root_user'],\
-                           password=self.cfg['arangodb']['root_user_password'])
-
-        if sys_db.has_database(self.cfg['arangodb']['arangopipe_dbname']):
-            sys_db.delete_database(self.cfg['arangodb']['arangopipe_dbname'])
-
         return
 
     def register_deployment(self, dep_tag):
-        client = ArangoClient(hosts=self.cfg['arangodb']['host'],\
-                              http_client=CustomHTTPClient(username="root", password="9BZ8pewKqkLdJBh6rq9b"))
-        db = client.db(name =self.cfg['arangodb']['arangopipe_dbname'],\
-                       username = self.cfg['arangodb']['arangopipe_admin_username'],\
-                       password = self.cfg['arangodb']['arangopipe_admin_password'])
+
         # Execute the query
         cursor = self.db.aql.execute(
             'FOR doc IN run FILTER doc.deployment_tag == @value RETURN doc',

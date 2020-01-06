@@ -50,8 +50,7 @@ class CustomHTTPClient(HTTPClient):
                      auth=None):
         # Add your own debug statement.
         self._logger.debug('Sending request to {}'.format(url))
-#        ca_file = os.path.join(os.path.dirname(__file__),
-#                                 "certs/" + self.cert_name)
+        
         # Send a request.
         response = session.request(
             method=method,
