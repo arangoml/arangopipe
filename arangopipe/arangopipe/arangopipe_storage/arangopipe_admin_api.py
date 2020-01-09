@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Apr 25 09:30:33 2019
-
 @author: Rajiv Sambasivan
 """
 
@@ -61,6 +60,8 @@ class ArangoPipeAdmin:
             db_serv_port = self.cfg['arangodb'][self.mscp.DB_SERVICE_PORT]
             db_end_point = self.cfg['arangodb'][self.mscp.DB_SERVICE_END_POINT]
             db_serv_name = self.cfg['arangodb'][self.mscp.DB_SERVICE_NAME]
+            db_root_user = self.cfg['arangodb'][self.mscp.DB_ROOT_USER]
+            db_root_user_password = self.cfg['arangodb'][self.mscp.DB_ROOT_USER_PASSWORD]
 
         except KeyError as k:
             logger.error("Connection information is missing : " + k.args[0])
@@ -104,10 +105,9 @@ class ArangoPipeAdmin:
         if self.mscp.DB_ROOT_USER_PASSWORD in self.cfg['arangodb']:
             logger.info("A root user password was specified, persisting...")
 
-
         self.create_db(db_serv_host, db_serv_port,\
                        db_serv_name, db_end_point,\
-                       db_dbName, db_user_name, db_password, db_conn_protocol)
+                       db_dbName, db_user_name, db_password, db_conn_protocol, db_root_user, db_root_user_password)
         self.create_enterprise_ml_graph(db_replication_factor)
 
         if persist_conn:
@@ -129,12 +129,12 @@ class ArangoPipeAdmin:
 
     def create_db(self, db_srv_host, db_srv_port, db_serv_name,\
                   db_end_point, db_dbName, db_user_name, db_password,\
-                  db_conn_protocol):
+                  db_conn_protocol, db_root_user, db_root_user_password):
 
         host_connection = db_conn_protocol + "://" + db_srv_host + ":" + str(
             db_srv_port)
         client = ArangoClient(hosts= host_connection,\
-                              http_client=CustomHTTPClient())
+                              http_client=CustomHTTPClient(db_root_user, db_root_user_password))
         logger.debug("Connection reuse: " + str(self.reuse_connection))
         if not self.reuse_connection:
             API_ENDPOINT = host_connection + "/_db/_system/" + db_end_point + \
@@ -434,7 +434,7 @@ class ArangoPipeAdmin:
             return
 
         client = ArangoClient(hosts= host_connection,\
-                              http_client=CustomHTTPClient())
+                              http_client=CustomHTTPClient(root_user, root_user_password))
         if not '_system' in preserve:
             preserve.append('_system')
 
@@ -485,7 +485,7 @@ class ArangoPipeAdmin:
             return
 
         client = ArangoClient(hosts= host_connection,\
-                              http_client=CustomHTTPClient())
+                              http_client=CustomHTTPClient(root_user, root_user_password))
 
         sys_db = client.db('_system',\
                                username = root_user,\

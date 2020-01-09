@@ -19,18 +19,20 @@ from arangopipe.arangopipe_storage.managed_service_conn_parameters import Manage
 
 
 class TestArangopipe(unittest.TestCase):
-    
+
     def setUp(self):
         #mshost: "5366b66b7d19.arangodb.cloud"
         config = ArangoPipeConfig()
         msc = ManagedServiceConnParam()
-        conn_params = { msc.DB_SERVICE_HOST : "localhost", \
-                        msc.DB_SERVICE_END_POINT : "apmdb",\
+        conn_params = { msc.DB_SERVICE_HOST : "7828dc387b41.arangodb.cloud", \
+                        msc.DB_SERVICE_END_POINT : "createDB",\
                         msc.DB_SERVICE_NAME : "createDB",\
                         msc.DB_SERVICE_PORT : 8529,\
-                        msc.DB_CONN_PROTOCOL : 'http',\
-                        msc.DB_NOTIFICATION_EMAIL : 'somebody@some_company.com'}
-        
+                        msc.DB_CONN_PROTOCOL : 'https',\
+                        msc.DB_NOTIFICATION_EMAIL : 'somebody@some_company.com',\
+                        msc.DB_ROOT_USER : "root",\
+                        msc.DB_ROOT_USER_PASSWORD : "9BZ8pewKqkLdJBh6rq9b"}
+
         config = config.create_connection_config(conn_params)
         self.config = config
         self.admin = ArangoPipeAdmin(reuse_connection = False, config= self.config)
@@ -38,7 +40,7 @@ class TestArangopipe(unittest.TestCase):
         self.ap = ArangoPipe(config = ap_config)
         self.provision_project()
         return
-    
+
     def provision_project(self):
         err_raised = False
         try:
@@ -54,7 +56,7 @@ class TestArangopipe(unittest.TestCase):
 
         #cls.assertFalse(err_raised, )
         return
-    
+
     def register_dataset(self):
         ds_info = {"name": "wine_dataset",
                    "description": "Wine quality ratings",
