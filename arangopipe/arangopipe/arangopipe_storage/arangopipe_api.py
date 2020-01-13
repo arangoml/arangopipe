@@ -161,7 +161,8 @@ class ArangoPipe:
         db_passwd = self.cfg['arangodb']['password']
         db_conn_protocol = self.cfg['arangodb'][self.mscp.DB_CONN_PROTOCOL]
         db_root_user = self.cfg['arangodb'][self.mscp.DB_ROOT_USER]
-        db_root_user_password = self.cfg['arangodb'][self.mscp.DB_ROOT_USER_PASSWORD]
+        db_root_user_password = self.cfg['arangodb'][
+            self.mscp.DB_ROOT_USER_PASSWORD]
 
         host_conn_str =  db_conn_protocol +  "://" + \
                         db_serv_host + ":" + str(db_serv_port)

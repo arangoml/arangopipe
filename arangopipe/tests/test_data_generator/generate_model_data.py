@@ -93,8 +93,7 @@ def delete_users():
         msg = "Root credentials are unvailable, try again " + \
                  "with a new connection and credentials for root provided"
         logger.error(msg)
-        logger.error("Credential information that is missing : " +
-                     k.args[0])
+        logger.error("Credential information that is missing : " + k.args[0])
         raise Exception("Key error associated with missing " + k.args[0])
 
     print("Deleting users before test !")
@@ -123,8 +122,7 @@ def delete_arangopipe_db():
         msg = "Root credentials are unvailable, try again " + \
                  "with a new connection and credentials for root provided"
         logger.error(msg)
-        logger.error("Credential information that is missing : " +
-                     k.args[0])
+        logger.error("Credential information that is missing : " + k.args[0])
         raise Exception("Key error associated with missing " + k.args[0])
 
     print("Deleting users before test !")

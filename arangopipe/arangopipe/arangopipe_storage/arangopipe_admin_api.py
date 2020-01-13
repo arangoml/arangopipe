@@ -61,7 +61,8 @@ class ArangoPipeAdmin:
             db_end_point = self.cfg['arangodb'][self.mscp.DB_SERVICE_END_POINT]
             db_serv_name = self.cfg['arangodb'][self.mscp.DB_SERVICE_NAME]
             db_root_user = self.cfg['arangodb'][self.mscp.DB_ROOT_USER]
-            db_root_user_password = self.cfg['arangodb'][self.mscp.DB_ROOT_USER_PASSWORD]
+            db_root_user_password = self.cfg['arangodb'][
+                self.mscp.DB_ROOT_USER_PASSWORD]
 
         except KeyError as k:
             logger.error("Connection information is missing : " + k.args[0])

@@ -13,6 +13,7 @@ from arango.http import HTTPClient
 import os
 from os.path import dirname, join
 
+
 class CustomHTTPClient(HTTPClient):
     """My custom HTTP client with cool features."""
     def __init__(self, username, password):
@@ -22,9 +23,7 @@ class CustomHTTPClient(HTTPClient):
         self.password = password
         # self.cert_name = 'ca-b9b556df.crt'
         self.path_to_cert = os.path.join(os.path.dirname(__file__),
-                                 "certs/" + "ca-b9b556df.crt")
-
-
+                                         "certs/" + "ca-b9b556df.crt")
 
     def create_session(self, host):
         session = Session()
@@ -52,14 +51,12 @@ class CustomHTTPClient(HTTPClient):
         self._logger.debug('Sending request to {}'.format(url))
 
         # Send a request.
-        response = session.request(
-            method=method,
-            url=url,
-            params=params,
-            data=data,
-            headers=headers,
-            verify=self.path_to_cert
-        )
+        response = session.request(method=method,
+                                   url=url,
+                                   params=params,
+                                   data=data,
+                                   headers=headers,
+                                   verify=self.path_to_cert)
         self._logger.debug('Got {}'.format(response.status_code))
 
         # Return an instance of arango.response.Response.

@@ -24,14 +24,14 @@ class TestArangopipe(unittest.TestCase):
         #mshost: "5366b66b7d19.arangodb.cloud"
         config = ArangoPipeConfig()
         msc = ManagedServiceConnParam()
-        conn_params = { msc.DB_SERVICE_HOST : "7828dc387b41.arangodb.cloud", \
+        conn_params = { msc.DB_SERVICE_HOST : "9abae0039203.arangodb.cloud", \
                         msc.DB_SERVICE_END_POINT : "createDB",\
                         msc.DB_SERVICE_NAME : "createDB",\
                         msc.DB_SERVICE_PORT : 8529,\
                         msc.DB_CONN_PROTOCOL : 'https',\
                         msc.DB_NOTIFICATION_EMAIL : 'somebody@some_company.com',\
                         msc.DB_ROOT_USER : "root",\
-                        msc.DB_ROOT_USER_PASSWORD : "9BZ8pewKqkLdJBh6rq9b"}
+                        msc.DB_ROOT_USER_PASSWORD : "bM3IbqTurunvtrNngO83"}
 
         config = config.create_connection_config(conn_params)
         self.config = config
