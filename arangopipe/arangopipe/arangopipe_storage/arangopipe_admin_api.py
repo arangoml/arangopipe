@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Apr 25 09:30:33 2019
+
 @author: Rajiv Sambasivan
 """
 
@@ -41,16 +42,25 @@ class ArangoPipeAdmin:
         self.config = None
         self.cfg = None
         self.mscp = ManagedServiceConnParam()
+        self.use_supp_config_to_reconnect = False
 
         if reuse_connection:
-            info_msg = "since connection reuse is indicated, " + \
-                        "conn information is ignored if provided."
-            self.config = self.create_config()
-            self.cfg = self.config.get_cfg()
+            info_msg = "If a config is provided, it will be used for setting up the connection"
+            if config is None:
+                self.config = self.create_config()
+                self.cfg = self.config.get_cfg()
+                self.use_supp_config_to_reconnect = False
+            else:
+                self.config = config
+                self.cfg = config.cfg
+                self.use_supp_config_to_reconnect = True
+
             logger.info(info_msg)
         else:
+
             assert config is not None,\
                    "You must provide connection information for new connections"
+
             self.config = config
             self.cfg = config.cfg
 
@@ -60,8 +70,6 @@ class ArangoPipeAdmin:
             db_serv_port = self.cfg['arangodb'][self.mscp.DB_SERVICE_PORT]
             db_end_point = self.cfg['arangodb'][self.mscp.DB_SERVICE_END_POINT]
             db_serv_name = self.cfg['arangodb'][self.mscp.DB_SERVICE_NAME]
-            db_root_user = self.cfg['arangodb'][self.mscp.DB_ROOT_USER]
-            db_root_user_password = self.cfg['arangodb'][self.mscp.DB_ROOT_USER_PASSWORD]
 
         except KeyError as k:
             logger.error("Connection information is missing : " + k.args[0])
@@ -105,15 +113,45 @@ class ArangoPipeAdmin:
         if self.mscp.DB_ROOT_USER_PASSWORD in self.cfg['arangodb']:
             logger.info("A root user password was specified, persisting...")
 
+
         self.create_db(db_serv_host, db_serv_port,\
                        db_serv_name, db_end_point,\
-                       db_dbName, db_user_name, db_password, db_conn_protocol, db_root_user, db_root_user_password)
-        self.create_enterprise_ml_graph(db_replication_factor)
+                       db_dbName, db_user_name, db_password, db_conn_protocol)
 
-        if persist_conn:
-            self.config.dump_data()
+        # If you could create a DB, proceed with provisioning the graph. Otherwise you
+        # had an issue creating the database.
+        if self.db is not None:
+            self.create_enterprise_ml_graph(db_replication_factor)
+
+            if persist_conn:
+                self.config.dump_data()
 
         return
+
+    def check_repeated_creation(self, api_data):
+        if not api_data:
+            repeated_connection = False
+        else:
+            try:
+                user_name_equal = api_data[self.mscp.DB_USER_NAME] ==\
+                self.cfg['arangodb'][self.mscp.DB_USER_NAME]
+                password_equal =  api_data[self.mscp.DB_PASSWORD] ==\
+                self.cfg['arangodb'][self.mscp.DB_PASSWORD]
+                db_name_equal = api_data[self.mscp.DB_NAME] ==\
+                self.cfg['arangodb'][self.mscp.DB_NAME]
+                repeated_connection = user_name_equal or password_equal or db_name_equal
+                if user_name_equal:
+                    logger.info(
+                        "Attempting to create a connection with an existing username"
+                    )
+                if db_name_equal:
+                    logger.info(
+                        "Attempting to create a connection with an existing db name"
+                    )
+            except KeyError:
+                repeated_connection = False
+
+        return repeated_connection
 
     def set_connection_params(self, config):
         self.cfg = config
@@ -129,12 +167,11 @@ class ArangoPipeAdmin:
 
     def create_db(self, db_srv_host, db_srv_port, db_serv_name,\
                   db_end_point, db_dbName, db_user_name, db_password,\
-                  db_conn_protocol, db_root_user, db_root_user_password):
+                  db_conn_protocol):
 
         host_connection = db_conn_protocol + "://" + db_srv_host + ":" + str(
             db_srv_port)
-        client = ArangoClient(hosts= host_connection,\
-                              http_client=CustomHTTPClient(db_root_user, db_root_user_password))
+        client = ArangoClient(hosts=host_connection)
         logger.debug("Connection reuse: " + str(self.reuse_connection))
         if not self.reuse_connection:
             API_ENDPOINT = host_connection + "/_db/_system/" + db_end_point + \
@@ -153,9 +190,17 @@ class ArangoPipeAdmin:
             api_data = {self.mscp.DB_NAME : db_dbName,\
                         self.mscp.DB_USER_NAME: db_user_name,\
                         self.mscp.DB_PASSWORD: db_password }
+            logger.info("Requesting a managed service database...")
 
             r = requests.post(url=API_ENDPOINT, json=api_data, verify=False)
-            logger.info("Requesting a managed service database...")
+
+            if r.status_code == 409 or r.status_code == 400:
+                logger.error(
+                    "It appears that you are attempting to connecting using \
+                             existing connection information. So either set reconnect = True when you create ArangoPipeAdmin or recreate a connection config and try again!"
+                )
+                return
+
             assert r.status_code == 200, \
             "Managed DB endpoint is unavailable !, reason: " + r.reason + " err code: " +\
             str(r.status_code)
@@ -174,15 +219,26 @@ class ArangoPipeAdmin:
             self.cfg['arangodb'][self.mscp.DB_CONN_PROTOCOL] = db_conn_protocol
 
         else:
-            disk_cfg = ArangoPipeConfig()
-            pcfg = disk_cfg.get_cfg()  # persisted config values
-            ms_dbName = pcfg['arangodb'][self.mscp.DB_NAME]
-            ms_user_name = pcfg['arangodb'][self.mscp.DB_USER_NAME]
-            ms_password = pcfg['arangodb'][self.mscp.DB_PASSWORD]
-            self.config = disk_cfg
-            self.cfg = disk_cfg.cfg
+            if self.use_supp_config_to_reconnect:
+                ms_dbName = self.cfg['arangodb'][self.mscp.DB_NAME]
+                ms_user_name = self.cfg['arangodb'][self.mscp.DB_USER_NAME]
+                ms_password = self.cfg['arangodb'][self.mscp.DB_PASSWORD]
+
+            else:
+                disk_cfg = ArangoPipeConfig()
+                pcfg = disk_cfg.get_cfg()  # persisted config values
+                ms_dbName = pcfg['arangodb'][self.mscp.DB_NAME]
+                ms_user_name = pcfg['arangodb'][self.mscp.DB_USER_NAME]
+                ms_password = pcfg['arangodb'][self.mscp.DB_PASSWORD]
+                self.config = disk_cfg
+                self.cfg = disk_cfg.cfg
         # Connect to arangopipe database as administrative user.
         #This returns an API wrapper for "test" database.
+        print("Host Connection: " + str(host_connection))
+        client = ArangoClient(hosts= host_connection,\
+                              http_client=CustomHTTPClient(username = ms_user_name,\
+                                                           password = ms_password))
+
         db = client.db(ms_dbName, ms_user_name, ms_password)
         self.db = db
 
@@ -434,7 +490,8 @@ class ArangoPipeAdmin:
             return
 
         client = ArangoClient(hosts= host_connection,\
-                              http_client=CustomHTTPClient(root_user, root_user_password))
+                              http_client=CustomHTTPClient(username=root_user,\
+                                                           password = root_user_password))
         if not '_system' in preserve:
             preserve.append('_system')
 
@@ -485,7 +542,8 @@ class ArangoPipeAdmin:
             return
 
         client = ArangoClient(hosts= host_connection,\
-                              http_client=CustomHTTPClient(root_user, root_user_password))
+                              http_client=CustomHTTPClient(username=root_user,\
+                                                           password = root_user_password))
 
         sys_db = client.db('_system',\
                                username = root_user,\

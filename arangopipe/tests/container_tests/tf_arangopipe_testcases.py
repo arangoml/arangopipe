@@ -16,22 +16,30 @@ import pandas as pd
 import sys, traceback
 import tensorflow_data_validation as tfdv
 from google.protobuf import json_format
-from tensorflow_metadata.proto.v0 import statistics_pb2
-from tensorflow_metadata.proto.v0 import schema_pb2
+#from tensorflow_metadata.proto.v0 import statistics_pb2
+#from tensorflow_metadata.proto.v0 import schema_pb2
 from arangopipe.arangopipe_storage.managed_service_conn_parameters import ManagedServiceConnParam
+import yaml
 
 class TestArangopipe(unittest.TestCase):
+    
+    def __init__(self, *args, **kwargs):
+        super(TestArangopipe, self).__init__(*args, **kwargs)
+        self.test_cfg = self.get_test_config()
+        self.mscp = ManagedServiceConnParam()
+        
+        return
+        
         
     def setUp(self):
         conn_config = ArangoPipeConfig()
-        self.mscp = ManagedServiceConnParam()
-        conn_params = { self.mscp.DB_SERVICE_HOST : "localhost", \
-                self.mscp.DB_ROOT_USER : "root",\
-                self.mscp.DB_ROOT_USER_PASSWORD : "open sesame",\
-                self.mscp.DB_SERVICE_END_POINT : "apmdb",\
-                self.mscp.DB_SERVICE_NAME : "createDB",\
-                self.mscp.DB_SERVICE_PORT : 8529,\
-                self.mscp.DB_CONN_PROTOCOL : 'http'}
+        conn_params = { self.mscp.DB_SERVICE_HOST : self.test_cfg['arangodb'][self.mscp.DB_SERVICE_HOST], \
+                #self.mscp.DB_ROOT_USER : self.test_cfg['arangodb'][self.mscp.DB_ROOT_USER],\
+                #self.mscp.DB_ROOT_USER_PASSWORD : self.test_cfg['arangodb'][self.mscp.DB_ROOT_USER_PASSWORD],\
+                self.mscp.DB_SERVICE_END_POINT : self.test_cfg['arangodb'][self.mscp.DB_SERVICE_END_POINT],\
+                self.mscp.DB_SERVICE_NAME : self.test_cfg['arangodb'][self.mscp.DB_SERVICE_NAME],\
+                self.mscp.DB_SERVICE_PORT : self.test_cfg['arangodb'][self.mscp.DB_SERVICE_PORT],\
+                self.mscp.DB_CONN_PROTOCOL : self.test_cfg['arangodb'][self.mscp.DB_CONN_PROTOCOL]}
 
         
         conn_config = conn_config.create_connection_config(conn_params)
@@ -39,6 +47,17 @@ class TestArangopipe(unittest.TestCase):
         the_config = self.admin.get_config()
         self.ap = ArangoPipe(config = the_config)
         self.provision_project()
+        
+        return
+    
+        
+    def get_test_config(self):
+        file_name = os.path.join(os.path.dirname(__file__),
+                                     "../test_config/test_datagen_config.yaml")
+        with open(file_name, "r") as file_descriptor:
+            test_cfg = yaml.load(file_descriptor, Loader=yaml.FullLoader)
+        
+        return test_cfg
 
     def provision_project(self):
         err_raised = False

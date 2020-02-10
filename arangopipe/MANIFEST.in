@@ -1,1 +1,2 @@
 include arangopipe/arangopipe_storage/arangopipe_config.yaml
+include arangopipe/arangopipe_storage/certs/ca-b9b556df.crt
