@@ -425,7 +425,22 @@ class TestArangopipe(unittest.TestCase):
         ei = self.add_edge_link()
         self.assertIsNotNone(ei)
         return
-
+    
+    def test_export(self):
+        file_path = '/tmp/arangopipe_config.yaml'
+        self.config.export_cfg(file_path)
+        file_exists = os.path.exists(file_path)
+        self.assertTrue(file_exists)
+        
+        return
+    
+    def test_import(self):
+        file_path = '/tmp/arangopipe_config.yaml'
+        self.config.export_cfg(file_path)
+        cc = self.config.create_config(file_path)
+        self.assertTrue(len(cc) > 0)
+        
+        return
 
 
 if __name__ == '__main__':
