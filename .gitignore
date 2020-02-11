@@ -3,7 +3,7 @@
 # log files
 **/*.log
 # yaml files
-**.yaml
+**/*.yaml
 # Setuptools distribution folder.
 arangopipe/dist/
 # Remove the build directory from repo
