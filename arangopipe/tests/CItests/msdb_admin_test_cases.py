@@ -48,7 +48,8 @@ class TestAdminMSDB(unittest.TestCase):
                         self.mscp.DB_CONN_PROTOCOL : self.test_cfg['arangodb'][self.mscp.DB_CONN_PROTOCOL]}
         
         conn_config = conn_config.create_connection_config(conn_params)
-        self.admin = ArangoPipeAdmin(reuse_connection = False, config = conn_config)
+        self.admin = ArangoPipeAdmin(reuse_connection = False,\
+                                     config = conn_config, persist_conn= False)
         
         return
     

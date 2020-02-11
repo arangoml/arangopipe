@@ -119,7 +119,7 @@ class ArangoPipe:
         """ Return a model parameter result given a tag."""
 
         # Execute the query
-        cursor = self.db.aql.execute('WITH run_modelparams\
+        cursor = self.db.aql.execute('WITH modelparams\
                                      FOR r IN run\
                     FILTER r.tag == @value \
                         FOR mp IN 1..1 OUTBOUND r run_modelparams\

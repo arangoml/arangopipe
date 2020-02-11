@@ -39,7 +39,8 @@ class TestArangopipe(unittest.TestCase):
         
         config = config.create_connection_config(conn_params)
         self.config = config
-        self.admin = ArangoPipeAdmin(reuse_connection = False, config= self.config)
+        self.admin = ArangoPipeAdmin(reuse_connection = False,\
+                                     config= self.config, persist_conn= False)
         ap_config = self.admin.get_config()
         self.ap = ArangoPipe(config = ap_config)
         self.provision_project()
