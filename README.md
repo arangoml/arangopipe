@@ -54,6 +54,8 @@ When data scientists have refined their models to a point where they are ready t
 ## Picking your Arangopipe Installation
 If you need a fully functional installation with minimal configuration, follow the guidelines provided in the section 'Getting Started' (see below). If you are planning to use **Arangopipe** with a a managed services **ArangoDB** installation you will need to install the `aisis.zip` file in the `aisis-foxx` directory into your managed services **ArangoDB** installation. See the google colab notebook `arangopipe_managed_service.ipynb` in the project github repository for the details of connecting to a managed services instance of **ArangoDB**. See the instructions in the section 'Installing Arangopipe API' for the details of using the **Arangopipe** API with your pipelines or applications (this just requires the installation of the required packages).  
 
+*If you want certificate verification, place your certificate in 'arangopipe/arangopipe_storage/cert'*
+
 ## Getting Started
 
 To facilitate an easy start, docker containers for *torch* and *tensorflow* are provided. These containers have all components of the **ArangoML Pipeline** (Arangopipe, ArangoDB and the Arangopipe user interface). To get started:
@@ -79,7 +81,7 @@ To facilitate an easy start, docker containers for *torch* and *tensorflow* are 
 2. Running an example in the *torch* container: The _pytorch_ example is a python script. To run it:
     * Run the `docker ps` command to get the `CONTAINER ID` of the _pytorch_ container.
     * Run the command ` docker exec -it [ CONTAINER ID ] /bin/bash ` where  `CONTAINER ID` is obtained from the previous step.
-    
+
 Change directory to the `examples/pytorch` directory. The *torch* container provides an example of a linear regression model that uses **Arangopipe** to log experiment metadata. The experiment meta data includes information about the dataset, featureset and optimization settings used to run the *pytorch* model. To run the example, launch an `ipython` shell. In the shell, execute the following:
     1. `from ch_torch_linear_regression_driver import run_driver`
     2. `run_driver()`
@@ -191,4 +193,3 @@ In Figure 4, the dataset, featureset, model, model parameters, model performance
 To execute adhoc queries against **Arangopipe** use the *Query* feature from the left navigation bar. The details of using the query feature to submit a query to **Arangopipe** is shown in the figure below.
  <img src="assets/adhoc_query.png" height="600">
 <figcaption> Figure 4: Submit an adhoc query </figcaption>
-

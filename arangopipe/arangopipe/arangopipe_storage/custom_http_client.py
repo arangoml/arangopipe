@@ -22,8 +22,8 @@ class CustomHTTPClient(HTTPClient):
         self.username = username
         self.password = password
         # self.cert_name = 'ca-b9b556df.crt'
-        self.path_to_cert = os.path.join(os.path.dirname(__file__),
-                                         "certs/" + "ca-b9b556df.crt")
+        self.path_to_cert = os.path.join(os.path.dirname(__file__), "cert/")
+        self.cert = os.path.join(self.path_to_cert, os.listdir(self.path_to_cert)[0])
 
     def create_session(self, host):
         session = Session()
@@ -56,7 +56,7 @@ class CustomHTTPClient(HTTPClient):
                                    params=params,
                                    data=data,
                                    headers=headers,
-                                   verify=self.path_to_cert)
+                                   verify=self.cert)
         self._logger.debug('Got {}'.format(response.status_code))
 
         # Return an instance of arango.response.Response.
