@@ -14,8 +14,8 @@ from arangopipe.arangopipe_analytics.dataset_shift_detector import DatasetShiftD
 class RF_DatasetShiftDetector(DatasetShiftDetector):
     def detect_dataset_shift(self, dataframe1, dataframe2):
         pd.options.mode.chained_assignment = None
-        dataframe1.ix[:, "DS"] = 0
-        dataframe2.ix[:, "DS"] = 1
+        dataframe1.loc[:, "DS"] = 0
+        dataframe2.loc[:, "DS"] = 1
         dfc = pd.concat([dataframe1, dataframe2])
         preds = dfc.columns.tolist()
         preds.remove("DS")

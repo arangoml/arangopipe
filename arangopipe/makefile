@@ -2,8 +2,8 @@ SRC = arangopipe/*.py
 DOCKER_FILE = Dockerfile
 DOCKER_PASSWORD = <the_password>
 DOCKER_REPO = arangopipe
-DOCKER_SI_FILE = Dockerfile_Prod
-DOCKER_SI_IMG_NAME = apms_prod
+DOCKER_SI_FILE = Dockerfile_Torch_FE	
+DOCKER_SI_IMG_NAME = ap_torch
 TEST_PYPI_PASSWORD = arangopipe
 
 python_arangopipe:$(SRC)
@@ -17,7 +17,7 @@ python_arangopipe:$(SRC)
 upload_test_pypi:
 	twine upload --repository-url https://test.pypi.org/legacy/  -u rajiv.sambasivan -p $(TEST_PYPI_PASSWORD) dist/*
 docker_APSI_build:$(DOCKER_SI_FILE)
-	docker build  --no-cache -t $(DOCKER_SI_IMG_NAME) -f $(DOCKER_SI_FILE) .
+	docker build -t $(DOCKER_SI_IMG_NAME) -f $(DOCKER_SI_FILE) .
 docker_publish_SI_latest:
 	@echo 'starting docker SI build...'
 	docker login --username arangopipe --password $(DOCKER_PASSWORD)

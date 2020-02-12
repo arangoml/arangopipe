@@ -11,8 +11,8 @@ COPY arangopipe_frontend/app/ /arangopipe_frontend
 FROM continuumio/miniconda3 
 MAINTAINER Joerg Schad <info@arangodb.com>
 ENV GIT_PYTHON_REFRESH=quiet
-RUN apt-get update && apt-get install -y python-pip curl
-RUN pip install mlflow hyperopt sklearn2 jsonpickle python-arango jupyter matplotlib PyYAML==5.1.1 arangopipe==0.0.5.8
+RUN apt-get update && apt-get install -y curl
+RUN pip install mlflow hyperopt sklearn2 jsonpickle python-arango jupyter matplotlib PyYAML==5.1.1 arangopipe==0.0.6.1
 RUN mkdir -p /workspace
 RUN conda install pytorch -c pytorch 
 
@@ -22,6 +22,7 @@ COPY aisis-foxx/ aisis-foxx/
 WORKDIR /workspace/experiments
 COPY --from=frontend /arangopipe_frontend .
 COPY tests/AQL/ examples/AQL/
+COPY tests/test_config/ examples/test_config/
 COPY tests/covariate_shift/ examples/covariate_shift/
 COPY tests/hyperopt/ examples/hyperopt/
 COPY tests/mlflow/ examples/mlflow/

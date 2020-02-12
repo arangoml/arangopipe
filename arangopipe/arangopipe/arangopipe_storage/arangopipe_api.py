@@ -119,7 +119,8 @@ class ArangoPipe:
         """ Return a model parameter result given a tag."""
 
         # Execute the query
-        cursor = self.db.aql.execute('FOR r IN run\
+        cursor = self.db.aql.execute('WITH modelparams\
+                                     FOR r IN run\
                     FILTER r.tag == @value \
                         FOR mp IN 1..1 OUTBOUND r run_modelparams\
                             RETURN mp ',
@@ -160,13 +161,12 @@ class ArangoPipe:
         db_user_name = self.cfg['arangodb']['username']
         db_passwd = self.cfg['arangodb']['password']
         db_conn_protocol = self.cfg['arangodb'][self.mscp.DB_CONN_PROTOCOL]
-        db_root_user = self.cfg['arangodb'][self.mscp.DB_ROOT_USER]
-        db_root_user_password = self.cfg['arangodb'][self.mscp.DB_ROOT_USER_PASSWORD]
 
         host_conn_str =  db_conn_protocol +  "://" + \
                         db_serv_host + ":" + str(db_serv_port)
         client = ArangoClient(hosts= host_conn_str,\
-                              http_client=CustomHTTPClient(db_root_user, db_root_user_password))
+                              http_client=CustomHTTPClient(username = db_user_name,\
+                                                           password = db_passwd))
 
         self.db = client.db(name= db_name, \
                            username=db_user_name,\

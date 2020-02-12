@@ -21,6 +21,7 @@ import logging
 from arangopipe.arangopipe_storage.managed_service_conn_parameters import ManagedServiceConnParam
 from arango import ArangoClient, DatabaseListError
 from arangopipe.arangopipe_storage.custom_http_client import CustomHTTPClient
+import yaml
 
 NUM_PERIODS = 22
 go_back_days = dt.timedelta(days=30)
@@ -52,6 +53,18 @@ ch.setFormatter(formatter)
 # add the handlers to the logger
 logger.addHandler(fh)
 logger.addHandler(ch)
+cfg = None
+
+
+def read_data():
+    global cfg
+    if cfg is None:
+        file_name = os.path.join(os.path.dirname(__file__),
+                                 "../test_config/test_datagen_config.yaml")
+        with open(file_name, "r") as file_descriptor:
+            cfg = yaml.load(file_descriptor, Loader=yaml.FullLoader)
+
+    return cfg
 
 
 def period_string_generator():
@@ -85,26 +98,32 @@ def eval_metrics(actual, pred):
 
 
 def delete_users():
-    try:
-        root_user = self.cfg['arangodb'][self.mscp.DB_ROOT_USER]
-        root_user_password = self.cfg['arangodb'][
-            self.mscp.DB_ROOT_USER_PASSWORD]
-    except KeyError as k:
-        msg = "Root credentials are unvailable, try again " + \
-                 "with a new connection and credentials for root provided"
-        logger.error(msg)
-        logger.error("Credential information that is missing : " +
-                     k.args[0])
-        raise Exception("Key error associated with missing " + k.args[0])
-
+    cfg = read_data()
+    mscp = ManagedServiceConnParam()
     print("Deleting users before test !")
     pl = ['_system', 'root', 'rajiv', 'node2vec_db_admin', 'susr']
-    host_connection = "https://d874fc3f1fa5.arangodb.cloud:8529"
+    protocol = cfg['arangodb'][mscp.DB_CONN_PROTOCOL]
+    srv_host = cfg['arangodb'][mscp.DB_SERVICE_HOST]
+    port = cfg['arangodb'][mscp.DB_SERVICE_PORT]
+    try:
+        root_user = cfg['arangodb'][mscp.DB_ROOT_USER]
+        root_user_password = cfg['arangodb'][mscp.DB_ROOT_USER_PASSWORD]
+    except KeyError as k:
+        msg = "Root credentials are unvailable, try again " + \
+             "with a new connection and credentials for root provided"
+        print(msg)
+        print("Credential information that is missing : " + k.args[0])
+        raise Exception("Key error associated with missing " + k.args[0])
+
+    host_connection = protocol + "://" + srv_host + ":" + str(port)
+    #    sys_user_name = cfg['arangodb'][mscp.DB_ROOT_USER]
+    #    sys_passwd = cfg['arangodb'][mscp.DB_ROOT_USER_PASSWORD]
     client = ArangoClient(hosts= host_connection,\
-                        http_client=CustomHTTPClient(root_user, root_user_password))
+                        http_client=CustomHTTPClient(username = root_user,\
+                                                     password = root_user_password))
     sys_db = client.db('_system',\
-                       username="root",\
-                       password="KzcHiaZMPcQWw3aaNdXt")
+                       username=root_user,\
+                       password=root_user_password)
     ul = sys_db.users()
     unl = [tu['username'] for tu in ul]
     for u in unl:
@@ -115,26 +134,31 @@ def delete_users():
 
 
 def delete_arangopipe_db():
+    print("Deleting users before test !")
+    cfg = read_data()
+    mscp = ManagedServiceConnParam()
+    protocol = cfg['arangodb'][mscp.DB_CONN_PROTOCOL]
+    srv_host = cfg['arangodb'][mscp.DB_SERVICE_HOST]
+    port = cfg['arangodb'][mscp.DB_SERVICE_PORT]
     try:
-        root_user = self.cfg['arangodb'][self.mscp.DB_ROOT_USER]
-        root_user_password = self.cfg['arangodb'][
-            self.mscp.DB_ROOT_USER_PASSWORD]
+        root_user = cfg['arangodb'][mscp.DB_ROOT_USER]
+        root_user_password = cfg['arangodb'][mscp.DB_ROOT_USER_PASSWORD]
     except KeyError as k:
         msg = "Root credentials are unvailable, try again " + \
-                 "with a new connection and credentials for root provided"
-        logger.error(msg)
-        logger.error("Credential information that is missing : " +
-                     k.args[0])
+             "with a new connection and credentials for root provided"
+        print(msg)
+        print("Credential information that is missing : " + k.args[0])
         raise Exception("Key error associated with missing " + k.args[0])
+    host_connection = protocol + "://" + srv_host + ":" + str(port)
 
-    print("Deleting users before test !")
-
-    host_connection = "https://d874fc3f1fa5.arangodb.cloud:8529"
+    #sys_user_name = cfg['arangodb'][mscp.DB_ROOT_USER]
+    #sys_passwd = cfg['arangodb'][mscp.DB_ROOT_USER_PASSWORD]
     client = ArangoClient(hosts= host_connection,\
-                        http_client=CustomHTTPClient(root_user, root_user_password))
+                        http_client=CustomHTTPClient(username = root_user,\
+                                                     password = root_user_password))
     sys_db = client.db('_system',\
-                       username="root",\
-                       password="KzcHiaZMPcQWw3aaNdXt")
+                       username=root_user,\
+                       password=root_user_password)
     try:
         if sys_db.has_database("arangopipe"):
             print(
@@ -153,20 +177,23 @@ def delete_arangopipe_db():
 
 
 def generate_runs(clean=False):
+    cfg = read_data()
+    mscp = ManagedServiceConnParam()
+
     delete_users()
     delete_arangopipe_db()
     conn_config = ArangoPipeConfig()
-    mscp = ManagedServiceConnParam()
-    conn_params = { mscp.DB_SERVICE_HOST : "d874fc3f1fa5.arangodb.cloud", \
-                    mscp.DB_USER_NAME : "arangopipe",\
-                    mscp.DB_PASSWORD : "arangopipe",\
-                    mscp.DB_NAME : "arangopipe", \
-                    mscp.DB_ROOT_USER : "root",\
-                    mscp.DB_ROOT_USER_PASSWORD : "open sesame",\
-                    mscp.DB_SERVICE_END_POINT : "apmdb",\
-                    mscp.DB_SERVICE_NAME : "createDB",\
-                    mscp.DB_SERVICE_PORT : 8529,\
-                    mscp.DB_CONN_PROTOCOL : 'https'}
+
+    conn_params = { mscp.DB_SERVICE_HOST : cfg['arangodb'][mscp.DB_SERVICE_HOST], \
+                    mscp.DB_USER_NAME : cfg['arangodb'][mscp.DB_USER_NAME],\
+                    mscp.DB_PASSWORD : cfg['arangodb'][mscp.DB_PASSWORD],\
+                    mscp.DB_NAME : cfg['arangodb'][mscp.DB_NAME], \
+                    mscp.DB_ROOT_USER : cfg['arangodb'][mscp.DB_ROOT_USER],\
+                    mscp.DB_ROOT_USER_PASSWORD : cfg['arangodb'][mscp.DB_ROOT_USER_PASSWORD],\
+                    mscp.DB_SERVICE_END_POINT : cfg['arangodb'][mscp.DB_SERVICE_END_POINT],\
+                    mscp.DB_SERVICE_NAME : cfg['arangodb'][mscp.DB_SERVICE_NAME],\
+                    mscp.DB_SERVICE_PORT : cfg['arangodb'][mscp.DB_SERVICE_PORT],\
+                    mscp.DB_CONN_PROTOCOL : cfg['arangodb'][mscp.DB_CONN_PROTOCOL]}
 
     conn_config = conn_config.create_connection_config(conn_params)
     admin = ArangoPipeAdmin(reuse_connection=False, config=conn_config)
@@ -242,5 +269,7 @@ def generate_runs(clean=False):
         admin.register_deployment(deployment_tag)
         user_id = "Arangopipe Test Data Generator"
         ap.log_serving_perf(ex_servingperf, deployment_tag, user_id)
+
+    print("Done loading data into the test database!")
 
     return
