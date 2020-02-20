@@ -138,7 +138,8 @@ class ArangoPipe:
         """ Return a model dev performance given a tag."""
 
         # Execute the query
-        cursor = self.db.aql.execute('FOR r IN run\
+        cursor = self.db.aql.execute('WITH devperf\
+                                     FOR r IN run\
                     FILTER r.tag == @value \
                         FOR dp IN 1..1 OUTBOUND r run_devperf\
                             RETURN dp ',

@@ -23,7 +23,8 @@ class CustomHTTPClient(HTTPClient):
         self.password = password
         # self.cert_name = 'ca-b9b556df.crt'
         self.path_to_cert = os.path.join(os.path.dirname(__file__), "cert/")
-        self.cert = os.path.join(self.path_to_cert, os.listdir(self.path_to_cert)[0])
+        self.cert = os.path.join(self.path_to_cert,
+                                 os.listdir(self.path_to_cert)[0])
 
     def create_session(self, host):
         session = Session()
