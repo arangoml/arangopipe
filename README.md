@@ -7,7 +7,7 @@ ArangoML Pipeline is a common and extensible Metadata Layer for Machine Learning
 
 
 ## Quick Start
-To get started with no installations of any sort (using ArangoML Pipeline Cloud).
+To get started with no installations of any sort (using ArangoML Pipeline Cloud)
 , click :
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/arangoml/arangopipe/blob/master/examples/Arangopipe_Feature_Example_ext1.ipynb) 
 
@@ -66,8 +66,7 @@ If you need a fully functional installation with minimal configuration, follow t
 
 ## Getting Started
 
-
-To get started with no installations, see the Quick Start sectionIf you would prefer an independent installation, docker containers for *torch* and *tensorflow* are provided. These containers have all components of the **ArangoML Pipeline** (Arangopipe, ArangoDB and the Arangopipe user interface). To get started with an independent installation:
+To get started with no installations, see the Quick Start section at the begining of this document. If you would prefer an independent installation, docker containers for *torch* and *tensorflow* are provided. These containers have all components of the **ArangoML Pipeline** (Arangopipe, ArangoDB and the Arangopipe user interface). To get started with an independent installation:
 
 ### Prerequisites
 * Install [_docker_](https://docs.docker.com/install/)
