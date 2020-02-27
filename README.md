@@ -66,7 +66,7 @@ If you need a fully functional installation with minimal configuration, follow t
 
 ## Getting Started
 
-To get started with no installations, see the Quick Start section at the begining of this document. If you would prefer an independent installation, docker containers for *torch* and *tensorflow* are provided. These containers have all components of the **ArangoML Pipeline** (Arangopipe, ArangoDB and the Arangopipe user interface). To get started with an independent installation:
+To get started with no installations, see the "Quick Start" section at the begining of this document. If you would prefer an independent installation, docker containers for *torch* and *tensorflow* are provided. These containers have all components of the **ArangoML Pipeline** (Arangopipe, ArangoDB and the Arangopipe user interface). To get started with an independent installation:
 
 ### Prerequisites
 * Install [_docker_](https://docs.docker.com/install/)
