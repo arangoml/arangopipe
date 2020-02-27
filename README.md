@@ -5,6 +5,12 @@ ArangoML Pipeline is a common and extensible Metadata Layer for Machine Learning
 **News:**
 [ArangoML Pipeline Cloud](https://www.arangodb.com/2020/01/arangoml-pipeline-cloud-manage-machine-learning-metadata/) is offering a no-setup, free-to-try managed service for ArangpML Pipeline. A [ArangoML Pipeline Cloud  tutorial](https://colab.research.google.com/github/arangoml/arangopipe/blob/master/examples/Arangopipe_with_TensorFlow_Beginner_Guide.ipynb#) is also available without any installation or Signup.
 
+
+## Quick Start
+To get started with no installations of any sort (using ArangoML Pipeline Cloud).
+, click :
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/arangoml/arangopipe/blob/master/examples/Arangopipe_Feature_Example_ext1.ipynb) 
+
 ## Introduction
 When productizing Machine Learning Pipelines (e.g., [TensorFlow Extended](https://www.tensorflow.org/tfx/guide) or [Kubeflow](https://www.kubeflow.org/))
 the capture (and access to) of metadata across the pipeline is vital. Typically, each of the  components of such ML pipeline produces/requires Metadata, for example:
@@ -59,11 +65,9 @@ If you need a fully functional installation with minimal configuration, follow t
 *If you want certificate verification, place your certificate in 'arangopipe/arangopipe_storage/cert'*
 
 ## Getting Started
-To get started with no installations of any sort (using ArangoML Pipeline Cloud).
-, click :
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/arangoml/arangopipe/blob/master/examples/Arangopipe_Feature_Example_ext1.ipynb) 
 
-If you would prefer an independent installation, docker containers for *torch* and *tensorflow* are provided. These containers have all components of the **ArangoML Pipeline** (Arangopipe, ArangoDB and the Arangopipe user interface). To get started with an independent installation:
+
+To get started with no installations, see the Quick Start sectionIf you would prefer an independent installation, docker containers for *torch* and *tensorflow* are provided. These containers have all components of the **ArangoML Pipeline** (Arangopipe, ArangoDB and the Arangopipe user interface). To get started with an independent installation:
 
 ### Prerequisites
 * Install [_docker_](https://docs.docker.com/install/)
