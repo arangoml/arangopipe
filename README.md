@@ -5,6 +5,12 @@ ArangoML Pipeline is a common and extensible Metadata Layer for Machine Learning
 **News:**
 [ArangoML Pipeline Cloud](https://www.arangodb.com/2020/01/arangoml-pipeline-cloud-manage-machine-learning-metadata/) is offering a no-setup, free-to-try managed service for ArangpML Pipeline. A [ArangoML Pipeline Cloud  tutorial](https://colab.research.google.com/github/arangoml/arangopipe/blob/master/examples/Arangopipe_with_TensorFlow_Beginner_Guide.ipynb#) is also available without any installation or Signup.
 
+
+## Quick Start
+To get started with no installations of any sort (using ArangoML Pipeline Cloud)
+, click :
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/arangoml/arangopipe/blob/master/examples/Arangopipe_Feature_Examples.ipynb) 
+
 ## Introduction
 When productizing Machine Learning Pipelines (e.g., [TensorFlow Extended](https://www.tensorflow.org/tfx/guide) or [Kubeflow](https://www.kubeflow.org/))
 the capture (and access to) of metadata across the pipeline is vital. Typically, each of the  components of such ML pipeline produces/requires Metadata, for example:
@@ -43,6 +49,8 @@ Machine learning tools and libraries focus on solving machine learning problems 
 2.  Data from Model Building: Data from the model building activity is tracked. This includes data about the model parameters (post optimization) and optimization parameters (learning rates, batch-sizes, optimization technique etc.)
 3.  Data from Model Performance: Data about the model performance is tracked. This includes performance observed in development and deployed model performance.
 
+
+
 ##  Usage
 Arangopipe has two components:
 1. **Arangopipe**
@@ -58,7 +66,7 @@ If you need a fully functional installation with minimal configuration, follow t
 
 ## Getting Started
 
-To facilitate an easy start, docker containers for *torch* and *tensorflow* are provided. These containers have all components of the **ArangoML Pipeline** (Arangopipe, ArangoDB and the Arangopipe user interface). To get started:
+To get started with no installations, see the "Quick Start" section at the begining of this document. If you would prefer an independent installation, docker containers for *torch* and *tensorflow* are provided. These containers have all components of the **ArangoML Pipeline** (Arangopipe, ArangoDB and the Arangopipe user interface). To get started with an independent installation:
 
 ### Prerequisites
 * Install [_docker_](https://docs.docker.com/install/)
@@ -88,14 +96,16 @@ Change directory to the `examples/pytorch` directory. The *torch* container prov
 
 The details are shown in the figure below.
 
-<img src="assets/run_torch_driver.png" height="400">
+<center><img src="assets/run_torch_driver.png" width=95%></center>
+
 
 3. Execute this step after the model development step above has completed. Point your browser http://localhost:3000. Login to the Arangopipe user interface with username  `root` and password  `open sesame`. Select `Models` in the `Search Metadata` content pane. You should see the model you developed in the previous step. The details are shown in the figure below.
 
+    <center>
+    <img src="assets/pytorch_model_FE.png" width=95% >
+    </center>
 
-    <img src="assets/pytorch_model_FE.png" height="400">
-
-4. Explore Arangopipe [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/arangoml/arangopipe/0.1?filepath=arangopipe%2Farangopipe_examples_torch.ipynb). Examples that show **Arangopipe** can be used with *hyperopt*, *sklearn* and *mlfow* are provided. To get the details of where these examples are located in the container, use the binder link above. To access the notebook examples provided with the docker container, point your browser to [http://localhost:8888](http://localhost:8888) to get to a **Jupyter** notebook. The default notebook password is _root_
+4. Explore Arangopipe  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/arangoml/arangopipe/blob/master/arangopipe/arangopipe_examples_torch.ipynb). Examples that show **Arangopipe** can be used with *hyperopt*, *sklearn* and *mlfow* are provided. To get the details of where these examples are located in the container, use the binder link above. To access the notebook examples provided with the docker container, point your browser to [http://localhost:8888](http://localhost:8888) to get to a **Jupyter** notebook. The default notebook password is _root_
 
 5. Point your browser to [http://localhost:6529](http://localhost:6529) to get to the **ArangoDB** web user interface. The `root` password is `open sesame`.
 
@@ -110,43 +120,19 @@ The details are shown in the figure below.
 
 3.  Execute this step after you have executed all the cells in the notebook discussed in the previous step. Point your browser to http://localhost:3000. Login to the Arangopipe user interface with username  root and password  `open sesame`. Select `Featursets` in the `Search Metadata` content pane. You should see the featureset logged with **Arangopipe** resulting from executing the notebook discussed in the previous step.
 
-    <img src="assets/tensorflow_example.png" height="400">
+    <center>
+    <img src="assets/tensorflow_example.png" width=95%>
+    </center>
 
-4. Explore Arangopipe [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/arangoml/arangopipe/0.1?filepath=arangopipe%2Farangopipe_examples.ipynb). Examples that show **Arangopipe** can be used with *hyperopt*, *sklearn* and *mlfow* are provided. To get the details of where these examples are located in the container, use the binder link above. To access the notebook examples provided with the docker container, point your browser to:  `http://localhost:8888` to get to a **Jupyter** notebook. The default notebook password is _root_
+4. Explore Arangopipe [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/arangoml/arangopipe/blob/master/arangopipe/arangopipe_examples.ipynb)
+ Examples that show **Arangopipe** can be used with *hyperopt*, *sklearn* and *mlfow* are provided. To get the details of where these examples are located in the container, use the binder link above. To access the notebook examples provided with the docker container, point your browser to:  `http://localhost:8888` to get to a **Jupyter** notebook. The default notebook password is _root_
 
 5. Point your browser to: `http://localhost:6529` to get to the **ArangoDB** web user interface. The `root` password is `open sesame`.
 
 
 
 ## Arangopipe Graph Model
-![Graph representation of Arangopipe entities](assets/arangopipe_schema.png)
-
-### Data Dictionary
-
-Arangopipe represents metadata as a graph. The nodes of the graph above are the principal elements about which metadata is gathered. These elements are high level abstractions that are encountered in any machine learning pipeline. A brief description of each of these elements is provided. Elements of the data model are either nodes or edges.
-
-1. Dataset: This node captures metadata about datasets. Examples of attributes could be the storage location (URL), source system, creation date, summary statistics etc. .
-2. Featureset: This node captures metadata about the features in the dataset. A featureset is obtained by applying a transformation to a dataset.
-3. (Edge) Featureset - Dataset: Captures the dataset the associated featureset was generated from. Details of the transformation, for example the jupyter notebook that performs the transformation could be captured as part of the edge data.
-4. Run: Captures metadata about the execution of a pipeline, for example the start time and the end time, status of execution (errors encountered) etc. .
-5. Project: Captures metadata about the project associated with a pipeline. This is created with **ArangopipeAdmin**
-6. Model: Captures metadata about the model. JSON serialized representations of model metadata can be stored if desiered. For example, if the model is used for hyper-parameter optimization. The hyper-parameter space can be stored in JSON serialized format.
-7. DevPerf: Captures metadata about the performance metrics gathered during execution of the pipeline. The metric captured depends on the purpose of the model. It could be the root mean square error (RMSE) for a regression model or the best performing model and associated hyper-parameters for a hyper-parameter optimization model.
-8. Deployment: Captures metadata about a particular production deployment. This could include details like the scheduled date, current status (scheduled, active, archived )etc.
-9. ServingPerf: Captures the serving performance for a particular period. This is associated with a deployment and could include a collection of metrics, for example model performance metrics, average response time etc. .
-10. (Edge) Deployment - Model: Captures the model associated with a deployment
-11. (Edge) Deployment - SevPerf: Captures the serving performance associated with a deployment.
-12. (Edge) Run - Model: Captures the model associated with a pipeline execution
-13. (Edge) Run - DevPerf: Captures the model performance observed in development
-14. (Edge) Run - Dataset: Captures the dataset associated with a pipeline execution
-15. (Edge) Run - Featureset: Captures the featureset associated with a pipeline execution.
-16. Model Params: This captures the hyper-parameters and the parameters associated with model development.
-17. (Edge) Run - Model Params: This captures the model parameters obtained with a pipeline execution.
-18. (Edge) Deployment - Featureset: This captures the featureset associated with a deployment.
-19. (Edge) Deployment - ModelParams: This captures the model parameters used with a deployment.
-20. (Edge) Project - Models: This captures the models associated with a project.
-
-The data associated with the nodes and edges of the graph are stored as documents. The documents do not have a fixed structure and represent data using key-value pairs. This offers flexibility and permits users to decide the metadata elements that they would like to store. This also permits users to store metadata from any machine learning tech stack in Arangopipe.
+Arango pipe uses a graph representation to capture machine learning meta-data. Please see the [data dictionary](documentation/design/data_dictionary.md) for details.
 
 ## Installing Arangopipe API
 If you would like to use **Arangopipe** with your pipelines, you would need to do the following:
@@ -165,31 +151,39 @@ If you would like to use **Arangopipe** with your pipelines, you would need to d
 ## Arangopipe User Interface Application
 Machine learning pipelines can use the **Arangopipe** API to update the **Arangopipe** database as they progress through their execution. Data scientists and ops personel, can use the **Arangopipe** UI to obtain information about deployed pipelines, trace the lineage of a deployment or track the details of a deployed asset (models, featuresets etc.). The **Arangopipe** UI offers a summary view of assets for each project tracked by **Arangopipe**. The summary view (content under "ML Projects Summary") is presented in the left navigation bar of the landing page of the user interface application. The administration features (associated with the "User", "Deployment" and "Project" links in the left navigation pane) are not available at this time and will be available shortly. The search feature, which can be used to track assets and view lineage information, is available at this time. The search feature can be accessed from the right hand pane of the landing page. This is shown below.
 
-
-<img src="assets/search_deployments.png" height="600">
+<center>
+<img src="assets/search_deployments.png" width=95%>
 <figcaption> Figure 1: Arangopipe User Interface Application</figcaption>
+</center>
 
 
 ### Searching for an Asset
 Assets (Featuresets, Datasets and Models) can be searched by the value of a property, for example the name, tag or deployment tag. An example of searching for a dataset by name is shown in the figure below.
-
-<img src="assets/search_datasets.png" height="600">
+<center>
+<img src="assets/search_datasets.png" width=95%>
 <figcaption> Figure 2: Search for a dataset by name</figcaption>
+</center>
 
 ### Tracing Asset Lineage
 To trace the lineage of a deployment, the user can make use of the search feature. Searching for deployments with no property value filter provides a list of all deployments for the project (see Figure 1).  After having selected the deployment of interest, if we are interested in a particualr asset, for example, the model associated with the deployment. We can search for models with the particular deployment tag. This is shown in the figure below.
 
- <img src="assets/model_for_deployment.png" height="600">
+<center>
+ <img src="assets/model_for_deployment.png" width=95%>
 <figcaption> Figure 3: Search the model for a deployment</figcaption>
+</center>
 
 If we are interested in the complete lineage, the graph representation of the lineage can be generated by clicking on the blue button with the graph icon (in the graph column of Figure 3). The graph is generated with the `graphviz` tool. This is illustrated in the figure below. You will have to click on the `Generate` button to generate the graph representation of the lineage.
 
- <img src="assets/graph_representation.png" height="600">
+<center>
+ <img src="assets/graph_representation.png" width=95%>
 <figcaption> Figure 4: Search the model for a deployment</figcaption>
+</center>
 
 In Figure 4, the dataset, featureset, model, model parameters, model performance in development, and most recent serving performance, is shown for the deployment of interest.
 
 ### Adhoc Queries
 To execute adhoc queries against **Arangopipe** use the *Query* feature from the left navigation bar. The details of using the query feature to submit a query to **Arangopipe** is shown in the figure below.
- <img src="assets/adhoc_query.png" height="600">
+<center>
+ <img src="assets/adhoc_query.png" width=95%>
 <figcaption> Figure 4: Submit an adhoc query </figcaption>
+</center>
