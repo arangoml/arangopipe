@@ -221,6 +221,20 @@ class TestArangopipe(unittest.TestCase):
                             'Exception raised while registering dataset')
         self.assertFalse(err_raised)
         return
+    def test_reregister_dataset(self):
+        err_raised = False
+        try:
+            self.register_dataset()
+            self.register_dataset()
+        except:
+            err_raised = True
+            print('-'*60)
+            traceback.print_exc(file=sys.stdout)
+            print('-'*60)
+            self.assertTrue(err_raised,
+                            'Exception raised while registering dataset')
+        self.assertFalse(err_raised)
+        return
 
     def test_lookup_dataset(self):
         err_raised = False
@@ -251,6 +265,22 @@ class TestArangopipe(unittest.TestCase):
                             'Exception raised while registering featureset')
         self.assertFalse(err_raised)
         return
+    
+    def test_reregister_featureset(self):
+        err_raised = False
+        try:
+            self.register_dataset()
+            self.register_featureset()
+            self.register_featureset()
+        except:
+            err_raised = True
+            print('-'*60)
+            traceback.print_exc(file=sys.stdout)
+            print('-'*60)
+            self.assertTrue(err_raised,
+                            'Exception raised while registering featureset')
+        self.assertFalse(err_raised)
+        return
 
     def test_lookup_featureset(self):
         err_raised = False
@@ -271,6 +301,21 @@ class TestArangopipe(unittest.TestCase):
     def test_register_model(self):
         err_raised = False
         try:
+            self.register_model()
+        except:
+            err_raised = True
+            print('-'*60)
+            traceback.print_exc(file=sys.stdout)
+            print('-'*60)
+            self.assertTrue(err_raised,
+                            'Exception raised while registering model')
+        self.assertFalse(err_raised)
+        return
+    
+    def test_reregister_model(self):
+        err_raised = False
+        try:
+            self.register_model()
             self.register_model()
         except:
             err_raised = True

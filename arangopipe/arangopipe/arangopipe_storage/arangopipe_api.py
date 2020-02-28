@@ -73,7 +73,7 @@ class ArangoPipe:
 
         dataset_info = None
         if len(dataset_keys) == 0:
-            logger.error("The dataset by name: " + dataset_name +\
+            logger.info("The dataset by name: " + dataset_name +\
                          " was not found in Arangopipe!")
         else:
             dataset_info = dataset_keys[0]
@@ -90,7 +90,7 @@ class ArangoPipe:
         featureset_info = None
         feature_set_keys = [doc for doc in cursor]
         if len(feature_set_keys) == 0:
-            logger.error("The featureset by name: " + feature_set_name +\
+            logger.info("The featureset by name: " + feature_set_name +\
                          " was not found in Arangopipe!")
         else:
             featureset_info = feature_set_keys[0]
@@ -108,7 +108,7 @@ class ArangoPipe:
         model_keys = [doc for doc in cursor]
 
         if len(model_keys) == 0:
-            logger.error("The model by name: " + model_name +\
+            logger.info("The model by name: " + model_name +\
                          " was not found in Arangopipe!")
         else:
             model_info = model_keys[0]
@@ -128,7 +128,7 @@ class ArangoPipe:
         mp_info = None
         mp_keys = [doc for doc in cursor]
         if len(mp_keys) == 0:
-            logger.error("The model params for tag: " + tag_value +\
+            logger.info("The model params for tag: " + tag_value +\
                          " was not found in Arangopipe!")
         else:
             mp_info = mp_keys[0]
@@ -147,7 +147,7 @@ class ArangoPipe:
         mperf_info = None
         mperf_keys = [doc for doc in cursor]
         if len(mperf_keys) == 0:
-            logger.error("The model performance for tag: " + tag_value +\
+            logger.info("The model performance for tag: " + tag_value +\
                          " was not found in Arangopipe!")
         else:
             mperf_info = mperf_keys[0]
@@ -183,6 +183,18 @@ class ArangoPipe:
     def register_model(self, mi, user_id = "authorized_user",\
                        project = "Wine-Quality-Regression-Modelling"):
         """ Register a model. The operation requires specifying a user id. If the user id is permitted to register a model, then the registration proceeds, otherwise an unauthorized operation is indicated. """
+
+        model_name = mi["name"]
+        try:
+            existing_model = self.lookup_model(model_name)
+        except AQLQueryExecuteError as e:
+            msg = "The model name %s is not taken" % (model_name)
+            logger.info(msg)
+        if existing_model is not None:
+            msg = "It looks like the model name %s is already taken, try another name" % (
+                model_name)
+            logger.error(msg)
+            return None
         models = self.emlg.vertex_collection("models")
         model_reg = models.insert(mi)
 
@@ -206,6 +218,18 @@ class ArangoPipe:
 
     def register_dataset(self, ds_info, user_id="authorized_user"):
         """ Register a dataset. The operation requires specifying a user id. If the user id is permitted to register a dataset, then the registration proceeds, otherwise an unauthorized operation is indicated. """
+
+        ds_name = ds_info["name"]
+        try:
+            existing_ds = self.lookup_dataset(ds_name)
+        except AQLQueryExecuteError as e:
+            msg = "The dataset name %s is not taken" % (ds_name)
+            logger.info(msg)
+        if existing_ds is not None:
+            msg = "It looks like the dataset name %s is already taken, try another name" % (
+                ds_name)
+            logger.error(msg)
+            return None
         ds = self.emlg.vertex_collection("datasets")
         ds_reg = ds.insert(ds_info)
         logger.info("Recording dataset dataset link " + str(ds_reg))
@@ -216,6 +240,18 @@ class ArangoPipe:
     def register_featureset(self, fs_info, dataset_id, \
                             user_id = "authorized_user"):
         """ Register a featureset. ManagedServiceConnParamThe operation requires specifying a user id. If the user id is permitted to register a featureset, then the registration proceeds, otherwise an unauthorized operation is indicated. """
+        fs_name = fs_info["name"]
+        try:
+            existing_fs = self.lookup_featureset(fs_name)
+        except AQLQueryExecuteError as e:
+            msg = "The featureset name %s is not taken" % (fs_name)
+            logger.info(msg)
+        if existing_fs is not None:
+            msg = "It looks like the featureset name %s is already taken, try another name" % (
+                fs_name)
+            logger.error(msg)
+            return None
+
         fs = self.emlg.vertex_collection("featuresets")
         fs_reg = fs.insert(fs_info)
         logger.info("Recording featureset " + str(fs_reg))
