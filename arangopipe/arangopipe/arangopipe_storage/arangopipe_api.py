@@ -62,56 +62,40 @@ class ArangoPipe:
         apc = ArangoPipeConfig()
         return apc.get_cfg()
 
+    def lookup_entity(self, asset_name, asset_type):
+        aql = 'FOR doc IN %s FILTER doc.name == @value RETURN doc' % (
+            asset_type)
+        # Execute the query
+        cursor = self.db.aql.execute(aql, bind_vars={'value': asset_name})
+        asset_keys = [doc for doc in cursor]
+
+        asset_info = None
+        if len(asset_keys) == 0:
+            logger.info("The asset by name: " + asset_name +\
+                         " was not found in Arangopipe!")
+        else:
+            asset_info = asset_keys[0]
+
+        return asset_info
+
     def lookup_dataset(self, dataset_name):
         """ Return a dataset identifier given a name. This can be used to get the dataset id that is used to log run information associated with execution of the pipeline."""
 
-        # Execute the query
-        cursor = self.db.aql.execute(
-            'FOR doc IN datasets FILTER doc.name == @value RETURN doc',
-            bind_vars={'value': dataset_name})
-        dataset_keys = [doc for doc in cursor]
-
-        dataset_info = None
-        if len(dataset_keys) == 0:
-            logger.info("The dataset by name: " + dataset_name +\
-                         " was not found in Arangopipe!")
-        else:
-            dataset_info = dataset_keys[0]
+        dataset_info = self.lookup_entity(dataset_name, 'datasets')
 
         return dataset_info
 
     def lookup_featureset(self, feature_set_name):
         """ Return a featureset identifier given a name. This can be used to get the featureset id that is used to log run information associated with execution of the pipeline."""
 
-        # Execute the query
-        cursor = self.db.aql.execute(
-            'FOR doc IN featuresets FILTER doc.name == @value RETURN doc',
-            bind_vars={'value': feature_set_name})
-        featureset_info = None
-        feature_set_keys = [doc for doc in cursor]
-        if len(feature_set_keys) == 0:
-            logger.info("The featureset by name: " + feature_set_name +\
-                         " was not found in Arangopipe!")
-        else:
-            featureset_info = feature_set_keys[0]
+        featureset_info = self.lookup_entity(feature_set_name, 'featuresets')
 
         return featureset_info
 
     def lookup_model(self, model_name):
         """ Return a model identifier given a name. This can be used to get the model id that is used to log run information associated with execution of the pipeline."""
 
-        # Execute the query
-        cursor = self.db.aql.execute(
-            'FOR doc IN models FILTER doc.name == @value RETURN doc',
-            bind_vars={'value': model_name})
-        model_info = None
-        model_keys = [doc for doc in cursor]
-
-        if len(model_keys) == 0:
-            logger.info("The model by name: " + model_name +\
-                         " was not found in Arangopipe!")
-        else:
-            model_info = model_keys[0]
+        model_info = self.lookup_entity(model_name, 'models')
 
         return model_info
 
