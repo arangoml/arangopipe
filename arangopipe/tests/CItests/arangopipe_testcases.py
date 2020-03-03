@@ -91,6 +91,38 @@ class TestArangopipe(unittest.TestCase):
                       "type": "elastic net regression"}
         model_reg = self.ap.register_model(model_info)
         return
+    
+    def link_models(self):
+
+        model_info1 = {"name": "elastic_net_wine_model1",
+                      "type": "elastic net regression1"}
+        model_reg1 = self.ap.register_model(model_info1)
+        
+        model_info2 = {"name": "elastic_net_wine_model2",
+                      "type": "elastic net regression2"}
+        model_reg2 = self.ap.register_model(model_info2)
+        
+        model_info3 = {"name": "elastic_net_wine_model3",
+                      "type": "elastic net regression3"}
+        model_reg3 = self.ap.register_model(model_info3)
+        
+        self.ap.link_entities(model_reg1['_id'], model_reg2['_id'])
+        updated_model_info = self.ap.lookup_model(model_info1["name"])
+        print("Updated model:")
+        print(updated_model_info)
+        print("Adding another model link")
+        self.ap.link_entities(model_reg1['_id'], model_reg3['_id'])
+        updated_model_info = self.ap.lookup_model(model_info1["name"])
+        print("Updated model:")
+        print(updated_model_info)
+        added_str = updated_model_info['related_models']
+        added_links = added_str.split(",")
+        link_added = len(added_links) == 2
+        self.assertTrue(link_added,
+                            'Exception raised while linking models')
+        
+        
+        return
 
     def lookup_model(self):
 
@@ -359,6 +391,21 @@ class TestArangopipe(unittest.TestCase):
         self.assertFalse(err_raised)
         return
 
+    def test_link_models(self):
+        err_raised = False
+        try:
+            self.link_models()
+ 
+
+        except:
+            err_raised = True
+            print('-'*60)
+            traceback.print_exc(file=sys.stdout)
+            print('-'*60)
+            self.assertTrue(err_raised,
+                            'Exception raised while provisioning deployment')
+        self.assertFalse(err_raised)
+        
     def test_provision_deployment(self):
         err_raised = False
         try:

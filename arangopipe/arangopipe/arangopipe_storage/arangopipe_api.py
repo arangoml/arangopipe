@@ -62,6 +62,66 @@ class ArangoPipe:
         apc = ArangoPipeConfig()
         return apc.get_cfg()
 
+    def get_collection_from_id(self, id_str):
+        sep = "/"
+        tokens = id_str.split(sep)
+        col_name = tokens[0]
+
+        return col_name
+
+    def is_valid_id_str(self, id_str):
+        valid_id_str = False
+        sep = "/"
+        tokens = id_str.split(sep)
+
+        valid_id_str = True if len(tokens) == 2 else False
+
+        return valid_id_str
+
+    def link_entities(self, src_id, dest_id):
+        src_id_valid = self.is_valid_id_str(src_id)
+        dest_id_valid = self.is_valid_id_str(dest_id)
+
+        if not src_id_valid:
+            logger.error("The source node key does appear to be valid")
+            return
+        if not dest_id_valid:
+            logger.error("The destination key does not appear to be valid")
+            return
+
+        dest_entity_type = self.get_collection_from_id(dest_id)
+        src_entity_type = self.get_collection_from_id(src_id)
+        related_key = "related_" + dest_entity_type
+        concat_key = 'doc.' + related_key
+        aql_str = 'FOR doc in %s FILTER doc._id == @value UPDATE doc WITH {\
+  %s: CONCAT_SEPARATOR(",", %s, @dest_entity) } IN %s' % (
+            src_entity_type, related_key, concat_key, src_entity_type)
+
+        cursor = self.db.aql.execute(aql_str,
+                                     bind_vars={
+                                         'value': src_id,
+                                         'dest_entity': dest_id
+                                     })
+
+        return
+
+    def lookup_entity_by_id(self, entity_id):
+        entity_col = self.get_collection_from_id(entity_id)
+        aql = 'FOR doc in %s FILTER doc._id == @value RETURN doc' % (
+            entity_col)
+        # Execute the query
+        cursor = self.db.aql.execute(aql, bind_vars={'value': entity_id})
+        asset_keys = [doc for doc in cursor]
+
+        asset_info = None
+        if len(asset_keys) == 0:
+            logger.info("The asset by name: " + asset_name +\
+                         " was not found in Arangopipe!")
+        else:
+            asset_info = asset_keys[0]
+
+        return asset_info
+
     def lookup_entity(self, asset_name, asset_type):
         aql = 'FOR doc IN %s FILTER doc.name == @value RETURN doc' % (
             asset_type)
