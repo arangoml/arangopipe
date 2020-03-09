@@ -62,56 +62,100 @@ class ArangoPipe:
         apc = ArangoPipeConfig()
         return apc.get_cfg()
 
+    def get_collection_from_id(self, id_str):
+        sep = "/"
+        tokens = id_str.split(sep)
+        col_name = tokens[0]
+
+        return col_name
+
+    def is_valid_id_str(self, id_str):
+        valid_id_str = False
+        sep = "/"
+        tokens = id_str.split(sep)
+
+        valid_id_str = True if len(tokens) == 2 else False
+
+        return valid_id_str
+
+    def link_entities(self, src_id, dest_id):
+        src_id_valid = self.is_valid_id_str(src_id)
+        dest_id_valid = self.is_valid_id_str(dest_id)
+
+        if not src_id_valid:
+            logger.error("The source node key does appear to be valid")
+            return
+        if not dest_id_valid:
+            logger.error("The destination key does not appear to be valid")
+            return
+
+        dest_entity_type = self.get_collection_from_id(dest_id)
+        src_entity_type = self.get_collection_from_id(src_id)
+        related_key = "related_" + dest_entity_type
+        concat_key = 'doc.' + related_key
+        aql_str = 'FOR doc in %s FILTER doc._id == @value UPDATE doc WITH {\
+  %s: CONCAT_SEPARATOR(",", %s, @dest_entity) } IN %s' % (
+            src_entity_type, related_key, concat_key, src_entity_type)
+
+        cursor = self.db.aql.execute(aql_str,
+                                     bind_vars={
+                                         'value': src_id,
+                                         'dest_entity': dest_id
+                                     })
+
+        return
+
+    def lookup_entity_by_id(self, entity_id):
+        entity_col = self.get_collection_from_id(entity_id)
+        aql = 'FOR doc in %s FILTER doc._id == @value RETURN doc' % (
+            entity_col)
+        # Execute the query
+        cursor = self.db.aql.execute(aql, bind_vars={'value': entity_id})
+        asset_keys = [doc for doc in cursor]
+
+        asset_info = None
+        if len(asset_keys) == 0:
+            logger.info("The asset by name: " + asset_name +\
+                         " was not found in Arangopipe!")
+        else:
+            asset_info = asset_keys[0]
+
+        return asset_info
+
+    def lookup_entity(self, asset_name, asset_type):
+        aql = 'FOR doc IN %s FILTER doc.name == @value RETURN doc' % (
+            asset_type)
+        # Execute the query
+        cursor = self.db.aql.execute(aql, bind_vars={'value': asset_name})
+        asset_keys = [doc for doc in cursor]
+
+        asset_info = None
+        if len(asset_keys) == 0:
+            logger.info("The asset by name: " + asset_name +\
+                         " was not found in Arangopipe!")
+        else:
+            asset_info = asset_keys[0]
+
+        return asset_info
+
     def lookup_dataset(self, dataset_name):
         """ Return a dataset identifier given a name. This can be used to get the dataset id that is used to log run information associated with execution of the pipeline."""
 
-        # Execute the query
-        cursor = self.db.aql.execute(
-            'FOR doc IN datasets FILTER doc.name == @value RETURN doc',
-            bind_vars={'value': dataset_name})
-        dataset_keys = [doc for doc in cursor]
-
-        dataset_info = None
-        if len(dataset_keys) == 0:
-            logger.error("The dataset by name: " + dataset_name +\
-                         " was not found in Arangopipe!")
-        else:
-            dataset_info = dataset_keys[0]
+        dataset_info = self.lookup_entity(dataset_name, 'datasets')
 
         return dataset_info
 
     def lookup_featureset(self, feature_set_name):
         """ Return a featureset identifier given a name. This can be used to get the featureset id that is used to log run information associated with execution of the pipeline."""
 
-        # Execute the query
-        cursor = self.db.aql.execute(
-            'FOR doc IN featuresets FILTER doc.name == @value RETURN doc',
-            bind_vars={'value': feature_set_name})
-        featureset_info = None
-        feature_set_keys = [doc for doc in cursor]
-        if len(feature_set_keys) == 0:
-            logger.error("The featureset by name: " + feature_set_name +\
-                         " was not found in Arangopipe!")
-        else:
-            featureset_info = feature_set_keys[0]
+        featureset_info = self.lookup_entity(feature_set_name, 'featuresets')
 
         return featureset_info
 
     def lookup_model(self, model_name):
         """ Return a model identifier given a name. This can be used to get the model id that is used to log run information associated with execution of the pipeline."""
 
-        # Execute the query
-        cursor = self.db.aql.execute(
-            'FOR doc IN models FILTER doc.name == @value RETURN doc',
-            bind_vars={'value': model_name})
-        model_info = None
-        model_keys = [doc for doc in cursor]
-
-        if len(model_keys) == 0:
-            logger.error("The model by name: " + model_name +\
-                         " was not found in Arangopipe!")
-        else:
-            model_info = model_keys[0]
+        model_info = self.lookup_entity(model_name, 'models')
 
         return model_info
 
@@ -128,7 +172,7 @@ class ArangoPipe:
         mp_info = None
         mp_keys = [doc for doc in cursor]
         if len(mp_keys) == 0:
-            logger.error("The model params for tag: " + tag_value +\
+            logger.info("The model params for tag: " + tag_value +\
                          " was not found in Arangopipe!")
         else:
             mp_info = mp_keys[0]
@@ -147,7 +191,7 @@ class ArangoPipe:
         mperf_info = None
         mperf_keys = [doc for doc in cursor]
         if len(mperf_keys) == 0:
-            logger.error("The model performance for tag: " + tag_value +\
+            logger.info("The model performance for tag: " + tag_value +\
                          " was not found in Arangopipe!")
         else:
             mperf_info = mperf_keys[0]
@@ -183,6 +227,18 @@ class ArangoPipe:
     def register_model(self, mi, user_id = "authorized_user",\
                        project = "Wine-Quality-Regression-Modelling"):
         """ Register a model. The operation requires specifying a user id. If the user id is permitted to register a model, then the registration proceeds, otherwise an unauthorized operation is indicated. """
+
+        model_name = mi["name"]
+        try:
+            existing_model = self.lookup_model(model_name)
+        except AQLQueryExecuteError as e:
+            msg = "The model name %s is not taken" % (model_name)
+            logger.info(msg)
+        if existing_model is not None:
+            msg = "It looks like the model name %s is already taken, try another name" % (
+                model_name)
+            logger.error(msg)
+            return None
         models = self.emlg.vertex_collection("models")
         model_reg = models.insert(mi)
 
@@ -206,6 +262,18 @@ class ArangoPipe:
 
     def register_dataset(self, ds_info, user_id="authorized_user"):
         """ Register a dataset. The operation requires specifying a user id. If the user id is permitted to register a dataset, then the registration proceeds, otherwise an unauthorized operation is indicated. """
+
+        ds_name = ds_info["name"]
+        try:
+            existing_ds = self.lookup_dataset(ds_name)
+        except AQLQueryExecuteError as e:
+            msg = "The dataset name %s is not taken" % (ds_name)
+            logger.info(msg)
+        if existing_ds is not None:
+            msg = "It looks like the dataset name %s is already taken, try another name" % (
+                ds_name)
+            logger.error(msg)
+            return None
         ds = self.emlg.vertex_collection("datasets")
         ds_reg = ds.insert(ds_info)
         logger.info("Recording dataset dataset link " + str(ds_reg))
@@ -216,6 +284,18 @@ class ArangoPipe:
     def register_featureset(self, fs_info, dataset_id, \
                             user_id = "authorized_user"):
         """ Register a featureset. ManagedServiceConnParamThe operation requires specifying a user id. If the user id is permitted to register a featureset, then the registration proceeds, otherwise an unauthorized operation is indicated. """
+        fs_name = fs_info["name"]
+        try:
+            existing_fs = self.lookup_featureset(fs_name)
+        except AQLQueryExecuteError as e:
+            msg = "The featureset name %s is not taken" % (fs_name)
+            logger.info(msg)
+        if existing_fs is not None:
+            msg = "It looks like the featureset name %s is already taken, try another name" % (
+                fs_name)
+            logger.error(msg)
+            return None
+
         fs = self.emlg.vertex_collection("featuresets")
         fs_reg = fs.insert(fs_info)
         logger.info("Recording featureset " + str(fs_reg))
