@@ -11,7 +11,7 @@ To get started with no installations of any sort (using ArangoML Pipeline Cloud)
 , click :
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/arangoml/arangopipe/blob/master/examples/Arangopipe_Feature_Examples.ipynb) 
 
-The [examples folder](https://github.com/arangoml/arangopipe/tree/master/examples) contains examples for the following:
+The [examples folder](https://github.com/arangoml/arangopipe/tree/master/examples) contains examples that illustrate some features of **Arangopipe** with common machine learning project activities:
 
 1. [Basic workflow](https://github.com/arangoml/arangopipe/blob/master/examples/Arangopipe_Feature_Examples.ipynb) of creating a project and tracking machine learning meta-data from project activity.
 
