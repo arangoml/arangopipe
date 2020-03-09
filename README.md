@@ -11,6 +11,17 @@ To get started with no installations of any sort (using ArangoML Pipeline Cloud)
 , click :
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/arangoml/arangopipe/blob/master/examples/Arangopipe_Feature_Examples.ipynb) 
 
+The [examples folder](https://github.com/arangoml/arangopipe/tree/master/examples) contains examples for the following:
+
+1. [Basic workflow](https://github.com/arangoml/arangopipe/blob/master/examples/Arangopipe_Feature_Examples.ipynb) of creating a project and tracking machine learning meta-data from project activity.
+
+2. An example of [connecting](https://github.com/arangoml/arangopipe/blob/master/examples/Reuse_Old_Arangopipe_Connection.ipynb) to the **Arangopipe** database created in the previous step using saved connection information.
+3. An example of using **Arangopipe** to track [covariate shift](https://github.com/arangoml/arangopipe/blob/master/examples/Arangopipe_Feature_ext2.ipynb)
+
+4. An example of using **Arangopipe** to document and capture meta-data from machine learning [experiments](https://github.com/arangoml/arangopipe/blob/master/examples/Arangopipe_Feature_Example_ext1.ipynb).
+
+5. An example of [linking](https://github.com/arangoml/arangopipe/blob/master/examples/Data_Summaries.ipynb) metadata from different project activities.
+
 ## Introduction
 When productizing Machine Learning Pipelines (e.g., [TensorFlow Extended](https://www.tensorflow.org/tfx/guide) or [Kubeflow](https://www.kubeflow.org/))
 the capture (and access to) of metadata across the pipeline is vital. Typically, each of the  components of such ML pipeline produces/requires Metadata, for example:
@@ -146,6 +157,8 @@ If you would like to use **Arangopipe** with your pipelines, you would need to d
 
 4. `pip install PyYAML==5.1.1`
 5. `pip install pandas `
+
+
 
 
 ## Arangopipe User Interface Application
