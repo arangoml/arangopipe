@@ -6,7 +6,7 @@ echo "Waiting for arangod"
 sleep 5
 done
 echo "arangod is up!"
-foxx install /apmdb /aisis-foxx/aisis-foxx.zip -u root -p /aisis-foxx/passwd.txt 
+foxx install /createDB /aisis-foxx/aisis-foxx.zip -u root -p /aisis-foxx/passwd.txt 
 export PYTHONPATH=$PYTHONPATH:/workspace/experiments/examples/test_data_generator
 python -c "from generate_model_data import generate_runs; generate_runs()"
 npm start
