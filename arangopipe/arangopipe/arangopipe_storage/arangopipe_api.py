@@ -138,6 +138,23 @@ class ArangoPipe:
 
         return asset_info
 
+    def find_entity(self, attrib_name, attrib_value, asset_type):
+        aql = 'FOR doc IN %s FILTER doc.%s == @value RETURN doc' % (
+            asset_type, attrib_name)
+        # Execute the query
+        cursor = self.db.aql.execute(aql, bind_vars={'value': attrib_value})
+        asset_keys = [doc for doc in cursor]
+
+        asset_info = None
+        if len(asset_keys) == 0:
+            msg = "Asset %s with %s = %s was not found!" % (
+                asset_type, attrib_name, attrib_value)
+            logger.info(msg)
+        else:
+            asset_info = asset_keys
+
+        return asset_info
+
     def lookup_dataset(self, dataset_name):
         """ Return a dataset identifier given a name. This can be used to get the dataset id that is used to log run information associated with execution of the pipeline."""
 

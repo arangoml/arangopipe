@@ -393,8 +393,8 @@ class ArangoPipeAdmin:
 
         return
 
-    def add_edge_definition_to_arangopipe(self, edge_name, from_vertex_name,
-                                          to_vertex_name):
+    def add_edge_definition_to_arangopipe(self, edge_col_name, edge_name,
+                                          from_vertex_name, to_vertex_name):
         rf = self.cfg['arangodb'][self.mscp.DB_REPLICATION_FACTOR]
 
         if not self.db.has_graph(self.cfg['mlgraph']['graphname']):
@@ -415,13 +415,39 @@ class ArangoPipeAdmin:
 
         else:
             if not self.emlg.has_edge_definition(edge_name):
-                self.db.create_collection(edge_name, edge = True,\
+                if not self.emlg.has_edge_collection(edge_col_name):
+                    self.db.create_collection(edge_col_name, edge = True,\
                                           replication_factor = rf)
-                self.emlg.create_edge_definition(edge_collection = edge_name,\
+
+                self.emlg.create_edge_definition(edge_collection = edge_col_name,\
                                                  from_vertex_collections=[from_vertex_name],\
                                                  to_vertex_collections=[to_vertex_name] )
             else:
                 logger.error("Edge, " + edge_name + " already exists!")
+
+        return
+
+    def add_edges_to_arangopipe(self, edge_col_name, from_vertex_list,
+                                to_vertex_list):
+        rf = self.cfg['arangodb'][self.mscp.DB_REPLICATION_FACTOR]
+
+        if not self.db.has_graph(self.cfg['mlgraph']['graphname']):
+            self.emlg = self.db.create_graph(self.cfg['mlgraph']['graphname'])
+        else:
+            self.emlg = self.db.graph(self.cfg['mlgraph']['graphname'])
+
+        #Check if all data needed to create an edge exists, if so, create it
+
+        if not self.emlg.has_edge_collection(edge_col_name):
+            msg = "Edge collection %s did not exist, creating it!" % (
+                edge_col_name)
+            logger.info(msg)
+            self.db.create_collection(edge_col_name, edge = True,\
+                                          replication_factor = rf)
+
+        ed = self.emlg.create_edge_definition(edge_collection = edge_col_name,\
+                                                 from_vertex_collections= from_vertex_list,\
+                                                 to_vertex_collections= to_vertex_list )
 
         return
 

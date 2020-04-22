@@ -14,7 +14,8 @@ ENV GIT_PYTHON_REFRESH=quiet
 RUN apt-get update && apt-get install -y curl
 RUN pip install mlflow hyperopt sklearn2 jsonpickle python-arango jupyter matplotlib PyYAML==5.1.1 arangopipe==0.0.6.9.3
 RUN mkdir -p /workspace
-RUN conda install pytorch -c pytorch 
+#RUN conda install pytorch
+RUN pip install torch==1.2.0 torchtext==0.4
 
 WORKDIR /
 COPY --from=0 / .

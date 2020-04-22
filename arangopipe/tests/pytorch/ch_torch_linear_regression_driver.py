@@ -24,13 +24,15 @@ import yaml
 import os
 #from torch.utils.data.sampler import SubsetRandomSampler
 
+
 def get_test_config():
     file_name = os.path.join(os.path.dirname(__file__),
-                                 "../test_config/test_datagen_config.yaml")
+                             "../test_config/test_datagen_config.yaml")
     with open(file_name, "r") as file_descriptor:
         test_cfg = yaml.load(file_descriptor, Loader=yaml.FullLoader)
-    
+
     return test_cfg
+
 
 def run_driver():
 
@@ -114,12 +116,12 @@ msc.DB_SERVICE_END_POINT : test_cfg['arangodb'][msc.DB_SERVICE_END_POINT],\
 msc.DB_SERVICE_NAME : test_cfg['arangodb'][msc.DB_SERVICE_NAME],\
 msc.DB_SERVICE_PORT : test_cfg['arangodb'][msc.DB_SERVICE_PORT],\
 msc.DB_CONN_PROTOCOL : test_cfg['arangodb'][msc.DB_CONN_PROTOCOL]}
-#    conn_params = { msc.DB_SERVICE_HOST : "localhost", \
-#                        msc.DB_SERVICE_END_POINT : "apmdb",\
-#                        msc.DB_SERVICE_NAME : "createDB",\
-#                        msc.DB_SERVICE_PORT : 8529,\
-#                        msc.DB_CONN_PROTOCOL : 'http',\
-#                        msc.DB_NOTIFICATION_EMAIL : 'somebody@some_company.com'}
+    #    conn_params = { msc.DB_SERVICE_HOST : "localhost", \
+    #                        msc.DB_SERVICE_END_POINT : "apmdb",\
+    #                        msc.DB_SERVICE_NAME : "createDB",\
+    #                        msc.DB_SERVICE_PORT : 8529,\
+    #                        msc.DB_CONN_PROTOCOL : 'http',\
+    #                        msc.DB_NOTIFICATION_EMAIL : 'somebody@some_company.com'}
 
     conn_config = conn_config.create_connection_config(conn_params)
     proj_info = {"name": "Housing_Price_Estimation_Project"}

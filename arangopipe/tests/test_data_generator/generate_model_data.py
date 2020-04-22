@@ -204,7 +204,7 @@ def generate_runs(clean=False):
         admin.delete_arangomldb()
         admin.create_db()
         admin.create_enterprise_ml_graph()
-        
+
     proj_info = {"name": "Home_Value_Assessor"}
     proj_reg = admin.register_project(proj_info)
 
