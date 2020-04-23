@@ -25,11 +25,29 @@ It is recommended that you create a build directory for the purpose of building 
 ## Building the Docker Images
 **Arangopipe** provides the following docker images:
 
-1. A Tensorflow docker image
-2. A Pytorch docker image
-3. A thin production docker image  with no  development tools. The production image contains only **Arangopipe** and dependencies. An ipython shell is also provided.
+1. A Tensorflow docker image (Dockerfile_TFFE)
+2. A Pytorch docker image (Dockerfile_Torch_FE)
+3. A thin production docker image  with no  development tools. The production image contains only **Arangopipe** and dependencies. An ipython shell is also provided. (Dockerfile_Prod)
 
+The docker file populates the **Arangopipe** with test data. This is the data used by the UI. You will need to put in the root password for the database used with the docker container to create the database. You will need to edit the `test_datagen_config.yaml` file in the `test_config` directory for this purpose. In particular, you need to edit the following entries:
+
+  (1) root_user_password : Put in the root user password for the database used
+  
+  (2) DB_service_host: Put in `localhost1 if you want to create the database on the local host. Alternatively, if you are using OASIS, this will be the host name for managed services. For example, `arangoml.arangodb.cloud`.
+
+ (3)conn_protocol: If you are using the container provided database, you may want to use `http`. If you are using SSL, you will have to have the certificate installed as per the requirements of your specific environment.
+
+  (3) dbName: The database name for arangopipe. Defaults to `arangopipe`.
+
+  (4) password: The password you want to use with the **Arangopipe** database. Default value is `open sesame`
+
+  (5) username: The user account name used for the **Arangopipe** database. Default value is `arangopipe`.
+
+You will need to edit the file prior to building the docker image.
+  
 To build the Docker images, we will have to use the makefile in the **Arangopipe** directory (step 6 in the previous section). **You will need to work from the Arangopipe directory (see step 6 of the previous section) to build the docker images**. The docker images will take some time to build, especially the torch image.
+
+
 
 ### Building the Tensorflow Docker Image
 Edit the the `makefile` to make the following changes:

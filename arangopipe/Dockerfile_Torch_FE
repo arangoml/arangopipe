@@ -1,4 +1,4 @@
-FROM arangodb:3.4
+FROM arangodb:3.6.3
 
 FROM node:8.7.0-alpine AS frontend
 RUN mkdir -p /arangopipe_frontend

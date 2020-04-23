@@ -2,8 +2,6 @@
 **/*.pyc
 # log files
 **/*.log
-# yaml files
-**/*.yaml
 # Setuptools distribution folder.
 arangopipe/dist/
 # Remove the build directory from repo
