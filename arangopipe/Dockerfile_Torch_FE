@@ -1,4 +1,4 @@
-FROM arangodb:3.4
+FROM FROM arangodb:3.6.3
 
 FROM node:8.7.0-alpine AS frontend
 RUN mkdir -p /arangopipe_frontend
@@ -8,13 +8,13 @@ COPY arangopipe_frontend/app/package-lock.json /arangopipe_frontend
 RUN npm install
 COPY arangopipe_frontend/app/ /arangopipe_frontend
 
-FROM continuumio/miniconda3 
+FROM continuumio/miniconda3
 MAINTAINER Joerg Schad <info@arangodb.com>
 ENV GIT_PYTHON_REFRESH=quiet
 RUN apt-get update && apt-get install -y curl
 RUN pip install mlflow hyperopt sklearn2 jsonpickle python-arango jupyter matplotlib PyYAML==5.1.1 arangopipe==0.0.6.1
 RUN mkdir -p /workspace
-RUN conda install pytorch -c pytorch 
+RUN conda install pytorch -c pytorch
 
 WORKDIR /
 COPY --from=0 / .
@@ -41,4 +41,3 @@ EXPOSE 8888 8529 3000
 COPY startup_commands.sh /workspace/experiments/startup_commands.sh
 RUN ["chmod", "+x", "/workspace/experiments/startup_commands.sh"]
 ENTRYPOINT ["/workspace/experiments/startup_commands.sh"]
-
