@@ -1,4 +1,4 @@
-FROM arangodb:3.4
+FROM arangodb:3.6.3
 # This image uses two base images arangodb (above) and tensorflow (below)
 
 FROM node:8.7.0-alpine AS frontend
