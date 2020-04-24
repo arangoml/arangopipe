@@ -180,8 +180,8 @@ def generate_runs(clean=False):
     cfg = read_data()
     mscp = ManagedServiceConnParam()
 
-    delete_users()
-    delete_arangopipe_db()
+    #delete_users()
+    #delete_arangopipe_db()
     conn_config = ArangoPipeConfig()
 
     conn_params = { mscp.DB_SERVICE_HOST : cfg['arangodb'][mscp.DB_SERVICE_HOST], \
