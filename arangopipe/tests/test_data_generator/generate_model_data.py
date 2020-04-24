@@ -180,8 +180,8 @@ def generate_runs(clean=False):
     cfg = read_data()
     mscp = ManagedServiceConnParam()
 
-    delete_users()
-    delete_arangopipe_db()
+    #delete_users()
+    #delete_arangopipe_db()
     conn_config = ArangoPipeConfig()
 
     conn_params = { mscp.DB_SERVICE_HOST : cfg['arangodb'][mscp.DB_SERVICE_HOST], \
@@ -244,13 +244,14 @@ def generate_runs(clean=False):
         ds_info["tag"] = dataset_tag
         ds_info["source"] = "Housing Price Operational Data Store"
         featureset["generated_by"] = feature_pipeline_tag
-        featureset["name"] = "log_transformed_house_value"
+        featureset["name"] = "log_transformed_house_value_" + str(ruuid)
         featureset["tag"] = dataset_tag
 
         ds_reg = ap.register_dataset(ds_info)
         fs_reg = ap.register_featureset(featureset, ds_reg["_key"])
         model_tag = "model_period:" + aperiod
-        model_info = {"name": "Housing Regression Model",\
+        model_name = "Housing Regression Model_" + str(ruuid)
+        model_info = {"name": model_name,\
                       "type": "LASSO regression", "tag": model_tag}
         model_reg = ap.register_model(model_info,
                                       project="Home_Value_Assessor")

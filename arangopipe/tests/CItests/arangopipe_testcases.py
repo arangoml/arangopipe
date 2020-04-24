@@ -462,20 +462,20 @@ class TestArangopipe(unittest.TestCase):
     def add_edge_to_arangopipe(self):
         self.admin.add_vertex_to_arangopipe('test_vertex_s')
         self.admin.add_vertex_to_arangopipe('test_vertex_d')
-        self.admin.add_edge_definition_to_arangopipe('test_edge',
+        self.admin.add_edge_definition_to_arangopipe('test_edge_col', 'test_edge',
                                                      'test_vertex_s', 'test_vertex_d')
         return
 
     def test_arangopipe_edge_add(self):
         self.add_edge_to_arangopipe()
-        self.assertTrue(self.admin.has_edge('test_edge'))
+        self.assertTrue(self.admin.has_edge('test_edge_col'))
 
         return
 
     def remove_edge_from_arangopipe(self):
         self.admin.add_vertex_to_arangopipe('test_vertex_s1')
         self.admin.add_vertex_to_arangopipe('test_vertex_d1')
-        self.admin.add_edge_definition_to_arangopipe('test_edge_1',
+        self.admin.add_edge_definition_to_arangopipe('test_edge_col', 'test_edge_1',
                                                      'test_vertex_s1', 'test_vertex_d1')
         self.admin.remove_edge_definition_from_arangopipe(
             'test_edge_1', purge=True)
@@ -508,9 +508,9 @@ class TestArangopipe(unittest.TestCase):
         sd = {'name': "sample doc"}
         v1 = self.ap.insert_into_vertex_type('test_vertex_s3', sd)
         v2 = self.ap.insert_into_vertex_type('test_vertex_s4', sd)
-        self.admin.add_edge_definition_to_arangopipe('test_edge',
+        self.admin.add_edge_definition_to_arangopipe('test_edge_col', 'test_edge',
                                                      'test_vertex_s3', 'test_vertex_s4')
-        ei = self.ap.insert_into_edge_type('test_edge', v1, v2)
+        ei = self.ap.insert_into_edge_type('test_edge_col', v1, v2)
 
         return ei
 

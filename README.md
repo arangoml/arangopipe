@@ -158,6 +158,9 @@ If you would like to use **Arangopipe** with your pipelines, you would need to d
 4. `pip install PyYAML==5.1.1`
 5. `pip install pandas `
 
+## Connecting to ArangoDB from Arangopipe
+Please look at [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/arangoml/arangopipe/blob/master/arangopipe_managed_service.ipynb) for details of connecting to an ArangoDB instance to use with your **Arangopipe** installation. If you would like to save the connection information specified in your session so that it can be reused in another session, please see [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/arangoml/arangopipe/blob/master/examples/Arangopipe_Feature_Examples.ipynb) for an example.
+
 
 
 
