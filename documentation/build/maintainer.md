@@ -94,7 +94,7 @@ In order to sign-in to the ArangoML WebUI, a running ArangoDB instance is requir
 
 2. Run `docker-compose build Dockerfile`
 
-3. Update `REACT_APP_API_ROOT_URL` in the follow command to be your desired ArangoDB endpoint:
+3. Update `REACT_APP_API_ROOT_URL` in the following command to be your desired ArangoDB endpoint:
  `docker run -p 3000:3000 -e REACT_APP_API_ROOT_URL=http://localhost:8529/_db/arangopipe/ arangopipe_frontend_app`
 
 4. To confirm successful configuration, attempt to login at http://localhost:3000
