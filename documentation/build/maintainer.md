@@ -1,5 +1,5 @@
 # Build Instructions
-The following insturctions show you how to build the different supported packages.
+The following instructions show you how to build the different supported packages.
 These instructions include build instructions for:
  * Building the Arangopipe package
  * Building Arangopipe Docker images with TensorFlow & PyTorch
