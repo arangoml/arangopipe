@@ -87,8 +87,8 @@ Edit the the `makefile` to make the following changes:
 
 
 ### Building only the ArangoML WebUI 
-These steps show you how to build the ArangoML React Frontend and update the URL necessary to connect to your ArangoDB instance. 
-In order to sign-in to the ArangoML WebUI, a running ArangoDB instance is required. The default port the WebUI looks for is `6529`.
+These steps show you how to build the ArangoML React frontend docker image and update the URL necessary to connect to your ArangoDB instance. 
+In order to sign-in to the ArangoML WebUI, a running ArangoDB instance is required. The default ArangoDB port the WebUI expects is `6529`.
 
 1. Navigate to `\arangopipe\arangopipe_frontend\app`
 
@@ -100,7 +100,7 @@ In order to sign-in to the ArangoML WebUI, a running ArangoDB instance is requir
 
 4. Run  `docker exec -it {Container Name/ID} sh`
 
-5. Update variable `REACT_APP_API_ROOT_URL` in `.env` file, located in this directory, to use your desired ArangoDB endpoint.
+5. Update variable `REACT_APP_API_ROOT_URL` in the `.env` file, to use your desired ArangoDB endpoint.
 
 6. `exit`
 
