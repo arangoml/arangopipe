@@ -1,4 +1,10 @@
 # Build Instrcutions
+The following insturctions show you how to build the different supported packages.
+These instructions include build instructions for:
+ * Building Arangopipe package
+ * Building Arangopipe Docker Images with Tensorflow & PyTorch
+ * Building a production ready Docker image
+ * Building a frontend-only Docker image for the ArangoML WebUI
 
 ## Building Arangopipe
 
@@ -28,6 +34,7 @@ It is recommended that you create a build directory for the purpose of building 
 1. A Tensorflow docker image (Dockerfile_TFFE)
 2. A Pytorch docker image (Dockerfile_Torch_FE)
 3. A thin production docker image  with no  development tools. The production image contains only **Arangopipe** and dependencies. An ipython shell is also provided. (Dockerfile_Prod)
+4. A frontend only Docker image for the ArangoML WebUI.
 
 The docker file populates the **Arangopipe** with test data. This is the data used by the UI. You will need to put in the root password for the database used with the docker container to create the database. You will need to edit the `test_datagen_config.yaml` file in the `test_config` directory for this purpose. In particular, you need to edit the following entries:
 
@@ -77,6 +84,29 @@ Edit the the `makefile` to make the following changes:
 2. Set `DOCKER_SI_IMG_NAME = apms_prod`
 
 3. Run `make docker_APSI_build`
+
+
+### Building only the ArangoML WebUI 
+These steps show you how to build the ArangoML React Frontend and update the URL necessary to connect to your ArangoDB instance. 
+In order to sign-in to the ArangoML WebUI, a running ArangoDB instance is required. The default port the WebUI looks for is `6529`.
+
+1. Navigate to `\arangopipe\arangopipe_frontend\app`
+
+2. Run `docker-compose build Dockerfile`
+
+3. Run `docker run -p 3000:3000 -p 6529:8529 -it arangopipe_frontend_app`
+
+3. Run `docker ps` to obtain container Name/ID
+
+4. Run  `docker exec -it {Container Name/ID} sh`
+
+5. Update variable `REACT_APP_API_ROOT_URL` in `.env` file, located in this directory, to use your desired ArangoDB endpoint.
+
+6. `exit`
+
+7. Run `docker restart`
+
+8. To confirm successful configuration, attempt to login at http://localhost:3000
 
 
 
