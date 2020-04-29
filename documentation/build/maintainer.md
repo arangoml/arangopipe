@@ -12,26 +12,22 @@ It is recommended that you create a build directory for the purpose of building 
 
 **Note**: The **Arangopipe** build requires `make`. The build procedure below has been verified on `Linux` environments. 
 
-(1) conda create -n apbuild python=3.7
+(1) Create new conda environment: `conda create -n apbuild python=3.7`
 
-(2) conda activate apbuild
+(2) Activate conda environment: `conda activate apbuild`
 
-(3) pip install -r requirements.txt
+(3) Install dependencies: `pip install -r requirements.txt`
 
-(4) run git init .
+(4) run `git clone https://github.com/arangoml/arangopipe.git`
 
-(5) run git pull git@github.com:arangoml/arangopipe.git
+(5) `cd arangopipe`
 
-(6) change directory to arangopipe
-
-(7) run make clean
-
-(8) run make python_arangopipe
+(6) Build `make clean && make python_arangopipe`
 
 ## Building the Docker Images
 **Arangopipe** provides the following docker images:
 
-1. A Tensorflow docker image (Dockerfile_TFFE)
+1. A TensorFlow docker image (Dockerfile_TFFE)
 2. A Pytorch docker image (Dockerfile_Torch_FE)
 3. A thin production docker image  with no  development tools. The production image contains only **Arangopipe** and dependencies. An ipython shell is also provided. (Dockerfile_Prod)
 4. A frontend-only Docker image for the ArangoML WebUI.
@@ -40,7 +36,7 @@ The docker file populates the **Arangopipe** with test data. This is the data us
 
   (1) root_user_password : Put in the root user password for the database used
   
-  (2) DB_service_host: Put in `localhost1 if you want to create the database on the local host. Alternatively, if you are using OASIS, this will be the host name for managed services. For example, `arangoml.arangodb.cloud`.
+  (2) DB_service_host: Put in `localhost` if you want to create the database on the local host. Alternatively, if you are using OASIS, this will be the host name for managed services. For example, `arangoml.arangodb.cloud`.
 
  (3)conn_protocol: If you are using the container provided database, you may want to use `http`. If you are using SSL, you will have to have the certificate installed as per the requirements of your specific environment.
 
@@ -90,9 +86,9 @@ Edit the the `makefile` to make the following changes:
 These steps show you how to build the ArangoML React Frontend and update the URL necessary to connect to your ArangoDB instance. 
 In order to sign-in to the ArangoML WebUI, a running ArangoDB instance is required. The default port the WebUI looks for is `6529`.
 
-1. Navigate to `\arangopipe\arangopipe_frontend\app`
+1. Navigate to `arangopipe/arangopipe_frontend/app`
 
-2. Run `docker-compose build Dockerfile`
+2. Run `docker build .`
 
 3. Update `REACT_APP_API_ROOT_URL` in the following command to be your desired ArangoDB endpoint:
  `docker run -p 3000:3000 -e REACT_APP_API_ROOT_URL=http://localhost:8529/_db/arangopipe/ arangopipe_frontend_app`
