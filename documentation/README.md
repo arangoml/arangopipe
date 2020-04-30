@@ -76,7 +76,7 @@ The details are shown in the figure below.
 
 5. Point your browser to [http://localhost:6529](http://localhost:6529) to get to the **ArangoDB** web user interface. The `root` password is `open sesame`.
 
-### Tensorflow
+### TensorFlow
 
 1. Start the container:
 
@@ -96,7 +96,7 @@ The details are shown in the figure below.
 
 5. Point your browser to: `http://localhost:6529` to get to the **ArangoDB** web user interface. The `root` password is `open sesame`.
 
-### Frontend Only Webui
+### Frontend Only WebUI
 
 To connect the UI against an existing Arangopipe instance, first update `REACT_APP_API_ROOT_URL` in the following command to be your desired ArangoDB endpoint:
 
