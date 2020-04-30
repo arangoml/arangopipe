@@ -1,6 +1,14 @@
 # ArangoML Pipeline
 
+<center>
+<img src="assets/logos/ArangoML_Logo.png" width=95% >
+</center>
+
 ArangoML Pipeline is a common and extensible Metadata Layer for Machine Learning Pipelines which allows Data Scientists and [DataOps](https://en.wikipedia.org/wiki/DataOps) to manage all information related to their ML pipeline in one place.
+
+<center>
+<img src="assets/logos/ArangoML_Pipleline_Overview.jpg" width=95% >
+</center>
 
 **News:**
 [ArangoML Pipeline Cloud](https://www.arangodb.com/2020/01/arangoml-pipeline-cloud-manage-machine-learning-metadata/) is offering a no-setup, free-to-try managed service for ArangpML Pipeline. A [ArangoML Pipeline Cloud  tutorial](https://colab.research.google.com/github/arangoml/arangopipe/blob/master/examples/Arangopipe_with_TensorFlow_Beginner_Guide.ipynb#) is also available without any installation or Signup.
