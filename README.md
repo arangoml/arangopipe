@@ -37,7 +37,7 @@ Instead of each component storing its own metadata, a common Metadata Layer allo
 ## Use Cases
 ArangoML Pipeline benefits many different scenarios including:
 * Capture of Lineage Information (e.g., Which dataset influences which Model?)
-* Capture of Audit Information (e.g, A given model was training two month ago with the following training/validation performance)
+* Capture of Audit Information (e.g, A given model was training two months ago with the following training/validation performance)
 * Reproducible Model Training
 * Model Serving Policy (e.g., Which model should be deployed in production based on training statistics)
 * Extension of existing ML pipelines through simple python/HTTP API
