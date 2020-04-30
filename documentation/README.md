@@ -43,7 +43,7 @@ If you would prefer an independent installation, docker containers for *torch* a
 
  - [Torch](#torch)
  - [Tensorflow](#tensorflow)
-
+ - [Frontend-only Docker image for the WebUI](#frontend-only-webui)
 
 ### Torch
 
@@ -96,6 +96,11 @@ The details are shown in the figure below.
 
 5. Point your browser to: `http://localhost:6529` to get to the **ArangoDB** web user interface. The `root` password is `open sesame`.
 
+### Frontend Only Webui
+
+To connect the UI against an existing Arangopipe instance, first update `REACT_APP_API_ROOT_URL` in the following command to be your desired ArangoDB endpoint:
+
+ `docker run -p 3000:3000 -e REACT_APP_API_ROOT_URL=http://localhost:8529/_db/arangopipe/ arangoml/arangopipe_ui:latest`
 
 
 ## Arangopipe Graph Model
