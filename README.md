@@ -20,6 +20,11 @@ To get started with no installations of any sort (using ArangoML Pipeline Cloud)
 
 The [examples folder](https://github.com/arangoml/arangopipe/tree/master/examples) contains examples more example notebooks that illustrate the features of **Arangopipe**.
 
+**NOTICE**
+If you are using the ArangoML Cloud feature and would like to access the ArangoDB WebUI please visit 
+https://a0434a558688.arangodb.cloud:8529/_db/_system/_admin/aardvark/index.html 
+ and sign into the supplied temporary database with the generated username and password.
+
 ## Introduction
 When productizing Machine Learning Pipelines (e.g., [TensorFlow Extended](https://www.tensorflow.org/tfx/guide) or [Kubeflow](https://www.kubeflow.org/))
 the capture (and access to) of metadata across the pipeline is vital. Typically, each of the  components of such ML pipeline produces/requires Metadata, for example:
