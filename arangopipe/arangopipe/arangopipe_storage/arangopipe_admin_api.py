@@ -13,8 +13,8 @@ from arangopipe.arangopipe_storage.custom_http_client import CustomHTTPClient
 from arangopipe.arangopipe_storage.managed_service_conn_parameters import ManagedServiceConnParam
 import json
 import requests
+import time
 #import traceback
-import sys
 # create logger with 'spam_application'
 logger = logging.getLogger('arangopipe_admin_logger')
 logger.setLevel(logging.DEBUG)
@@ -35,7 +35,8 @@ logger.addHandler(ch)
 
 
 class ArangoPipeAdmin:
-    def __init__(self, reuse_connection=True, config=None, persist_conn=True):
+    def __init__(self, reuse_connection=True, config=None, persist_conn=True,\
+                 client_url = None):
         self.reuse_connection = reuse_connection
         self.db = None
         self.emlg = None
@@ -43,6 +44,7 @@ class ArangoPipeAdmin:
         self.cfg = None
         self.mscp = ManagedServiceConnParam()
         self.use_supp_config_to_reconnect = False
+        self.client_url = client_url
 
         if reuse_connection:
             info_msg = "If a config is provided, it will be used for setting up the connection"
@@ -113,18 +115,28 @@ class ArangoPipeAdmin:
         if self.mscp.DB_ROOT_USER_PASSWORD in self.cfg['arangodb']:
             logger.info("A root user password was specified, persisting...")
 
-
-        self.create_db(db_serv_host, db_serv_port,\
-                       db_serv_name, db_end_point,\
-                       db_dbName, db_user_name, db_password, db_conn_protocol)
-
-        # If you could create a DB, proceed with provisioning the graph. Otherwise you
-        # had an issue creating the database.
-        if self.db is not None:
+        try:
+            self.create_db(db_serv_host, db_serv_port,\
+                           db_serv_name, db_end_point,\
+                           db_dbName, db_user_name, db_password, db_conn_protocol)
+    
+            # If you could create a DB, proceed with provisioning the graph. Otherwise you
+            # had an issue creating the database.
+            if self.db is not None:
+                self.create_enterprise_ml_graph(db_replication_factor)
+    
+                if persist_conn:
+                    self.config.dump_data()
+        except:
+            logger.error("Error connecting to DB, trying again...")
+            time.sleep(2)
+            self.create_db(db_serv_host, db_serv_port,\
+                           db_serv_name, db_end_point,\
+                           db_dbName, db_user_name, db_password, db_conn_protocol)
             self.create_enterprise_ml_graph(db_replication_factor)
-
             if persist_conn:
-                self.config.dump_data()
+                    self.config.dump_data()
+            logger.error("Obtained connection with retry!")
 
         return
 
@@ -201,6 +213,7 @@ class ArangoPipeAdmin:
                 )
                 return
 
+
             assert r.status_code == 200, \
             "Managed DB endpoint is unavailable !, reason: " + r.reason + " err code: " +\
             str(r.status_code)
@@ -238,8 +251,12 @@ class ArangoPipeAdmin:
         client = ArangoClient(hosts= host_connection,\
                               http_client=CustomHTTPClient(username = ms_user_name,\
                                                            password = ms_password))
+        #This is for the case when it is not a 409 or 400 but due to the OASIS connection
+        # issue
+        
 
         db = client.db(ms_dbName, ms_user_name, ms_password)
+
         self.db = db
 
         return

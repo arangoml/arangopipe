@@ -1,12 +1,12 @@
 arangodb:
   DB_end_point: createDB
-  DB_service_host: localhost
+  DB_service_host: arangoml.arangodb.cloud
   DB_service_name: createDB
   DB_service_port: 8529
   arangodb_replication_factor: null
-  conn_protocol: http
-  dbName: umbocv_ap_demo
-  password: umbocv_ap_demo
-  username: umbocv_ap_demo
+  conn_protocol: https
+  dbName: MLi9awu5slfmf64l1ps8r2om
+  password: MLwned9waz82sdicegg28aa
+  username: ML6djxnfet4vc195x896uz7w
 mlgraph:
   graphname: enterprise_ml_graph

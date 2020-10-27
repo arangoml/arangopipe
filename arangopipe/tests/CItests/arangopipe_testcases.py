@@ -17,6 +17,7 @@ import sys
 import traceback
 from arangopipe.arangopipe_storage.managed_service_conn_parameters import ManagedServiceConnParam
 import yaml
+from arangopipe.arangopipe_storage.connection_manager import arango_pipe_connections
 
 class TestArangopipe(unittest.TestCase):
     
@@ -532,6 +533,22 @@ class TestArangopipe(unittest.TestCase):
         self.config.export_cfg(file_path)
         cc = self.config.create_config(file_path)
         self.assertTrue(len(cc) > 0)
+        
+        return
+    
+    def test_connection_manager(self):
+        msc = ManagedServiceConnParam()
+        conn_params = { msc.DB_SERVICE_HOST : "arangoml.arangodb.cloud", \
+                        msc.DB_SERVICE_END_POINT : "createDB",\
+                        msc.DB_SERVICE_NAME : "createDB",\
+                        msc.DB_SERVICE_PORT : 8529,\
+                        msc.DB_CONN_PROTOCOL : 'https'}
+        
+        
+        with arango_pipe_connections(conn_params, False) as (ap_admin, ap):
+             proj_info = {"name": "Python With Generator Admin test"}
+             proj_reg = ap_admin.register_project(proj_info)
+             print("Done with test!")
         
         return
 
