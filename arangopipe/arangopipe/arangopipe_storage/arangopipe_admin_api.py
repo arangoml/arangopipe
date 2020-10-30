@@ -119,12 +119,12 @@ class ArangoPipeAdmin:
             self.create_db(db_serv_host, db_serv_port,\
                            db_serv_name, db_end_point,\
                            db_dbName, db_user_name, db_password, db_conn_protocol)
-    
+
             # If you could create a DB, proceed with provisioning the graph. Otherwise you
             # had an issue creating the database.
             if self.db is not None:
                 self.create_enterprise_ml_graph(db_replication_factor)
-    
+
                 if persist_conn:
                     self.config.dump_data()
         except:
@@ -135,7 +135,7 @@ class ArangoPipeAdmin:
                            db_dbName, db_user_name, db_password, db_conn_protocol)
             self.create_enterprise_ml_graph(db_replication_factor)
             if persist_conn:
-                    self.config.dump_data()
+                self.config.dump_data()
             logger.error("Obtained connection with retry!")
 
         return
@@ -253,7 +253,6 @@ class ArangoPipeAdmin:
                                                            password = ms_password))
         #This is for the case when it is not a 409 or 400 but due to the OASIS connection
         # issue
-        
 
         db = client.db(ms_dbName, ms_user_name, ms_password)
 

@@ -13,14 +13,11 @@ from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig
 
 
 @contextmanager
-def arango_pipe_connections(conn_params, reuse_prev_connection = True):
+def arango_pipe_connections(conn_params, reuse_prev_connection=True):
     mdb_config = ArangoPipeConfig()
     mdb_config = mdb_config.create_connection_config(conn_params)
-    admin = ArangoPipeAdmin(reuse_connection = reuse_prev_connection, config = mdb_config)
+    admin = ArangoPipeAdmin(reuse_connection=reuse_prev_connection,
+                            config=mdb_config)
     ap_config = admin.get_config()
-    ap = ArangoPipe(config = ap_config)
+    ap = ArangoPipe(config=ap_config)
     yield admin, ap
-
-
-    
-    
