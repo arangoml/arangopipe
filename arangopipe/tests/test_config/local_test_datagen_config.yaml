@@ -1,0 +1,14 @@
+arangodb:
+  root_user: root
+  root_user_password: open sesame
+  DB_end_point: createDB
+  DB_service_host: localhost  
+  DB_service_name: createDB 
+  DB_service_port: 8529
+  arangodb_replication_factor: 3
+  conn_protocol: http
+  dbName: arangopipe
+  password: open sesame
+  username: arangopipe
+mlgraph:
+  graphname: enterprise_ml_graph

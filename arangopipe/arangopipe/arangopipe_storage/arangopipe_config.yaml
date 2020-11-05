@@ -5,8 +5,8 @@ arangodb:
   DB_service_port: 8529
   arangodb_replication_factor: null
   conn_protocol: http
-  dbName: umbocv_ap_demo
-  password: umbocv_ap_demo
-  username: umbocv_ap_demo
+  dbName: ML881pqplr9vps5p5xfdhizn
+  password: MLtvwiapyo74dkg1irl0ztc
+  username: MLtwb3i0ws26e3l31ovv0n37
 mlgraph:
   graphname: enterprise_ml_graph

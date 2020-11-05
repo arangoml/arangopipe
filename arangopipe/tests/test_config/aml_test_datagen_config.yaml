@@ -1,0 +1,14 @@
+arangodb:
+  root_user: root
+  root_user_password: open sesame
+  DB_end_point: createDB
+  DB_service_host: arangoml.arangodb.cloud  
+  DB_service_name: createDB 
+  DB_service_port: 8529
+  arangodb_replication_factor: 3
+  conn_protocol: https
+  dbName: MLav6p2n0epyovkc6n6jr89
+  password: MLgmn08lavdhjc98rt2q8t0c
+  username: MLiv34vhf6rri0mmxrku8joa
+mlgraph:
+  graphname: enterprise_ml_graph
