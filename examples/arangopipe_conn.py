@@ -5,21 +5,50 @@ from arangopipe.arangopipe_storage.managed_service_conn_parameters import Manage
 from arangopipe.arangopipe_storage.connection_manager import arango_pipe_connections
 
 
-def conn_arangopipe():
-  msc = ManagedServiceConnParam()
-  conn_params = { msc.DB_SERVICE_HOST : "localhost", \
-                  msc.DB_SERVICE_END_POINT : "createDB",\
-                  msc.DB_SERVICE_NAME : "createDB",\
-                  msc.DB_SERVICE_PORT : 8529,\
-                  msc.DB_CONN_PROTOCOL : 'http'}
+def conn_arangopipe(conn_params):
+    valid_conn_info_provided = validate_conn_params(conn_params)
+    conn_info = None
+    
+    if valid_conn_info_provided:
+        with arango_pipe_connections(conn_params, False) as (ap_admin, ap):
+            conn_info = {"ap_admin": ap_admin, "ap": ap}
+            print("Obtained connection for R Arangopipe Connector!")
+    else:
+        print("Please try again after fixing connection information errors!")
+        msg = "Incorrect connection info, Please try again after fixing connection information errors!"
+        raise Exception(msg)
         
-        
-  with arango_pipe_connections(conn_params, False) as (ap_admin, ap):
-      proj_info = {"name": "Context_Manager_Test"}
-      proj_reg = ap_admin.register_project(proj_info)
-      print("Done with context manager connection test!")
-  return ap
-  
+    return conn_info 
+
+def validate_conn_params(conn_params):
+    valid_conn_params = True
+    msc = ManagedServiceConnParam()
+    
+    if not msc.DB_SERVICE_HOST in conn_params:
+        print("Service host information not provided!, please provide")
+        valid_conn_params = False
+    
+    if not msc.DB_SERVICE_END_POINT in conn_params:
+        print("Service end point information not provided!, please provide")
+        valid_conn_params = False
+    
+    if not msc.DB_SERVICE_NAME in conn_params:
+        print("Service name information not provided!, please provide")
+        valid_conn_params = False
+    
+    if not msc.DB_SERVICE_PORT in conn_params:
+        print("Service port information not provided!, please provide")
+        valid_conn_params = False
+    
+    if not msc.DB_CONN_PROTOCOL in conn_params:
+        print("Service connection protocol information not provided!, please provide")
+        valid_conn_params = False
+    
+    return valid_conn_params
+    
+    
+
+
 
       
     
