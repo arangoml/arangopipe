@@ -1,0 +1,646 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>arangopipe.arangopipe_storage package &mdash; arangopipe  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Setting Up Arangopipe" href="setup.html" />
+    <link rel="prev" title="arangopipe.arangopipe_analytics package" href="arangopipe.arangopipe_analytics.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> arangopipe
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="basic_workflow.html">Basic Workflow with Arangopipe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pytorch_example.html">Using Arangopipe with Pytorch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tensorflow_example.html">Using Arangopipe with Tensorflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="covariate_shift.html">Using Arangopipe for Covariate Shift Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hyperparam_exp.html">Using Arangopipe to Record Hyperparameter Tuning Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="graph_embeddings.html">Using Arangopipe in a Project Activity that Produces Graph Embeddings</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Arangopipe API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="arangopipe.html">arangopipe package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="arangopipe.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="arangopipe.arangopipe_analytics.html">arangopipe.arangopipe_analytics package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">arangopipe.arangopipe_storage package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="arangopipe.html#module-arangopipe">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Setting Up Arangopipe</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">arangopipe</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">Arangopipe API</a> &raquo;</li>
+        
+          <li><a href="arangopipe.html">arangopipe package</a> &raquo;</li>
+        
+      <li>arangopipe.arangopipe_storage package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/arangopipe.arangopipe_storage.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="arangopipe-arangopipe-storage-package">
+<h1>arangopipe.arangopipe_storage package<a class="headerlink" href="#arangopipe-arangopipe-storage-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-arangopipe.arangopipe_storage.arangopipe_admin_api">
+<span id="arangopipe-arangopipe-storage-arangopipe-admin-api-module"></span><h2>arangopipe.arangopipe_storage.arangopipe_admin_api module<a class="headerlink" href="#module-arangopipe.arangopipe_storage.arangopipe_admin_api" title="Permalink to this headline">¶</a></h2>
+<p>Created on Thu Apr 25 09:30:33 2019</p>
+<p>&#64;author: Rajiv Sambasivan</p>
+<dl class="class">
+<dt id="arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin">
+<em class="property">class </em><code class="sig-prename descclassname">arangopipe.arangopipe_storage.arangopipe_admin_api.</code><code class="sig-name descname">ArangoPipeAdmin</code><span class="sig-paren">(</span><em class="sig-param">reuse_connection=True</em>, <em class="sig-param">config=None</em>, <em class="sig-param">persist_conn=True</em>, <em class="sig-param">client_url=None</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.add_edge_definition_to_arangopipe">
+<code class="sig-name descname">add_edge_definition_to_arangopipe</code><span class="sig-paren">(</span><em class="sig-param">edge_col_name</em>, <em class="sig-param">edge_name</em>, <em class="sig-param">from_vertex_name</em>, <em class="sig-param">to_vertex_name</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.add_edge_definition_to_arangopipe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.add_edges_to_arangopipe">
+<code class="sig-name descname">add_edges_to_arangopipe</code><span class="sig-paren">(</span><em class="sig-param">edge_col_name</em>, <em class="sig-param">from_vertex_list</em>, <em class="sig-param">to_vertex_list</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.add_edges_to_arangopipe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.add_vertex_to_arangopipe">
+<code class="sig-name descname">add_vertex_to_arangopipe</code><span class="sig-paren">(</span><em class="sig-param">vertex_to_create</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.add_vertex_to_arangopipe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.check_repeated_creation">
+<code class="sig-name descname">check_repeated_creation</code><span class="sig-paren">(</span><em class="sig-param">api_data</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.check_repeated_creation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.create_config">
+<code class="sig-name descname">create_config</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.create_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.create_db">
+<code class="sig-name descname">create_db</code><span class="sig-paren">(</span><em class="sig-param">db_srv_host</em>, <em class="sig-param">db_srv_port</em>, <em class="sig-param">db_serv_name</em>, <em class="sig-param">db_end_point</em>, <em class="sig-param">db_dbName</em>, <em class="sig-param">db_user_name</em>, <em class="sig-param">db_password</em>, <em class="sig-param">db_conn_protocol</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.create_db" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.create_enterprise_ml_graph">
+<code class="sig-name descname">create_enterprise_ml_graph</code><span class="sig-paren">(</span><em class="sig-param">db_replication_factor</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.create_enterprise_ml_graph" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.delete_all_databases">
+<code class="sig-name descname">delete_all_databases</code><span class="sig-paren">(</span><em class="sig-param">preserve=['arangopipe', 'facebook_db', 'fb_node2vec_db', 'node2vecdb', '_system']</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.delete_all_databases" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.delete_arangomldb">
+<code class="sig-name descname">delete_arangomldb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.delete_arangomldb" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.delete_database">
+<code class="sig-name descname">delete_database</code><span class="sig-paren">(</span><em class="sig-param">db_to_delete</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.delete_database" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.get_config">
+<code class="sig-name descname">get_config</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.get_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.has_edge">
+<code class="sig-name descname">has_edge</code><span class="sig-paren">(</span><em class="sig-param">edge_name</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.has_edge" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.has_vertex">
+<code class="sig-name descname">has_vertex</code><span class="sig-paren">(</span><em class="sig-param">vertex_name</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.has_vertex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.register_deployment">
+<code class="sig-name descname">register_deployment</code><span class="sig-paren">(</span><em class="sig-param">dep_tag</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.register_deployment" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.register_project">
+<code class="sig-name descname">register_project</code><span class="sig-paren">(</span><em class="sig-param">p</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.register_project" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.remove_edge_definition_from_arangopipe">
+<code class="sig-name descname">remove_edge_definition_from_arangopipe</code><span class="sig-paren">(</span><em class="sig-param">edge_name</em>, <em class="sig-param">purge=True</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.remove_edge_definition_from_arangopipe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.remove_vertex_from_arangopipe">
+<code class="sig-name descname">remove_vertex_from_arangopipe</code><span class="sig-paren">(</span><em class="sig-param">vertex_to_remove</em>, <em class="sig-param">purge=True</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.remove_vertex_from_arangopipe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.set_connection_params">
+<code class="sig-name descname">set_connection_params</code><span class="sig-paren">(</span><em class="sig-param">config</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_admin_api.ArangoPipeAdmin.set_connection_params" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-arangopipe.arangopipe_storage.arangopipe_api">
+<span id="arangopipe-arangopipe-storage-arangopipe-api-module"></span><h2>arangopipe.arangopipe_storage.arangopipe_api module<a class="headerlink" href="#module-arangopipe.arangopipe_storage.arangopipe_api" title="Permalink to this headline">¶</a></h2>
+<p>Created on Sat Apr 13 08:35:58 2019</p>
+<p>&#64;author: Rajiv Sambasivan</p>
+<dl class="class">
+<dt id="arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe">
+<em class="property">class </em><code class="sig-prename descclassname">arangopipe.arangopipe_storage.arangopipe_api.</code><code class="sig-name descname">ArangoPipe</code><span class="sig-paren">(</span><em class="sig-param">config</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An instance of ArangoPipe is meant to be used to log a run of a pipeline execution. To use it:
+(1) Create a ArangoPipe object
+(2) Register your dataset with ArangoPipe
+(3) Register your featureset with ArangoPipe
+(4) Register you model with ArangoPipe</p>
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.find_entity">
+<code class="sig-name descname">find_entity</code><span class="sig-paren">(</span><em class="sig-param">attrib_name</em>, <em class="sig-param">attrib_value</em>, <em class="sig-param">asset_type</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.find_entity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.get_collection_from_id">
+<code class="sig-name descname">get_collection_from_id</code><span class="sig-paren">(</span><em class="sig-param">id_str</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.get_collection_from_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.get_config">
+<code class="sig-name descname">get_config</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.get_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.heart_beat">
+<code class="sig-name descname">heart_beat</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.heart_beat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.init_graph">
+<code class="sig-name descname">init_graph</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.init_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a graph when an instance of ArangoPipe is provisioned.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.insert_into_edge_type">
+<code class="sig-name descname">insert_into_edge_type</code><span class="sig-paren">(</span><em class="sig-param">edge_name</em>, <em class="sig-param">from_vdoc</em>, <em class="sig-param">to_vdoc</em>, <em class="sig-param">document=None</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.insert_into_edge_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.insert_into_vertex_type">
+<code class="sig-name descname">insert_into_vertex_type</code><span class="sig-paren">(</span><em class="sig-param">vertex_type_name</em>, <em class="sig-param">document</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.insert_into_vertex_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.is_valid_id_str">
+<code class="sig-name descname">is_valid_id_str</code><span class="sig-paren">(</span><em class="sig-param">id_str</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.is_valid_id_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.link_entities">
+<code class="sig-name descname">link_entities</code><span class="sig-paren">(</span><em class="sig-param">src_id</em>, <em class="sig-param">dest_id</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.link_entities" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.log_run">
+<code class="sig-name descname">log_run</code><span class="sig-paren">(</span><em class="sig-param">ri</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.log_run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log a run. Logging a run requires specifying a dataset, featureset and a model against which this run is recored. A run records model parameters and model performance. The run object is probably most useful for the analysis of model performance with respect to a featureset, model hyper-parameters and a dataset.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.log_serving_perf">
+<code class="sig-name descname">log_serving_perf</code><span class="sig-paren">(</span><em class="sig-param">sp</em>, <em class="sig-param">dep_tag</em>, <em class="sig-param">userid='authorized user'</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.log_serving_perf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log serving performance against a deployed model. The user making the request needs to be authorized to log this performance update. A serving performance vertex is created and is linked with its deployment vertex</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.lookup_dataset">
+<code class="sig-name descname">lookup_dataset</code><span class="sig-paren">(</span><em class="sig-param">dataset_name</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.lookup_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dataset identifier given a name. This can be used to get the dataset id that is used to log run information associated with execution of the pipeline.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.lookup_entity">
+<code class="sig-name descname">lookup_entity</code><span class="sig-paren">(</span><em class="sig-param">asset_name</em>, <em class="sig-param">asset_type</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.lookup_entity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.lookup_entity_by_id">
+<code class="sig-name descname">lookup_entity_by_id</code><span class="sig-paren">(</span><em class="sig-param">entity_id</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.lookup_entity_by_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.lookup_featureset">
+<code class="sig-name descname">lookup_featureset</code><span class="sig-paren">(</span><em class="sig-param">feature_set_name</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.lookup_featureset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a featureset identifier given a name. This can be used to get the featureset id that is used to log run information associated with execution of the pipeline.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.lookup_model">
+<code class="sig-name descname">lookup_model</code><span class="sig-paren">(</span><em class="sig-param">model_name</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.lookup_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a model identifier given a name. This can be used to get the model id that is used to log run information associated with execution of the pipeline.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.lookup_modelparams">
+<code class="sig-name descname">lookup_modelparams</code><span class="sig-paren">(</span><em class="sig-param">tag_value</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.lookup_modelparams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a model parameter result given a tag.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.lookup_modelperf">
+<code class="sig-name descname">lookup_modelperf</code><span class="sig-paren">(</span><em class="sig-param">tag_value</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.lookup_modelperf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a model dev performance given a tag.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.register_dataset">
+<code class="sig-name descname">register_dataset</code><span class="sig-paren">(</span><em class="sig-param">ds_info</em>, <em class="sig-param">user_id='authorized_user'</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.register_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a dataset. The operation requires specifying a user id. If the user id is permitted to register a dataset, then the registration proceeds, otherwise an unauthorized operation is indicated.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.register_featureset">
+<code class="sig-name descname">register_featureset</code><span class="sig-paren">(</span><em class="sig-param">fs_info</em>, <em class="sig-param">dataset_id</em>, <em class="sig-param">user_id='authorized_user'</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.register_featureset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a featureset. ManagedServiceConnParamThe operation requires specifying a user id. If the user id is permitted to register a featureset, then the registration proceeds, otherwise an unauthorized operation is indicated.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.register_model">
+<code class="sig-name descname">register_model</code><span class="sig-paren">(</span><em class="sig-param">mi</em>, <em class="sig-param">user_id='authorized_user'</em>, <em class="sig-param">project='Wine-Quality-Regression-Modelling'</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_api.ArangoPipe.register_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a model. The operation requires specifying a user id. If the user id is permitted to register a model, then the registration proceeds, otherwise an unauthorized operation is indicated.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-arangopipe.arangopipe_storage.arangopipe_config">
+<span id="arangopipe-arangopipe-storage-arangopipe-config-module"></span><h2>arangopipe.arangopipe_storage.arangopipe_config module<a class="headerlink" href="#module-arangopipe.arangopipe_storage.arangopipe_config" title="Permalink to this headline">¶</a></h2>
+<p>Created on Fri Jun 14 09:17:50 2019</p>
+<p>&#64;author: Rajiv Sambasivan</p>
+<dl class="class">
+<dt id="arangopipe.arangopipe_storage.arangopipe_config.ArangoPipeConfig">
+<em class="property">class </em><code class="sig-prename descclassname">arangopipe.arangopipe_storage.arangopipe_config.</code><code class="sig-name descname">ArangoPipeConfig</code><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_config.ArangoPipeConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_config.ArangoPipeConfig.create_config">
+<code class="sig-name descname">create_config</code><span class="sig-paren">(</span><em class="sig-param">file_path</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_config.ArangoPipeConfig.create_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_config.ArangoPipeConfig.create_connection_config">
+<code class="sig-name descname">create_connection_config</code><span class="sig-paren">(</span><em class="sig-param">conn_params</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_config.ArangoPipeConfig.create_connection_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_config.ArangoPipeConfig.dump_data">
+<code class="sig-name descname">dump_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_config.ArangoPipeConfig.dump_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_config.ArangoPipeConfig.export_cfg">
+<code class="sig-name descname">export_cfg</code><span class="sig-paren">(</span><em class="sig-param">file_path</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_config.ArangoPipeConfig.export_cfg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_config.ArangoPipeConfig.get_cfg">
+<code class="sig-name descname">get_cfg</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_config.ArangoPipeConfig.get_cfg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_config.ArangoPipeConfig.read_data">
+<code class="sig-name descname">read_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_config.ArangoPipeConfig.read_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.arangopipe_config.ArangoPipeConfig.set_cfg">
+<code class="sig-name descname">set_cfg</code><span class="sig-paren">(</span><em class="sig-param">new_cfg</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.arangopipe_config.ArangoPipeConfig.set_cfg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-arangopipe.arangopipe_storage.custom_http_client">
+<span id="arangopipe-arangopipe-storage-custom-http-client-module"></span><h2>arangopipe.arangopipe_storage.custom_http_client module<a class="headerlink" href="#module-arangopipe.arangopipe_storage.custom_http_client" title="Permalink to this headline">¶</a></h2>
+<p>Spyder Editor
+&#64;author: Rajiv Sambasivan</p>
+<dl class="class">
+<dt id="arangopipe.arangopipe_storage.custom_http_client.CustomHTTPClient">
+<em class="property">class </em><code class="sig-prename descclassname">arangopipe.arangopipe_storage.custom_http_client.</code><code class="sig-name descname">CustomHTTPClient</code><span class="sig-paren">(</span><em class="sig-param">username</em>, <em class="sig-param">password</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.custom_http_client.CustomHTTPClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">arango.http.HTTPClient</span></code></p>
+<p>My custom HTTP client with cool features.</p>
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.custom_http_client.CustomHTTPClient.create_session">
+<code class="sig-name descname">create_session</code><span class="sig-paren">(</span><em class="sig-param">host</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.custom_http_client.CustomHTTPClient.create_session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new requests session given the host URL.</p>
+<p>This method must be overridden by the user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>host</strong> (<em>str | unicode</em>) – ArangoDB host URL.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Requests session object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>requests.Session</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.custom_http_client.CustomHTTPClient.send_request">
+<code class="sig-name descname">send_request</code><span class="sig-paren">(</span><em class="sig-param">session</em>, <em class="sig-param">method</em>, <em class="sig-param">url</em>, <em class="sig-param">params=None</em>, <em class="sig-param">data=None</em>, <em class="sig-param">headers=None</em>, <em class="sig-param">auth=None</em><span class="sig-paren">)</span><a class="headerlink" href="#arangopipe.arangopipe_storage.custom_http_client.CustomHTTPClient.send_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send an HTTP request.</p>
+<p>This method must be overridden by the user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>session</strong> (<em>requests.Session</em>) – Requests session object.</p></li>
+<li><p><strong>method</strong> (<em>str | unicode</em>) – HTTP method in lowercase (e.g. “post”).</p></li>
+<li><p><strong>url</strong> (<em>str | unicode</em>) – Request URL.</p></li>
+<li><p><strong>headers</strong> (<em>dict</em>) – Request headers.</p></li>
+<li><p><strong>params</strong> (<em>dict</em>) – URL (query) parameters.</p></li>
+<li><p><strong>data</strong> (<em>str | unicode | bool | int | list | dict</em>) – Request payload.</p></li>
+<li><p><strong>auth</strong> (<em>tuple</em>) – Username and password.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>HTTP response.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>arango.response.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-arangopipe.arangopipe_storage.managed_service_conn_parameters">
+<span id="arangopipe-arangopipe-storage-managed-service-conn-parameters-module"></span><h2>arangopipe.arangopipe_storage.managed_service_conn_parameters module<a class="headerlink" href="#module-arangopipe.arangopipe_storage.managed_service_conn_parameters" title="Permalink to this headline">¶</a></h2>
+<p>Created on Thu Dec  5 09:05:19 2019</p>
+<p>&#64;author: Rajiv Sambasivan</p>
+<dl class="class">
+<dt id="arangopipe.arangopipe_storage.managed_service_conn_parameters.ManagedServiceConnParam">
+<em class="property">class </em><code class="sig-prename descclassname">arangopipe.arangopipe_storage.managed_service_conn_parameters.</code><code class="sig-name descname">ManagedServiceConnParam</code><a class="headerlink" href="#arangopipe.arangopipe_storage.managed_service_conn_parameters.ManagedServiceConnParam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.managed_service_conn_parameters.ManagedServiceConnParam.DB_CONN_PROTOCOL">
+<em class="property">property </em><code class="sig-name descname">DB_CONN_PROTOCOL</code><a class="headerlink" href="#arangopipe.arangopipe_storage.managed_service_conn_parameters.ManagedServiceConnParam.DB_CONN_PROTOCOL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.managed_service_conn_parameters.ManagedServiceConnParam.DB_NAME">
+<em class="property">property </em><code class="sig-name descname">DB_NAME</code><a class="headerlink" href="#arangopipe.arangopipe_storage.managed_service_conn_parameters.ManagedServiceConnParam.DB_NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.managed_service_conn_parameters.ManagedServiceConnParam.DB_NOTIFICATION_EMAIL">
+<em class="property">property </em><code class="sig-name descname">DB_NOTIFICATION_EMAIL</code><a class="headerlink" href="#arangopipe.arangopipe_storage.managed_service_conn_parameters.ManagedServiceConnParam.DB_NOTIFICATION_EMAIL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.managed_service_conn_parameters.ManagedServiceConnParam.DB_PASSWORD">
+<em class="property">property </em><code class="sig-name descname">DB_PASSWORD</code><a class="headerlink" href="#arangopipe.arangopipe_storage.managed_service_conn_parameters.ManagedServiceConnParam.DB_PASSWORD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.managed_service_conn_parameters.ManagedServiceConnParam.DB_REPLICATION_FACTOR">
+<em class="property">property </em><code class="sig-name descname">DB_REPLICATION_FACTOR</code><a class="headerlink" href="#arangopipe.arangopipe_storage.managed_service_conn_parameters.ManagedServiceConnParam.DB_REPLICATION_FACTOR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.managed_service_conn_parameters.ManagedServiceConnParam.DB_ROOT_USER">
+<em class="property">property </em><code class="sig-name descname">DB_ROOT_USER</code><a class="headerlink" href="#arangopipe.arangopipe_storage.managed_service_conn_parameters.ManagedServiceConnParam.DB_ROOT_USER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.managed_service_conn_parameters.ManagedServiceConnParam.DB_ROOT_USER_PASSWORD">
+<em class="property">property </em><code class="sig-name descname">DB_ROOT_USER_PASSWORD</code><a class="headerlink" href="#arangopipe.arangopipe_storage.managed_service_conn_parameters.ManagedServiceConnParam.DB_ROOT_USER_PASSWORD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.managed_service_conn_parameters.ManagedServiceConnParam.DB_SERVICE_END_POINT">
+<em class="property">property </em><code class="sig-name descname">DB_SERVICE_END_POINT</code><a class="headerlink" href="#arangopipe.arangopipe_storage.managed_service_conn_parameters.ManagedServiceConnParam.DB_SERVICE_END_POINT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.managed_service_conn_parameters.ManagedServiceConnParam.DB_SERVICE_HOST">
+<em class="property">property </em><code class="sig-name descname">DB_SERVICE_HOST</code><a class="headerlink" href="#arangopipe.arangopipe_storage.managed_service_conn_parameters.ManagedServiceConnParam.DB_SERVICE_HOST" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.managed_service_conn_parameters.ManagedServiceConnParam.DB_SERVICE_NAME">
+<em class="property">property </em><code class="sig-name descname">DB_SERVICE_NAME</code><a class="headerlink" href="#arangopipe.arangopipe_storage.managed_service_conn_parameters.ManagedServiceConnParam.DB_SERVICE_NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.managed_service_conn_parameters.ManagedServiceConnParam.DB_SERVICE_PORT">
+<em class="property">property </em><code class="sig-name descname">DB_SERVICE_PORT</code><a class="headerlink" href="#arangopipe.arangopipe_storage.managed_service_conn_parameters.ManagedServiceConnParam.DB_SERVICE_PORT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="arangopipe.arangopipe_storage.managed_service_conn_parameters.ManagedServiceConnParam.DB_USER_NAME">
+<em class="property">property </em><code class="sig-name descname">DB_USER_NAME</code><a class="headerlink" href="#arangopipe.arangopipe_storage.managed_service_conn_parameters.ManagedServiceConnParam.DB_USER_NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-arangopipe.arangopipe_storage">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-arangopipe.arangopipe_storage" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="setup.html" class="btn btn-neutral float-right" title="Setting Up Arangopipe" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="arangopipe.arangopipe_analytics.html" class="btn btn-neutral float-left" title="arangopipe.arangopipe_analytics package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, ArangoDB
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
