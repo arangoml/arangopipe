@@ -32,7 +32,7 @@ It is recommended that you create a build directory for the purpose of building 
 3. A thin production docker image  with no  development tools. The production image contains only **Arangopipe** and dependencies. An ipython shell is also provided. (Dockerfile_Prod)
 4. A frontend-only Docker image for the ArangoML WebUI.
 
-The docker file populates the **Arangopipe** with test data. This is the data used by the UI. You will need to put in the root password for the database used with the docker container to create the database. You will need to edit the `test_datagen_config.yaml` file in the `test_config` directory for this purpose. In particular, you need to edit the following entries:
+The Dockerfile already populates the **Arangopipe** with test data. This is the data used by the UI. You will need to put in the root password for the database used with the docker container to create the database. You will need to edit the `test_datagen_config.yaml` file in the `test_config` directory for this purpose. In particular, you need to edit the following entries:
 
   (1) root_user_password : Put in the root user password for the database used
   
@@ -52,7 +52,7 @@ To build the Docker images, we will have to use the makefile in the **Arangopipe
 
 
 
-### Building the Tensorflow Docker Image
+### Building the TensorFlow Docker Image
 Edit the the `makefile` to make the following changes:
 
 1. Set `DOCKER_SI_FILE = Dockerfile_TFFE`
