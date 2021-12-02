@@ -17,3 +17,4 @@ arangopipe/*.egg-info
 */.ipynb_checkpoints/*
 #OSX DS_Store
 **/*.DS_Store
+.venv
