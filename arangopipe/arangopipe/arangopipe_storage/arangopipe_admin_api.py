@@ -9,7 +9,6 @@ Created on Thu Apr 25 09:30:33 2019
 from arango import ArangoClient, DatabaseListError
 import logging
 from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig
-from arangopipe.arangopipe_storage.custom_http_client import CustomHTTPClient
 from arangopipe.arangopipe_storage.managed_service_conn_parameters import ManagedServiceConnParam
 import json
 import requests
@@ -204,7 +203,7 @@ class ArangoPipeAdmin:
                         self.mscp.DB_PASSWORD: db_password }
             logger.info("Requesting a managed service database...")
 
-            r = requests.post(url=API_ENDPOINT, json=api_data, verify=False)
+            r = requests.post(url=API_ENDPOINT, json=api_data, verify=True)
 
             if r.status_code == 409 or r.status_code == 400:
                 logger.error(
@@ -248,13 +247,11 @@ class ArangoPipeAdmin:
         # Connect to arangopipe database as administrative user.
         #This returns an API wrapper for "test" database.
         print("Host Connection: " + str(host_connection))
-        client = ArangoClient(hosts= host_connection,\
-                              http_client=CustomHTTPClient(username = ms_user_name,\
-                                                           password = ms_password))
+        client = ArangoClient(hosts= host_connection)
         #This is for the case when it is not a 409 or 400 but due to the OASIS connection
         # issue
 
-        db = client.db(ms_dbName, ms_user_name, ms_password)
+        db = client.db(ms_dbName, ms_user_name, ms_password, verify=True)
 
         self.db = db
 
@@ -531,16 +528,14 @@ class ArangoPipeAdmin:
             logger.info(msg)
             return
 
-        client = ArangoClient(hosts= host_connection,\
-                              http_client=CustomHTTPClient(username=root_user,\
-                                                           password = root_user_password))
+        client = ArangoClient(hosts= host_connection)
         if not '_system' in preserve:
             preserve.append('_system')
 
 
         sys_db = client.db('_system',\
                                    username = root_user,\
-                                   password = root_user_password)
+                                   password = root_user_password, verify=True)
 
         try:
 
@@ -583,13 +578,11 @@ class ArangoPipeAdmin:
             logger.info(msg)
             return
 
-        client = ArangoClient(hosts= host_connection,\
-                              http_client=CustomHTTPClient(username=root_user,\
-                                                           password = root_user_password))
+        client = ArangoClient(hosts= host_connection)
 
         sys_db = client.db('_system',\
                                username = root_user,\
-                               password = root_user_password)
+                               password = root_user_password, verify=True)
         try:
             if sys_db.has_database(db_to_delete):
                 sys_db.delete_database(db_to_delete)

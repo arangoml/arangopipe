@@ -9,7 +9,6 @@ Created on Sat Apr 13 08:35:58 2019
 from arango import ArangoClient, AQLQueryExecuteError
 import logging
 from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig
-from arangopipe.arangopipe_storage.custom_http_client import CustomHTTPClient
 from arangopipe.arangopipe_storage.managed_service_conn_parameters import ManagedServiceConnParam
 
 # create logger with 'spam_application'
@@ -226,13 +225,11 @@ class ArangoPipe:
 
         host_conn_str =  db_conn_protocol +  "://" + \
                         db_serv_host + ":" + str(db_serv_port)
-        client = ArangoClient(hosts= host_conn_str,\
-                              http_client=CustomHTTPClient(username = db_user_name,\
-                                                           password = db_passwd))
+        client = ArangoClient(hosts= host_conn_str)
 
         self.db = client.db(name= db_name, \
                            username=db_user_name,\
-                           password=db_passwd)
+                           password=db_passwd, verify=True)
 
         self.emlg = self.db.graph(self.cfg['mlgraph']['graphname'])
 
