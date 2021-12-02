@@ -11,7 +11,6 @@ import traceback
 from arangopipe.arangopipe_storage.arangopipe_admin_api import ArangoPipeAdmin
 from arangopipe.arangopipe_storage.arangopipe_api import ArangoPipe
 from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig
-from arangopipe.arangopipe_storage.custom_http_client import CustomHTTPClient
 from arangopipe.arangopipe_storage.managed_service_conn_parameters import ManagedServiceConnParam
 from arango import ArangoClient, DatabaseListError
 import yaml
@@ -128,12 +127,10 @@ class TestAdminMSDB(unittest.TestCase):
                          k.args[0])
             raise Exception("Key error associated with missing " + k.args[0])
         
-        client = ArangoClient(hosts= host_connection,\
-                            http_client=CustomHTTPClient(username=root_user,\
-                                                         password= root_user_password))
+        client = ArangoClient(hosts= host_connection)
         sys_db = client.db('_system',\
                            username=self.test_cfg['arangodb'][self.mscp.DB_ROOT_USER],\
-                           password=self.test_cfg['arangodb'][self.mscp.DB_ROOT_USER_PASSWORD])
+                           password=self.test_cfg['arangodb'][self.mscp.DB_ROOT_USER_PASSWORD], verify=True)
         ul = sys_db.users()
         unl = [ tu['username'] for tu in ul]
         for u in unl:
@@ -159,12 +156,10 @@ class TestAdminMSDB(unittest.TestCase):
             print("Credential information that is missing : " +
                          k.args[0])
             raise Exception("Key error associated with missing " + k.args[0])
-        client = ArangoClient(hosts= host_connection,\
-                            http_client=CustomHTTPClient(username=root_user,\
-                                                         password= root_user_password))
+        client = ArangoClient(hosts= host_connection)
         sys_db = client.db('_system',\
                            username=self.test_cfg['arangodb'][self.mscp.DB_ROOT_USER],\
-                           password=self.test_cfg['arangodb'][self.mscp.DB_ROOT_USER_PASSWORD] )
+                           password=self.test_cfg['arangodb'][self.mscp.DB_ROOT_USER_PASSWORD], verify=True)
         try:
             if sys_db.has_database("arangopipe"):
                 print("Before starting the test, cleaning up arangopipe instances...")

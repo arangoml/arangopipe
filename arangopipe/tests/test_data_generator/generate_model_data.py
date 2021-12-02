@@ -20,7 +20,6 @@ import numpy as np
 import logging
 from arangopipe.arangopipe_storage.managed_service_conn_parameters import ManagedServiceConnParam
 from arango import ArangoClient, DatabaseListError
-from arangopipe.arangopipe_storage.custom_http_client import CustomHTTPClient
 import yaml
 
 NUM_PERIODS = 22
@@ -118,12 +117,10 @@ def delete_users():
     host_connection = protocol + "://" + srv_host + ":" + str(port)
     #    sys_user_name = cfg['arangodb'][mscp.DB_ROOT_USER]
     #    sys_passwd = cfg['arangodb'][mscp.DB_ROOT_USER_PASSWORD]
-    client = ArangoClient(hosts= host_connection,\
-                        http_client=CustomHTTPClient(username = root_user,\
-                                                     password = root_user_password))
+    client = ArangoClient(hosts= host_connection)
     sys_db = client.db('_system',\
                        username=root_user,\
-                       password=root_user_password)
+                       password=root_user_password, verify=True)
     ul = sys_db.users()
     unl = [tu['username'] for tu in ul]
     for u in unl:
@@ -153,12 +150,10 @@ def delete_arangopipe_db():
 
     #sys_user_name = cfg['arangodb'][mscp.DB_ROOT_USER]
     #sys_passwd = cfg['arangodb'][mscp.DB_ROOT_USER_PASSWORD]
-    client = ArangoClient(hosts= host_connection,\
-                        http_client=CustomHTTPClient(username = root_user,\
-                                                     password = root_user_password))
+    client = ArangoClient(hosts= host_connection)
     sys_db = client.db('_system',\
                        username=root_user,\
-                       password=root_user_password)
+                       password=root_user_password, verify=True)
     try:
         if sys_db.has_database("arangopipe"):
             print(
