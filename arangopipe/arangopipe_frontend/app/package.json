@@ -9,7 +9,7 @@
     "jquery": "^3.5.0",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.13.1",
     "react": "^16.9.0",
     "react-ace": "^7.0.4",
     "react-app-rewired": "^2.1.3",
