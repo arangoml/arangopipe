@@ -208,7 +208,7 @@ class ArangoPipeAdmin:
             logger.info("Requesting a managed service database...")
 
             
-            if self.mscp.DB_ROOT_USER_PASSWORD and self.mscp.DB_ROOT_USER in self.cfg['arangodb']:
+            if self.mscp.DB_ROOT_USER_PASSWORD in self.cfg['arangodb'] and self.mscp.DB_ROOT_USER in self.cfg['arangodb']:
                 r = requests.post(url=API_ENDPOINT, auth=HTTPBasicAuth(self.cfg['arangodb'][self.mscp.DB_ROOT_USER], self.cfg['arangodb'][self.mscp.DB_ROOT_USER_PASSWORD]),json=api_data, verify=True)
             else:
                 r = requests.post(url=API_ENDPOINT,json=api_data, verify=True)
