@@ -12,7 +12,10 @@ from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig
 from arangopipe.arangopipe_storage.managed_service_conn_parameters import ManagedServiceConnParam
 import json
 import requests
+from requests.auth import HTTPBasicAuth
 import time
+
+
 #import traceback
 # create logger with 'spam_application'
 logger = logging.getLogger('arangopipe_admin_logger')
@@ -71,6 +74,7 @@ class ArangoPipeAdmin:
             db_serv_port = self.cfg['arangodb'][self.mscp.DB_SERVICE_PORT]
             db_end_point = self.cfg['arangodb'][self.mscp.DB_SERVICE_END_POINT]
             db_serv_name = self.cfg['arangodb'][self.mscp.DB_SERVICE_NAME]
+            
 
         except KeyError as k:
             logger.error("Connection information is missing : " + k.args[0])
@@ -203,7 +207,11 @@ class ArangoPipeAdmin:
                         self.mscp.DB_PASSWORD: db_password }
             logger.info("Requesting a managed service database...")
 
-            r = requests.post(url=API_ENDPOINT, json=api_data, verify=True)
+            
+            if self.mscp.DB_ROOT_USER_PASSWORD and self.mscp.DB_ROOT_USER in self.cfg['arangodb']:
+                r = requests.post(url=API_ENDPOINT, auth=HTTPBasicAuth(self.cfg['arangodb'][self.mscp.DB_ROOT_USER], self.cfg['arangodb'][self.mscp.DB_ROOT_USER_PASSWORD]),json=api_data, verify=True)
+            else:
+                r = requests.post(url=API_ENDPOINT,json=api_data, verify=True)
 
             if r.status_code == 409 or r.status_code == 400:
                 logger.error(
