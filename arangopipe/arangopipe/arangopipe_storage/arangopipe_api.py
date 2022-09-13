@@ -337,73 +337,94 @@ class ArangoPipe:
         model_key = ri["model"]
 
         run_info_adds = {"_key": rrid, "timestamp": mperf["timestamp"]}
+        default_params = ["dataset", "featureset", "model", "run_id", "model-params", "model-perf", "tag", "project",
+                          "deployment_tag"]
+        default_run_params = ["run_id", "deployment_tag"]
 
         for key in ri:
-            if key == "run_id" or key == "featureset" or key == "dataset" or key == "model" or key == "deployment_tag" \
-                    or key == "model-params" or key == "model-perf" or key == "tag" or key == "project":
-                if key == "run_id" or key == "deployment_tag":
+            if key in default_params:
+                if key in default_run_params:
                     run_info_adds[key] = ri[key]
             else:
                 run_info_adds[key] = ri[key]
 
         run = self.emlg.vertex_collection("run")
-        #collection type
+        # collection type
         logger.info("Run info " + str(run_info_adds))
-        #logger
+        # logger
         run_reg = run.insert(run_info_adds)
-        #insert dict into collection type
+        # insert dict into collection type
         logger.info("Recording run " + str(run_reg))
-        #logger
+        # logger
 
         run_model_key = run_reg["_key"] + "-" + model_key
         # key gen
         a_run_model_edge = {"_key": run_model_key, "_from": "models/" + model_key, "_to": "run/" + rrid}
-        #dict creation
+        # dict creation
         run_model_edge = self.emlg.edge_collection("run_models")
-        #collection type
+        # collection type
         rme_reg = run_model_edge.insert(a_run_model_edge)
-        #insert dict into collection
+        # insert dict into collection
         logger.info("Recording model run link " + str(rme_reg))
-        #
+        # logger
 
         model_param = self.emlg.vertex_collection("modelparams")
+        # get collection
         mp_reg = model_param.insert(mp)
+        # insert dict into collection
         logger.info("Recording model params " + str(mp_reg))
+        # logger
 
         run_fs_edge = self.emlg.edge_collection("run_featuresets")
+        # get colletion
         run_fs_key = rrid + "-" + ri["featureset"]
-
+        # gen key
         a_edge_run_fs = {"_key": run_fs_key, "_from": "run/" + rrid, "_to": "featuresets/" + ri["featureset"]}
-
+        # dict gen
         rfse_reg = run_fs_edge.insert(a_edge_run_fs)
+        # insert dict into collection
         logger.info("Recording run featureset link " + str(rfse_reg))
+        # logger
 
         run_mp_edge = self.emlg.edge_collection("run_modelparams")
+        # get collection
         run_mp_key = rrid + "-" + mp["run_id"]
-
+        # key gen
         a_run_mp_edge = {"_key": run_mp_key, "_from": "run/" + rrid, "_to": "modelparams/" + mp_reg["_key"]}
-
+        # dict creation
         rmp_reg = run_mp_edge.insert(a_run_mp_edge)
+        # insert into collection
         logger.info("Recording run model params " + str(rmp_reg))
+        # logger
 
         model_perf = self.emlg.vertex_collection("devperf")
+        # get collection
         dp_reg = model_perf.insert(mperf)
+        # insert into collection
         logger.info("Recording model dev performance  " + str(dp_reg))
+        # logger
 
         run_devperf_edge = self.emlg.edge_collection("run_devperf")
+        # get collection
         run_devperf_key = rrid + "-" + dp_reg["_key"]
-
+        # key gen
         a_run_devperfedge = {"_key": run_devperf_key, "_from": "run/" + rrid, "_to": "devperf/" + dp_reg["_key"]}
+        # dict gen
         rdp_reg = run_devperf_edge.insert(a_run_devperfedge)
+        # insert into collection
         logger.info("Recording run dev perf link " + str(rdp_reg))
+        # logger
 
         run_dataset_edge = self.emlg.edge_collection("run_datasets")
+        # get collection
         run_dataset_key = rrid + "-" + ri["dataset"]
-
+        # key gen
         a_run_dataset_edge = {"_key": run_dataset_key, "_from": "run/" + rrid, "_to": "datasets/" + ri["dataset"]}
+        # dict gen
         rds_reg = run_dataset_edge.insert(a_run_dataset_edge)
+        # insert into collection
         logger.info("Recording run dev perf link " + str(rds_reg))
-
+        # logger
         return
 
     def log_serving_perf(self, sp, dep_tag, userid="authorized user"):
