@@ -1,4 +1,7 @@
 name: release
+defaults:
+  run:
+    working-directory: ./arangopipe
 on:
   workflow_dispatch:
   release:
@@ -8,9 +11,6 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./arangopipe
     strategy:
       matrix:
         python: ["3.7", "3.8", "3.9", "3.10"]
@@ -29,9 +29,6 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./arangopipe
     name: Release package
     steps:
       - uses: actions/checkout@v2
@@ -52,7 +49,6 @@ jobs:
 
       - name: Build distribution
         run: python setup.py sdist bdist_wheel
-        working-directory: ./arangopipe
 
       - name: Publish to PyPI Test
         env:
@@ -68,9 +64,6 @@ jobs:
   changelog:
     needs: release
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./arangopipe
     name: Update Changelog
     steps:
       - uses: actions/checkout@v2
