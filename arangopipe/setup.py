@@ -22,8 +22,13 @@ setup(
     classifiers=[
         "License :: OSI Approved :: Apache Software License",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.7"],
-    packages=["arangopipe", "arangopipe.arangopipe_storage","arangopipe.arangopipe_analytics"],
-    package_data={'config': ['arangopipe/arangopipe_storage/arangopipe_config.yaml']},
-    include_package_data=True
+        "Programming Language :: Python :: 3.7",
+    ],
+    packages=[
+        "arangopipe",
+        "arangopipe.arangopipe_storage",
+        "arangopipe.arangopipe_analytics",
+    ],
+    package_data={"config": ["arangopipe/arangopipe_storage/arangopipe_config.yaml"]},
+    include_package_data=True,
 )
