@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./arangopipe/arangopipe
+        working-directory: ./arangopipe
     strategy:
       matrix:
         python: ["3.7", "3.8", "3.9", "3.10"]
