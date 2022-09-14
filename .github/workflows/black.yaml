@@ -1,0 +1,21 @@
+name: black
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up pip & install packages
+        run: |
+          source ~/anaconda3/etc/profile.d/conda.sh
+          conda activate ${{ matrix.python }}
+          python -m pip install --upgrade pip setuptools wheel
+          pip install torch
+          pip install .[dev]
+      - name: Run black
+        run: conda run -n ${{ matrix.python }} black --check --verbose --diff --color ${{env.PACKAGE_DIR}} ${{env.TESTS_DIR}}
