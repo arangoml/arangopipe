@@ -1,5 +1,4 @@
 python-arango
-arangopipe
 pandas
 PyYAML==5.1.1
 sklearn2
