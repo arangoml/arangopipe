@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./arangopipe/arangopipe
+        working-directory: ./arangopipe
     strategy:
       matrix:
         python: ["3.7", "3.8", "3.9", "3.10"]
@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./arangopipe/arangopipe
+        working-directory: ./arangopipe
     name: Release package
     steps:
       - uses: actions/checkout@v2
@@ -52,6 +52,7 @@ jobs:
 
       - name: Build distribution
         run: python setup.py sdist bdist_wheel
+        working-directory: ./arangopipe
 
       - name: Publish to PyPI Test
         env:
@@ -69,7 +70,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./arangopipe/arangopipe
+        working-directory: ./arangopipe
     name: Update Changelog
     steps:
       - uses: actions/checkout@v2
