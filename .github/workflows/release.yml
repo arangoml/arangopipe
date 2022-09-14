@@ -1,0 +1,131 @@
+name: release
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+env:
+  PACKAGE_DIR: adbnx_adapter
+  TESTS_DIR: tests
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.7", "3.8", "3.9", "3.10"]
+    name: Python ${{ matrix.python }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python ${{ matrix.python }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Set up ArangoDB Instance via Docker
+        run: docker create --name adb -p 8529:8529 -e ARANGO_ROOT_PASSWORD= arangodb/arangodb:3.9.1
+      - name: Start ArangoDB Instance
+        run: docker start adb
+      - name: Setup pip
+        run: python -m pip install --upgrade pip setuptools wheel
+      - name: Install packages
+        run: pip install .[dev]
+      - name: Run black
+        run: black --check --verbose --diff --color ${{env.PACKAGE_DIR}} ${{env.TESTS_DIR}}
+      - name: Run flake8
+        run: flake8 ${{env.PACKAGE_DIR}} ${{env.TESTS_DIR}}
+      - name: Run isort
+        run: isort --check --profile=black ${{env.PACKAGE_DIR}} ${{env.TESTS_DIR}}
+      - name: Run mypy
+        run: mypy ${{env.PACKAGE_DIR}} ${{env.TESTS_DIR}}
+      - name: Run pytest
+        run: pytest --cov=${{env.PACKAGE_DIR}} --cov-report xml --cov-report term-missing -v --color=yes --no-cov-on-fail --code-highlight=yes
+      - name: Publish to coveralls.io
+        if: matrix.python == '3.8'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: coveralls --service=github
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    name: Release package
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Fetch complete history for all tags and branches
+        run: git fetch --prune --unshallow
+
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+
+      - name: Install release packages
+        run: pip install setuptools wheel twine setuptools-scm[toml]
+
+      - name: Install dependencies
+        run: pip install .[dev]
+
+      - name: Build distribution
+        run: python setup.py sdist bdist_wheel
+
+      - name: Publish to PyPI Test
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD_TEST }}
+        run: twine upload --repository testpypi dist/* #--skip-existing
+      - name: Publish to PyPI
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
+        run: twine upload --repository pypi dist/* #--skip-existing
+
+  changelog:
+    needs: release
+    runs-on: ubuntu-latest
+    name: Update Changelog
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Create new branch
+        run: git checkout -b actions/changelog
+
+      - name: Set branch upstream
+        run: git push -u origin actions/changelog
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+
+      - name: Install release packages
+        run: pip install wheel gitchangelog pystache
+
+      - name: Set variables
+        run: echo "VERSION=$(curl ${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/releases/latest | python -c "import sys; import json; print(json.load(sys.stdin)['tag_name'])")" >> $GITHUB_ENV
+
+      - name: Generate newest changelog
+        run: gitchangelog ${{env.VERSION}} > CHANGELOG.md
+
+      - name: Make commit for auto-generated changelog
+        uses: EndBug/add-and-commit@v7
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          add: "CHANGELOG.md"
+          branch: actions/changelog
+          message: "!gitchangelog"
+
+      - name: Create pull request for the auto generated changelog
+        run: |
+          echo "PR_URL=$(gh pr create \
+            --title "changelog: release ${{env.VERSION}}" \
+            --body "beep boop, i am a robot" \
+            --label documentation)" >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Alert developer of open PR
+        run: echo "Changelog $PR_URL is ready to be merged by developer."

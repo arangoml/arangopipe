@@ -1,0 +1,46 @@
+name: build
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+env:
+  PACKAGE_DIR: adbnx_adapter
+  TESTS_DIR: tests
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.7", "3.8", "3.9", "3.10"]
+    name: Python ${{ matrix.python }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python ${{ matrix.python }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Set up ArangoDB Instance via Docker
+        run: docker create --name adb -p 8529:8529 -e ARANGO_ROOT_PASSWORD= arangodb/arangodb:3.9.1
+      - name: Start ArangoDB Instance
+        run: docker start adb
+      - name: Setup pip
+        run: python -m pip install --upgrade pip setuptools wheel
+      - name: Install packages
+        run: pip install .[dev]
+      - name: Run black
+        run: black --check --verbose --diff --color ${{env.PACKAGE_DIR}} ${{env.TESTS_DIR}}
+      - name: Run flake8
+        run: flake8 ${{env.PACKAGE_DIR}} ${{env.TESTS_DIR}}
+      - name: Run isort
+        run: isort --check --profile=black ${{env.PACKAGE_DIR}} ${{env.TESTS_DIR}}
+      - name: Run mypy
+        run: mypy ${{env.PACKAGE_DIR}} ${{env.TESTS_DIR}}
+      - name: Run pytest
+        run: pytest --cov=${{env.PACKAGE_DIR}} --cov-report xml --cov-report term-missing -v --color=yes --no-cov-on-fail --code-highlight=yes
+      - name: Publish to coveralls.io
+        if: matrix.python == '3.8'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: coveralls --service=github
