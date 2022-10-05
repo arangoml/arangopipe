@@ -34,11 +34,14 @@ logger.addHandler(ch)
 
 
 class ArangoPipe:
-    """An instance of ArangoPipe is meant to be used to log a run of a pipeline execution. To use it:
+    """
+    An instance of ArangoPipe is meant to be used to log a run of a pipeline
+    execution. To use it:
     (1) Create a ArangoPipe object
     (2) Register your dataset with ArangoPipe
     (3) Register your featureset with ArangoPipe
-    (4) Register you model with ArangoPipe"""
+    (4) Register you model with ArangoPipe
+    """
 
     def __init__(self, config):
         self.cfg = config.get_cfg()
@@ -100,7 +103,7 @@ class ArangoPipe:
             % (src_entity_type, related_key, concat_key, src_entity_type)
         )
 
-        cursor = self.db.aql.execute(
+        self.db.aql.execute(
             aql_str, bind_vars={"value": src_id, "dest_entity": dest_id}
         )
 
@@ -116,7 +119,7 @@ class ArangoPipe:
         asset_info = None
         if len(asset_keys) == 0:
             logger.info(
-                "The asset by name: " + asset_name + " was not found in Arangopipe!"
+                "The asset by name: " + entity_id + " was not found in Arangopipe!"
             )
         else:
             asset_info = asset_keys[0]
@@ -162,21 +165,32 @@ class ArangoPipe:
         return asset_info
 
     def lookup_dataset(self, dataset_name):
-        """Return a dataset identifier given a name. This can be used to get the dataset id that is used to log run information associated with execution of the pipeline."""
+        """
+        Return a dataset identifier given a name. This can be used to get the dataset
+        id that is used to log run information associated with execution of the
+        pipeline.
+        """
 
         dataset_info = self.lookup_entity(dataset_name, "datasets")
 
         return dataset_info
 
     def lookup_featureset(self, feature_set_name):
-        """Return a featureset identifier given a name. This can be used to get the featureset id that is used to log run information associated with execution of the pipeline."""
+        """
+        Return a featureset identifier given a name. This can be used to get the
+        featureset id that is used to log run information associated with
+        execution of the pipeline.
+        """
 
         featureset_info = self.lookup_entity(feature_set_name, "featuresets")
 
         return featureset_info
 
     def lookup_model(self, model_name):
-        """Return a model identifier given a name. This can be used to get the model id that is used to log run information associated with execution of the pipeline."""
+        """
+        Return a model identifier given a name. This can be used to get the model id
+        that is used to log run information associated with execution of the pipeline.
+        """
 
         model_info = self.lookup_entity(model_name, "models")
 
@@ -256,13 +270,16 @@ class ArangoPipe:
     def register_model(
         self, mi, user_id="authorized_user", project="Wine-Quality-Regression-Modelling"
     ):
-        """Register a model. The operation requires specifying a user id. If the user id is permitted to register a
-        model, then the registration proceeds, otherwise an unauthorized operation is indicated."""
+        """
+        Register a model. The operation requires specifying a user id. If the user id
+        is permitted to register a model, then the registration proceeds, otherwise an
+        unauthorized operation is indicated.
+        """
 
         model_name = mi["name"]
         try:
             existing_model = self.lookup_model(model_name)
-        except AQLQueryExecuteError as e:
+        except AQLQueryExecuteError:
             msg = "The model name %s is not taken" % (model_name)
             logger.info(msg)
         if existing_model is not None:
@@ -297,13 +314,16 @@ class ArangoPipe:
         return model_reg
 
     def register_dataset(self, ds_info, user_id="authorized_user"):
-        """Register a dataset. The operation requires specifying a user id. If the user id is permitted to register
-        a dataset, then the registration proceeds, otherwise an unauthorized operation is indicated."""
+        """
+        Register a dataset. The operation requires specifying a user id. If the user
+        id is permitted to register a dataset, then the registration proceeds,
+        otherwise an unauthorized operation is indicated.
+        """
 
         ds_name = ds_info["name"]
         try:
             existing_ds = self.lookup_dataset(ds_name)
-        except AQLQueryExecuteError as e:
+        except AQLQueryExecuteError:
             msg = "The dataset name %s is not taken" % (ds_name)
             logger.info(msg)
         if existing_ds is not None:
@@ -320,18 +340,20 @@ class ArangoPipe:
         return ds_reg
 
     def register_featureset(self, fs_info, dataset_id, user_id="authorized_user"):
-        """Register a featureset. ManagedServiceConnParamThe operation requires specifying a user id. If the user id
-        is permitted to register a featureset, then the registration proceeds, otherwise an unauthorized operation is
-        indicated."""
+        """
+        Register a featureset. ManagedServiceConnParamThe operation requires specifying
+        a user id. If the user id is permitted to register a featureset, then the
+        registration proceeds, otherwise an unauthorized operation is indicated.
+        """
         fs_name = fs_info["name"]
         try:
             existing_fs = self.lookup_featureset(fs_name)
-        except AQLQueryExecuteError as e:
+        except AQLQueryExecuteError:
             msg = "The featureset name %s is not taken" % (fs_name)
             logger.info(msg)
         if existing_fs is not None:
             msg = (
-                "It looks like the featureset name %s is already taken, try another name"
+                "It looks like the featureset name %s is already taken, try another name"  # noqa E501
                 % (fs_name)
             )
             logger.error(msg)
@@ -354,9 +376,12 @@ class ArangoPipe:
         return fs_reg
 
     def log_run(self, ri):
-        """Log a run. Logging a run requires specifying a dataset, featureset and a model against which this run is
-        recored. A run records model parameters and model performance. The run object is probably most useful for the
-        analysis of model performance with respect to a featureset, model hyper-parameters and a dataset."""
+        """
+        Log a run. Logging a run requires specifying a dataset, featureset and a model
+        against which this run is recorded. A run records model parameters and model
+        performance. The run object is probably most useful for the analysis of model
+        performance with respect to a featureset, model hyper-parameters and a dataset.
+        """
 
         rrid = ri["run_id"]
         mp = ri["model-params"]
@@ -486,7 +511,11 @@ class ArangoPipe:
         return
 
     def log_serving_perf(self, sp, dep_tag, userid="authorized user"):
-        """Log serving performance against a deployed model. The user making the request needs to be authorized to log this performance update. A serving performance vertex is created and is linked with its deployment vertex"""
+        """
+        Log serving performance against a deployed model. The user making the request
+        needs to be authorized to log this performance update. A serving performance
+        vertex is created and is linked with its deployment vertex
+        """
         servingperf = self.emlg.vertex_collection("servingperf")
         sp_reg = servingperf.insert(sp)
 

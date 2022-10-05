@@ -139,14 +139,14 @@ class ArangoPipeAdmin:
                 db_conn_protocol,
             )
 
-            # If you could create a DB, proceed with provisioning the graph. Otherwise you
-            # had an issue creating the database.
+            # If you could create a DB, proceed with provisioning the graph.
+            # Otherwise you had an issue creating the database.
             if self.db is not None:
                 self.create_enterprise_ml_graph(db_replication_factor)
 
                 if persist_conn:
                     self.config.dump_data()
-        except:
+        except Exception:
             logger.error("Error connecting to DB, trying again...")
             time.sleep(2)
             self.create_db(
@@ -267,7 +267,7 @@ class ArangoPipeAdmin:
             if r.status_code == 409 or r.status_code == 400:
                 logger.error(
                     "It appears that you are attempting to connecting using \
-                             existing connection information. So either set reconnect = True when you create ArangoPipeAdmin or recreate a connection config and try again!"
+                             existing connection information. So either set reconnect = True when you create ArangoPipeAdmin or recreate a connection config and try again!"  # noqa E501
                 )
                 return
 
@@ -309,8 +309,8 @@ class ArangoPipeAdmin:
         # This returns an API wrapper for "test" database.
         print("Host Connection: " + str(host_connection))
         client = ArangoClient(hosts=host_connection)
-        # This is for the case when it is not a 409 or 400 but due to the OASIS connection
-        # issue
+        # This is for the case when it is not a 409 or 400
+        # but due to the OASIS connection issue
 
         db = client.db(ms_dbName, ms_user_name, ms_password, verify=True)
 
@@ -451,7 +451,7 @@ class ArangoPipeAdmin:
             "_to": tagged_model_params["_id"],
         }
 
-        dep_mp_reg = dep_model_params_edge.insert(the_dep_model_param_edge)
+        dep_model_params_edge.insert(the_dep_model_param_edge)
 
         # Link the deployment to the featureset
         dep_featureset_edge = self.emlg.edge_collection("deployment_featureset")
@@ -461,7 +461,7 @@ class ArangoPipeAdmin:
             "_from": dep_reg["_id"],
             "_to": tagged_featureset["_id"],
         }
-        dep_fs_reg = dep_featureset_edge.insert(the_dep_featureset_edge)
+        dep_featureset_edge.insert(the_dep_featureset_edge)
 
         # Link the deployment to the model
         dep_model_edge = self.emlg.edge_collection("deployment_model")
@@ -568,7 +568,7 @@ class ArangoPipeAdmin:
             logger.info(msg)
             self.db.create_collection(edge_col_name, edge=True, replication_factor=rf)
 
-        ed = self.emlg.create_edge_definition(
+        self.emlg.create_edge_definition(
             edge_collection=edge_col_name,
             from_vertex_collections=from_vertex_list,
             to_vertex_collections=to_vertex_list,
@@ -651,7 +651,7 @@ class ArangoPipeAdmin:
             return
 
         client = ArangoClient(hosts=host_connection)
-        if not "_system" in preserve:
+        if "_system" not in preserve:
             preserve.append("_system")
 
         sys_db = client.db(
@@ -664,7 +664,7 @@ class ArangoPipeAdmin:
             print("There were " + str(len(all_db) - 4) + " databases!")
 
             for the_db in all_db:
-                if not the_db in preserve:
+                if the_db not in preserve:
                     sys_db.delete_database(the_db)
 
         except DatabaseListError as err:

@@ -5,7 +5,6 @@ Created on Fri Jun 14 09:17:50 2019
 
 @author: Rajiv Sambasivan
 """
-import json
 import os
 
 import yaml
@@ -39,8 +38,11 @@ class ArangoPipeConfig:
             with open(file_path, "w") as file_descriptor:
                 cfg = yaml.dump(self.cfg, file_descriptor)
         except (IOError, EOFError) as e:
-            print("Error writing config file to specified location:".format(e.args[-1]))
-
+            print(
+                "Error writing config file to specified location: {}".format(
+                    e.args[-1]
+                )
+            )
         return cfg
 
     def create_config(self, file_path):
@@ -52,7 +54,7 @@ class ArangoPipeConfig:
                 conn_config[key] = value
         except (yaml.YAMLError, IOError, EOFError) as exc:
             print(
-                "Error reading the config file from the path specified".format(
+                "Error reading the config file from the path specified {}".format(
                     exc.args[-1]
                 )
             )
