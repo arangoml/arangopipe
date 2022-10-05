@@ -10,7 +10,7 @@ import logging
 
 from arango import AQLQueryExecuteError, ArangoClient
 
-from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig
+from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig, APConfigDict
 from arangopipe.arangopipe_storage.managed_service_conn_parameters import (
     ManagedServiceConnParam,
 )
@@ -43,7 +43,7 @@ class ArangoPipe:
     (4) Register you model with ArangoPipe
     """
 
-    def __init__(self, config):
+    def __init__(self, config: ArangoPipeConfig):
         self.cfg = config.get_cfg()
         self.emlg = None
         self.db = None
@@ -51,7 +51,7 @@ class ArangoPipe:
         self.init_graph()
         self.heart_beat()
 
-    def heart_beat(self):
+    def heart_beat(self) -> None:
         try:
             self.lookup_dataset("heart beat check")
         except AQLQueryExecuteError as e:
@@ -62,18 +62,18 @@ class ArangoPipe:
 
         return
 
-    def get_config(self):
+    def get_config(self) -> APConfigDict:
         apc = ArangoPipeConfig()
         return apc.get_cfg()
 
-    def get_collection_from_id(self, id_str):
+    def get_collection_from_id(self, id_str: str) -> str:
         sep = "/"
         tokens = id_str.split(sep)
         col_name = tokens[0]
 
         return col_name
 
-    def is_valid_id_str(self, id_str):
+    def is_valid_id_str(self, id_str: str) -> bool:
         valid_id_str = False
         sep = "/"
         tokens = id_str.split(sep)
@@ -82,7 +82,7 @@ class ArangoPipe:
 
         return valid_id_str
 
-    def link_entities(self, src_id, dest_id):
+    def link_entities(self, src_id: str, dest_id: str) -> None:
         src_id_valid = self.is_valid_id_str(src_id)
         dest_id_valid = self.is_valid_id_str(dest_id)
 
@@ -103,16 +103,19 @@ class ArangoPipe:
             % (src_entity_type, related_key, concat_key, src_entity_type)
         )
 
-        self.db.aql.execute(
-            aql_str, bind_vars={"value": src_id, "dest_entity": dest_id}
-        )
+        if self.db:
+            self.db.aql.execute(
+                aql_str, bind_vars={"value": src_id, "dest_entity": dest_id}
+            )
 
         return
 
-    def lookup_entity_by_id(self, entity_id):
+    def lookup_entity_by_id(self, entity_id: str):
         entity_col = self.get_collection_from_id(entity_id)
         aql = "FOR doc in %s FILTER doc._id == @value RETURN doc" % (entity_col)
         # Execute the query
+        if not self.db:
+            return
         cursor = self.db.aql.execute(aql, bind_vars={"value": entity_id})
         asset_keys = [doc for doc in cursor]
 
@@ -129,6 +132,8 @@ class ArangoPipe:
     def lookup_entity(self, asset_name, asset_type):
         aql = "FOR doc IN %s FILTER doc.name == @value RETURN doc" % (asset_type)
         # Execute the query
+        if not self.db:
+            return
         cursor = self.db.aql.execute(aql, bind_vars={"value": asset_name})
         asset_keys = [doc for doc in cursor]
 
@@ -245,7 +250,7 @@ class ArangoPipe:
 
         return mperf_info
 
-    def init_graph(self):
+    def init_graph(self) -> None:
         """Initialize a graph when an instance of ArangoPipe is provisioned."""
         db_serv_host = self.cfg["arangodb"]["DB_service_host"]
         db_serv_port = self.cfg["arangodb"]["DB_service_port"]
@@ -263,6 +268,8 @@ class ArangoPipe:
             name=db_name, username=db_user_name, password=db_passwd, verify=True
         )
 
+        if self.db is None:
+            return
         self.emlg = self.db.graph(self.cfg["mlgraph"]["graphname"])
 
         return
