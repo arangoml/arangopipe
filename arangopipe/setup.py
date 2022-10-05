@@ -33,7 +33,7 @@ setup(
     package_data={'config': ['arangopipe/arangopipe_storage/arangopipe_config.yaml']},
     include_package_data=True,
     install_requires=requirements,
-    python_requries=">=3.7"
+    python_requires=">=3.7",
     extras_require={
         "dev": [
             "black~=22.8",
