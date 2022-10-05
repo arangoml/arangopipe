@@ -27,3 +27,31 @@ jobs:
         run: python -m pip install --upgrade pip setuptools wheel
       - name: Install packages
         run: pip install -r requirements.txt
+  lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./arangopipe
+    strategy:
+      matrix:
+        python: ["3.7", "3.8", "3.9", "3.10"]
+    name: Linting Python ${{ matrix.python }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python ${{ matrix.python }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Setup pip
+        run: python -m pip install --upgrade pip setuptools wheel
+      - name: Install packages
+        run: pip install -e .[dev]
+      - name: Run black
+        run: black --check --verbose --diff --color ./arangopipe
+      - name: Run isort
+        run: isort --check --profile=black ./arangopipe
+      - name: Run mypy
+        run: mypy ./arangopipe
+      - name: Run flake8
+        run: flake8 ./arangopipe
+
