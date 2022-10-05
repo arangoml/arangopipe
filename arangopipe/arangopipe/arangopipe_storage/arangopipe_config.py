@@ -6,14 +6,13 @@ Created on Fri Jun 14 09:17:50 2019
 @author: Rajiv Sambasivan
 """
 import os
-from typing import cast, Dict, Any, Optional
+from typing import Any, Dict, Optional, cast
 
 import yaml
 
 from arangopipe.arangopipe_storage.managed_service_conn_parameters import (
     ManagedServiceConnParam,
 )
-
 
 APConfigDict = Dict[str, Dict[str, Any]]
 ConnectionConfig = Dict[str, Any]
@@ -45,9 +44,7 @@ class ArangoPipeConfig:
                 return cfg
         except (IOError, EOFError) as e:
             print(
-                "Error writing config file to specified location: {}".format(
-                    e.args[-1]
-                )
+                "Error writing config file to specified location: {}".format(e.args[-1])
             )
             return None
 
@@ -73,7 +70,7 @@ class ArangoPipeConfig:
             cfg = yaml.dump(self.cfg, file_descriptor)
         return cfg
 
-    def create_connection_config(self, conn_params: Dict[str, Any]) -> ArangoPipeConfig:
+    def create_connection_config(self, conn_params: Dict[str, Any]):
         self.cfg = {"arangodb": {}, "mlgraph": {"graphname": "enterprise_ml_graph"}}
         for key, value in conn_params.items():
             self.cfg["arangodb"][key] = value

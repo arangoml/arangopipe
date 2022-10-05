@@ -10,7 +10,10 @@ import logging
 
 from arango import AQLQueryExecuteError, ArangoClient
 
-from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig, APConfigDict
+from arangopipe.arangopipe_storage.arangopipe_config import (
+    APConfigDict,
+    ArangoPipeConfig,
+)
 from arangopipe.arangopipe_storage.managed_service_conn_parameters import (
     ManagedServiceConnParam,
 )
