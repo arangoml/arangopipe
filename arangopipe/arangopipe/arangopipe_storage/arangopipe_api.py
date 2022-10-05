@@ -6,8 +6,10 @@ Created on Sat Apr 13 08:35:58 2019
 @author: Rajiv Sambasivan
 """
 
-from arango import ArangoClient, AQLQueryExecuteError
 import logging
+
+from arango import AQLQueryExecuteError, ArangoClient
+
 from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig
 from arangopipe.arangopipe_storage.managed_service_conn_parameters import (
     ManagedServiceConnParam,

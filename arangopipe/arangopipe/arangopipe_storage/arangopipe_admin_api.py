@@ -6,16 +6,18 @@ Created on Thu Apr 25 09:30:33 2019
 @author: Rajiv Sambasivan
 """
 
-from arango import ArangoClient, DatabaseListError
+import json
 import logging
+import time
+
+import requests
+from arango import ArangoClient, DatabaseListError
+from requests.auth import HTTPBasicAuth
+
 from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig
 from arangopipe.arangopipe_storage.managed_service_conn_parameters import (
     ManagedServiceConnParam,
 )
-import json
-import requests
-from requests.auth import HTTPBasicAuth
-import time
 
 # import traceback
 # create logger with 'spam_application'
