@@ -10,19 +10,21 @@ These instructions include build instructions for:
 
 It is recommended that you create a build directory for the purpose of building **Arangopipe**. Creating a python environment for **Arangopipe** is also recommended. Having a separate environment for **Arangopipe**  provides the benefit of isolating **Arangopipe** dependencies from other python applications you may be developing or working with.
 
-**Note**: The **Arangopipe** build requires `make`. The build procedure below has been verified on `Linux` environments. 
+**Note**: The **Arangopipe** build requires `make`. The build procedure below has been verified on `Linux` and `MacOS` environments. 
 
-(1) Create new conda environment: `conda create -n apbuild python=3.7`
+(1) Create new conda environment: `conda create -n apbuild python=3.8`
 
 (2) Activate conda environment: `conda activate apbuild`
 
-(3) Install dependencies: `pip install -r requirements.txt`
+(3) run `git clone https://github.com/arangoml/arangopipe.git`
 
-(4) run `git clone https://github.com/arangoml/arangopipe.git`
+(4) `cd arangopipe`
 
-(5) `cd arangopipe`
+(5) Install dependencies: `pip install -r requirements.txt`
 
-(6) Build `make clean && make python_arangopipe`
+(6) `cd arangopipe`
+
+(7) Build `make clean && make python_arangopipe`
 
 ## Building the Docker Images
 **Arangopipe** provides the following docker images:
