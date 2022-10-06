@@ -10,7 +10,7 @@ These instructions include build instructions for:
 
 It is recommended that you create a build directory for the purpose of building **Arangopipe**. Creating a python environment for **Arangopipe** is also recommended. Having a separate environment for **Arangopipe**  provides the benefit of isolating **Arangopipe** dependencies from other python applications you may be developing or working with.
 
-**Note**: The **Arangopipe** build requires `make`. The build procedure below has been verified on `Linux` environments. 
+**Note**: The **Arangopipe** build requires `make`. The build procedure below has been verified on `Linux` and `MacOS` environments. 
 
 (1) Create new conda environment: `conda create -n apbuild python=3.8`
 
