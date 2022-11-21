@@ -16,8 +16,7 @@ from requests.auth import HTTPBasicAuth
 
 from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig
 from arangopipe.arangopipe_storage.managed_service_conn_parameters import (
-    ManagedServiceConnParam,
-)
+    ManagedServiceConnParam, )
 
 # import traceback
 # create logger with 'spam_application'
@@ -30,7 +29,8 @@ fh.setLevel(logging.DEBUG)
 ch = logging.StreamHandler()
 ch.setLevel(logging.ERROR)
 # create formatter and add it to the handlers
-formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+formatter = logging.Formatter(
+    "%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 fh.setFormatter(formatter)
 ch.setFormatter(formatter)
 # add the handlers to the logger
@@ -39,9 +39,12 @@ logger.addHandler(ch)
 
 
 class ArangoPipeAdmin:
-    def __init__(
-        self, reuse_connection=True, config=None, persist_conn=True, client_url=None
-    ):
+
+    def __init__(self,
+                 reuse_connection=True,
+                 config=None,
+                 persist_conn=True,
+                 client_url=None):
         self.reuse_connection = reuse_connection
         self.db = None
         self.emlg = None
@@ -83,23 +86,20 @@ class ArangoPipeAdmin:
 
         except KeyError as k:
             logger.error("Connection information is missing : " + k.args[0])
-            logger.error("Please try again after providing the missing information !")
+            logger.error(
+                "Please try again after providing the missing information !")
             raise Exception("Key error associated with missing " + k.args[0])
 
         # check if connection preferences are indicated
         if "dbName" in self.cfg["arangodb"]:
-            logger.info(
-                "DB name for connection: "
-                + str(self.cfg["arangodb"][self.mscp.DB_NAME])
-            )
+            logger.info("DB name for connection: " +
+                        str(self.cfg["arangodb"][self.mscp.DB_NAME]))
             db_dbName = self.cfg["arangodb"][self.mscp.DB_NAME]
         else:
             db_dbName = ""
         if "username" in self.cfg["arangodb"]:
-            logger.info(
-                "user name for connection: "
-                + str(self.cfg["arangodb"][self.mscp.DB_USER_NAME])
-            )
+            logger.info("user name for connection: " +
+                        str(self.cfg["arangodb"][self.mscp.DB_USER_NAME]))
             db_user_name = self.cfg["arangodb"][self.mscp.DB_USER_NAME]
         else:
             db_user_name = ""
@@ -116,8 +116,7 @@ class ArangoPipeAdmin:
 
         if self.mscp.DB_REPLICATION_FACTOR in self.cfg["arangodb"]:
             db_replication_factor = self.cfg["arangodb"][
-                self.mscp.DB_REPLICATION_FACTOR
-            ]
+                self.mscp.DB_REPLICATION_FACTOR]
         else:
             db_replication_factor = None
 
@@ -171,18 +170,12 @@ class ArangoPipeAdmin:
             repeated_connection = False
         else:
             try:
-                user_name_equal = (
-                    api_data[self.mscp.DB_USER_NAME]
-                    == self.cfg["arangodb"][self.mscp.DB_USER_NAME]
-                )
-                password_equal = (
-                    api_data[self.mscp.DB_PASSWORD]
-                    == self.cfg["arangodb"][self.mscp.DB_PASSWORD]
-                )
-                db_name_equal = (
-                    api_data[self.mscp.DB_NAME]
-                    == self.cfg["arangodb"][self.mscp.DB_NAME]
-                )
+                user_name_equal = (api_data[self.mscp.DB_USER_NAME] == self.
+                                   cfg["arangodb"][self.mscp.DB_USER_NAME])
+                password_equal = (api_data[self.mscp.DB_PASSWORD] ==
+                                  self.cfg["arangodb"][self.mscp.DB_PASSWORD])
+                db_name_equal = (api_data[self.mscp.DB_NAME] ==
+                                 self.cfg["arangodb"][self.mscp.DB_NAME])
                 repeated_connection = user_name_equal or password_equal or db_name_equal
                 if user_name_equal:
                     logger.info(
@@ -221,15 +214,13 @@ class ArangoPipeAdmin:
         db_conn_protocol,
     ):
 
-        host_connection = (
-            db_conn_protocol + "://" + db_srv_host + ":" + str(db_srv_port)
-        )
+        host_connection = (db_conn_protocol + "://" + db_srv_host + ":" +
+                           str(db_srv_port))
         client = ArangoClient(hosts=host_connection)
         logger.debug("Connection reuse: " + str(self.reuse_connection))
         if not self.reuse_connection:
-            API_ENDPOINT = (
-                host_connection + "/_db/_system/" + db_end_point + "/" + db_serv_name
-            )
+            API_ENDPOINT = (host_connection + "/_db/_system/" + db_end_point +
+                            "/" + db_serv_name)
             print("API endpoint: " + API_ENDPOINT)
 
             if db_dbName:
@@ -248,10 +239,8 @@ class ArangoPipeAdmin:
             }
             logger.info("Requesting a managed service database...")
 
-            if (
-                self.mscp.DB_ROOT_USER_PASSWORD in self.cfg["arangodb"]
-                and self.mscp.DB_ROOT_USER in self.cfg["arangodb"]
-            ):
+            if (self.mscp.DB_ROOT_USER_PASSWORD in self.cfg["arangodb"]
+                    and self.mscp.DB_ROOT_USER in self.cfg["arangodb"]):
                 r = requests.post(
                     url=API_ENDPOINT,
                     auth=HTTPBasicAuth(
@@ -267,16 +256,15 @@ class ArangoPipeAdmin:
             if r.status_code == 409 or r.status_code == 400:
                 logger.error(
                     "It appears that you are attempting to connecting using \
-                             existing connection information. So either set reconnect = True when you create ArangoPipeAdmin or recreate a connection config and try again!"  # noqa E501
+                             existing connection information. So either set reconnect = True when you create ArangoPipeAdmin or recreate a connection config and try again!"
+
+                    # noqa E501
                 )
                 return
 
             assert r.status_code == 200, (
-                "Managed DB endpoint is unavailable !, reason: "
-                + r.reason
-                + " err code: "
-                + str(r.status_code)
-            )
+                "Managed DB endpoint is unavailable !, reason: " + r.reason +
+                " err code: " + str(r.status_code))
             result = json.loads(r.text)
             logger.info("Managed service database was created !")
             ms_dbName = result["dbName"]
@@ -388,15 +376,15 @@ class ArangoPipeAdmin:
         for edge, fromv, tov in zip(edge_names, from_list, to_list):
             if not self.emlg.has_edge_definition(edge):
                 self.db.create_collection(
-                    edge, edge=True, replication_factor=db_replication_factor
-                )
+                    edge, edge=True, replication_factor=db_replication_factor)
                 self.emlg.create_edge_definition(
                     edge_collection=edge,
                     from_vertex_collections=[fromv],
                     to_vertex_collections=[tov],
                 )
 
-        self.cfg["arangodb"][self.mscp.DB_REPLICATION_FACTOR] = db_replication_factor
+        self.cfg["arangodb"][
+            self.mscp.DB_REPLICATION_FACTOR] = db_replication_factor
 
         return
 
@@ -443,8 +431,10 @@ class ArangoPipeAdmin:
         deploy_info = {"tag": dep_tag}
         dep_reg = deployment.insert(deploy_info)
         # Link the deployment to the model parameters
-        dep_model_params_edge = self.emlg.edge_collection("deployment_modelparams")
-        dep_model_params_key = dep_reg["_key"] + "-" + tagged_model_params["_key"]
+        dep_model_params_edge = self.emlg.edge_collection(
+            "deployment_modelparams")
+        dep_model_params_key = dep_reg["_key"] + "-" + tagged_model_params[
+            "_key"]
         the_dep_model_param_edge = {
             "_key": dep_model_params_key,
             "_from": dep_reg["_id"],
@@ -454,7 +444,8 @@ class ArangoPipeAdmin:
         dep_model_params_edge.insert(the_dep_model_param_edge)
 
         # Link the deployment to the featureset
-        dep_featureset_edge = self.emlg.edge_collection("deployment_featureset")
+        dep_featureset_edge = self.emlg.edge_collection(
+            "deployment_featureset")
         dep_featureset_key = dep_reg["_key"] + "-" + tagged_featureset["_key"]
         the_dep_featureset_edge = {
             "_key": dep_featureset_key,
@@ -503,15 +494,15 @@ class ArangoPipeAdmin:
         if self.emlg.has_vertex_collection(vertex_to_remove):
             self.emlg.delete_vertex_collection(vertex_to_remove, purge)
 
-            logger.info("Vertex collection " + vertex_to_remove + " has been deleted!")
+            logger.info("Vertex collection " + vertex_to_remove +
+                        " has been deleted!")
         else:
             logger.error("Vertex, " + vertex_to_remove + " does not exist!")
 
         return
 
-    def add_edge_definition_to_arangopipe(
-        self, edge_col_name, edge_name, from_vertex_name, to_vertex_name
-    ):
+    def add_edge_definition_to_arangopipe(self, edge_col_name, edge_name,
+                                          from_vertex_name, to_vertex_name):
         rf = self.cfg["arangodb"][self.mscp.DB_REPLICATION_FACTOR]
 
         if not self.db.has_graph(self.cfg["mlgraph"]["graphname"]):
@@ -522,26 +513,20 @@ class ArangoPipeAdmin:
         # Check if all data needed to create an edge exists, if so, create it
 
         if not self.emlg.has_vertex_collection(from_vertex_name):
-            logger.error(
-                "Source vertex, "
-                + from_vertex_name
-                + " does not exist, aborting edge creation!"
-            )
+            logger.error("Source vertex, " + from_vertex_name +
+                         " does not exist, aborting edge creation!")
             return
         elif not self.emlg.has_vertex_collection(to_vertex_name):
-            logger.error(
-                "Destination vertex, "
-                + to_vertex_name
-                + " does not exist, aborting edge creation!"
-            )
+            logger.error("Destination vertex, " + to_vertex_name +
+                         " does not exist, aborting edge creation!")
             return
 
         else:
             if not self.emlg.has_edge_definition(edge_name):
                 if not self.emlg.has_edge_collection(edge_col_name):
-                    self.db.create_collection(
-                        edge_col_name, edge=True, replication_factor=rf
-                    )
+                    self.db.create_collection(edge_col_name,
+                                              edge=True,
+                                              replication_factor=rf)
 
                 self.emlg.create_edge_definition(
                     edge_collection=edge_col_name,
@@ -553,7 +538,8 @@ class ArangoPipeAdmin:
 
         return
 
-    def add_edges_to_arangopipe(self, edge_col_name, from_vertex_list, to_vertex_list):
+    def add_edges_to_arangopipe(self, edge_col_name, from_vertex_list,
+                                to_vertex_list):
         rf = self.cfg["arangodb"][self.mscp.DB_REPLICATION_FACTOR]
 
         if not self.db.has_graph(self.cfg["mlgraph"]["graphname"]):
@@ -564,9 +550,12 @@ class ArangoPipeAdmin:
         # Check if all data needed to create an edge exists, if so, create it
 
         if not self.emlg.has_edge_collection(edge_col_name):
-            msg = "Edge collection %s did not exist, creating it!" % (edge_col_name)
+            msg = "Edge collection %s did not exist, creating it!" % (
+                edge_col_name)
             logger.info(msg)
-            self.db.create_collection(edge_col_name, edge=True, replication_factor=rf)
+            self.db.create_collection(edge_col_name,
+                                      edge=True,
+                                      replication_factor=rf)
 
         self.emlg.create_edge_definition(
             edge_collection=edge_col_name,
@@ -627,26 +616,24 @@ class ArangoPipeAdmin:
 
         try:
             root_user = self.cfg["arangodb"][self.mscp.DB_ROOT_USER]
-            root_user_password = self.cfg["arangodb"][self.mscp.DB_ROOT_USER_PASSWORD]
+            root_user_password = self.cfg["arangodb"][
+                self.mscp.DB_ROOT_USER_PASSWORD]
         except KeyError as k:
-            msg = (
-                "Root credentials are unvailable, try again "
-                + "with a new connection and credentials for root provided"
-            )
+            msg = ("Root credentials are unvailable, try again " +
+                   "with a new connection and credentials for root provided")
             logger.error(msg)
-            logger.error("Credential information that is missing : " + k.args[0])
+            logger.error("Credential information that is missing : " +
+                         k.args[0])
             raise Exception("Key error associated with missing " + k.args[0])
 
         db_conn_protocol = self.cfg["arangodb"][self.mscp.DB_CONN_PROTOCOL]
 
-        host_connection = (
-            db_conn_protocol + "://" + db_srv_host + ":" + str(db_srv_port)
-        )
+        host_connection = (db_conn_protocol + "://" + db_srv_host + ":" +
+                           str(db_srv_port))
         if not root_user and not root_user_password:
             msg = (
                 "You will need to provide root credentials while connecting to perform"
-                + " deletes of databases ! Please try again after doing so."
-            )
+                + " deletes of databases ! Please try again after doing so.")
             logger.info(msg)
             return
 
@@ -654,9 +641,10 @@ class ArangoPipeAdmin:
         if "_system" not in preserve:
             preserve.append("_system")
 
-        sys_db = client.db(
-            "_system", username=root_user, password=root_user_password, verify=True
-        )
+        sys_db = client.db("_system",
+                           username=root_user,
+                           password=root_user_password,
+                           verify=True)
 
         try:
 
@@ -679,39 +667,39 @@ class ArangoPipeAdmin:
         db_srv_port = self.cfg["arangodb"][self.mscp.DB_SERVICE_PORT]
         try:
             root_user = self.cfg["arangodb"][self.mscp.DB_ROOT_USER]
-            root_user_password = self.cfg["arangodb"][self.mscp.DB_ROOT_USER_PASSWORD]
+            root_user_password = self.cfg["arangodb"][
+                self.mscp.DB_ROOT_USER_PASSWORD]
         except KeyError as k:
-            msg = (
-                "Root credentials are unvailable, try again "
-                + "with a new connection and credentials for root provided"
-            )
+            msg = ("Root credentials are unvailable, try again " +
+                   "with a new connection and credentials for root provided")
             logger.error(msg)
-            logger.error("Credential information that is missing : " + k.args[0])
+            logger.error("Credential information that is missing : " +
+                         k.args[0])
             raise Exception("Key error associated with missing " + k.args[0])
 
         db_conn_protocol = self.cfg["arangodb"][self.mscp.DB_CONN_PROTOCOL]
 
-        host_connection = (
-            db_conn_protocol + "://" + db_srv_host + ":" + str(db_srv_port)
-        )
+        host_connection = (db_conn_protocol + "://" + db_srv_host + ":" +
+                           str(db_srv_port))
         if not root_user and not root_user_password:
             msg = (
                 "You will need to provide root credentials while connecting to perform"
-                + " deletes of databases ! Please try again after doing so."
-            )
+                + " deletes of databases ! Please try again after doing so.")
             logger.info(msg)
             return
 
         client = ArangoClient(hosts=host_connection)
 
-        sys_db = client.db(
-            "_system", username=root_user, password=root_user_password, verify=True
-        )
+        sys_db = client.db("_system",
+                           username=root_user,
+                           password=root_user_password,
+                           verify=True)
         try:
             if sys_db.has_database(db_to_delete):
                 sys_db.delete_database(db_to_delete)
             else:
-                logger.error("The database, " + db_to_delete + ", does not exist !")
+                logger.error("The database, " + db_to_delete +
+                             ", does not exist !")
 
         except DatabaseListError as err:
             logger.error(err)

@@ -117,7 +117,7 @@ def delete_users():
     host_connection = protocol + "://" + srv_host + ":" + str(port)
     #    sys_user_name = cfg['arangodb'][mscp.DB_ROOT_USER]
     #    sys_passwd = cfg['arangodb'][mscp.DB_ROOT_USER_PASSWORD]
-    client = ArangoClient(hosts= host_connection)
+    client = ArangoClient(hosts=host_connection)
     sys_db = client.db('_system',\
                        username=root_user,\
                        password=root_user_password, verify=True)
@@ -150,7 +150,7 @@ def delete_arangopipe_db():
 
     #sys_user_name = cfg['arangodb'][mscp.DB_ROOT_USER]
     #sys_passwd = cfg['arangodb'][mscp.DB_ROOT_USER_PASSWORD]
-    client = ArangoClient(hosts= host_connection)
+    client = ArangoClient(hosts=host_connection)
     sys_db = client.db('_system',\
                        username=root_user,\
                        password=root_user_password, verify=True)
