@@ -12,6 +12,7 @@ import time
 
 import requests
 from arango import ArangoClient, DatabaseListError
+from arango.database import StandardDatabase
 from requests.auth import HTTPBasicAuth
 
 from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig
@@ -41,12 +42,12 @@ logger.addHandler(ch)
 class ArangoPipeAdmin:
 
     def __init__(self,
+                 db,
                  reuse_connection=True,
                  config=None,
                  persist_conn=True,
                  client_url=None):
         self.reuse_connection = reuse_connection
-        self.db = None
         self.emlg = None
         self.config = None
         self.cfg = None
@@ -54,65 +55,77 @@ class ArangoPipeAdmin:
         self.use_supp_config_to_reconnect = False
         self.client_url = client_url
 
-        if reuse_connection:
-            info_msg = (
-                "If a config is provided, it will be used for setting up the connection"
-            )
-            if config is None:
-                self.config = self.create_config()
-                self.cfg = self.config.get_cfg()
-                self.use_supp_config_to_reconnect = False
-            else:
-                self.config = config
-                self.cfg = config.cfg
-                self.use_supp_config_to_reconnect = True
-
-            logger.info(info_msg)
-        else:
-
-            assert (
-                config is not None
-            ), "You must provide connection information for new connections"
-
-            self.config = config
-            self.cfg = config.cfg
-
-        try:
-
-            db_serv_host = self.cfg["arangodb"][self.mscp.DB_SERVICE_HOST]
-            db_serv_port = self.cfg["arangodb"][self.mscp.DB_SERVICE_PORT]
-            db_end_point = self.cfg["arangodb"][self.mscp.DB_SERVICE_END_POINT]
-            db_serv_name = self.cfg["arangodb"][self.mscp.DB_SERVICE_NAME]
-
-        except KeyError as k:
-            logger.error("Connection information is missing : " + k.args[0])
+        if db is None:
             logger.error(
-                "Please try again after providing the missing information !")
-            raise Exception("Key error associated with missing " + k.args[0])
+                "A database object is required to initialize ArangoPipeAdmin")
+            raise Exception("arango_db object parameter is missing")
+        else:
+            self.db = db
+
+        if config is None:
+            self.config = self.create_config()
+        else:
+            self.config = config
+        self.cfg = self.config.cfg
+
+        # if reuse_connection:
+        #     info_msg = (
+        #         "If a config is provided, it will be used for setting up the connection"
+        #     )
+        #     if config is None:
+        #         self.config = self.create_config()
+        #         self.cfg = self.config.get_cfg()
+        #         self.use_supp_config_to_reconnect = False
+        #     else:
+        #         self.config = config
+        #         self.cfg = config.cfg
+        #         self.use_supp_config_to_reconnect = True
+
+        #     logger.info(info_msg)
+        # else:
+        #     assert (
+        #         config is not None
+        #     ), "You must provide connection information for new connections"
+
+        #     self.config = config
+        #     self.cfg = config.cfg
+
+        # try:
+
+        #     db_serv_host = self.cfg["arangodb"][self.mscp.DB_SERVICE_HOST]
+        #     db_serv_port = self.cfg["arangodb"][self.mscp.DB_SERVICE_PORT]
+        #     db_end_point = self.cfg["arangodb"][self.mscp.DB_SERVICE_END_POINT]
+        #     db_serv_name = self.cfg["arangodb"][self.mscp.DB_SERVICE_NAME]
+
+        # except KeyError as k:
+        #     logger.error("Connection information is missing : " + k.args[0])
+        #     logger.error(
+        #         "Please try again after providing the missing information !")
+        #     raise Exception("Key error associated with missing " + k.args[0])
 
         # check if connection preferences are indicated
-        if "dbName" in self.cfg["arangodb"]:
-            logger.info("DB name for connection: " +
-                        str(self.cfg["arangodb"][self.mscp.DB_NAME]))
-            db_dbName = self.cfg["arangodb"][self.mscp.DB_NAME]
-        else:
-            db_dbName = ""
-        if "username" in self.cfg["arangodb"]:
-            logger.info("user name for connection: " +
-                        str(self.cfg["arangodb"][self.mscp.DB_USER_NAME]))
-            db_user_name = self.cfg["arangodb"][self.mscp.DB_USER_NAME]
-        else:
-            db_user_name = ""
-        if "password" in self.cfg["arangodb"]:
-            logger.info("A specific password was requested !")
-            db_password = self.cfg["arangodb"][self.mscp.DB_PASSWORD]
-        else:
-            db_password = ""
+        # if "dbName" in self.cfg["arangodb"]:
+        #     logger.info("DB name for connection: " +
+        #                 str(self.cfg["arangodb"][self.mscp.DB_NAME]))
+        #     db_dbName = self.cfg["arangodb"][self.mscp.DB_NAME]
+        # else:
+        #     db_dbName = ""
+        # if "username" in self.cfg["arangodb"]:
+        #     logger.info("user name for connection: " +
+        #                 str(self.cfg["arangodb"][self.mscp.DB_USER_NAME]))
+        #     db_user_name = self.cfg["arangodb"][self.mscp.DB_USER_NAME]
+        # else:
+        #     db_user_name = ""
+        # if "password" in self.cfg["arangodb"]:
+        #     logger.info("A specific password was requested !")
+        #     db_password = self.cfg["arangodb"][self.mscp.DB_PASSWORD]
+        # else:
+        #     db_password = ""
 
-        if self.mscp.DB_CONN_PROTOCOL in self.cfg["arangodb"]:
-            db_conn_protocol = self.cfg["arangodb"][self.mscp.DB_CONN_PROTOCOL]
-        else:
-            db_conn_protocol = "http"
+        # if self.mscp.DB_CONN_PROTOCOL in self.cfg["arangodb"]:
+        #     db_conn_protocol = self.cfg["arangodb"][self.mscp.DB_CONN_PROTOCOL]
+        # else:
+        #     db_conn_protocol = "http"
 
         if self.mscp.DB_REPLICATION_FACTOR in self.cfg["arangodb"]:
             db_replication_factor = self.cfg["arangodb"][
@@ -120,48 +133,51 @@ class ArangoPipeAdmin:
         else:
             db_replication_factor = None
 
-        if self.mscp.DB_ROOT_USER in self.cfg["arangodb"]:
-            logger.info("A root user was specified, persisting...")
+        # if self.mscp.DB_ROOT_USER in self.cfg["arangodb"]:
+        #     logger.info("A root user was specified, persisting...")
 
-        if self.mscp.DB_ROOT_USER_PASSWORD in self.cfg["arangodb"]:
-            logger.info("A root user password was specified, persisting...")
+        # if self.mscp.DB_ROOT_USER_PASSWORD in self.cfg["arangodb"]:
+        #     logger.info("A root user password was specified, persisting...")
 
-        try:
-            self.create_db(
-                db_serv_host,
-                db_serv_port,
-                db_serv_name,
-                db_end_point,
-                db_dbName,
-                db_user_name,
-                db_password,
-                db_conn_protocol,
-            )
+        #Provision the graph
+        self.create_enterprise_ml_graph(db_replication_factor)
 
-            # If you could create a DB, proceed with provisioning the graph.
-            # Otherwise you had an issue creating the database.
-            if self.db is not None:
-                self.create_enterprise_ml_graph(db_replication_factor)
+        # try:
+        #     self.create_db(
+        #         db_serv_host,
+        #         db_serv_port,
+        #         db_serv_name,
+        #         db_end_point,
+        #         db_dbName,
+        #         db_user_name,
+        #         db_password,
+        #         db_conn_protocol,
+        #     )
 
-                if persist_conn:
-                    self.config.dump_data()
-        except Exception:
-            logger.error("Error connecting to DB, trying again...")
-            time.sleep(2)
-            self.create_db(
-                db_serv_host,
-                db_serv_port,
-                db_serv_name,
-                db_end_point,
-                db_dbName,
-                db_user_name,
-                db_password,
-                db_conn_protocol,
-            )
-            self.create_enterprise_ml_graph(db_replication_factor)
-            if persist_conn:
-                self.config.dump_data()
-            logger.error("Obtained connection with retry!")
+        #     # If you could create a DB, proceed with provisioning the graph.
+        #     # Otherwise you had an issue creating the database.
+        #     if self.db is not None:
+        #         self.create_enterprise_ml_graph(db_replication_factor)
+
+        #         if persist_conn:
+        #             self.config.dump_data()
+        # except Exception:
+        #     logger.error("Error connecting to DB, trying again...")
+        #     time.sleep(2)
+        #     self.create_db(
+        #         db_serv_host,
+        #         db_serv_port,
+        #         db_serv_name,
+        #         db_end_point,
+        #         db_dbName,
+        #         db_user_name,
+        #         db_password,
+        #         db_conn_protocol,
+        #     )
+        #     self.create_enterprise_ml_graph(db_replication_factor)
+        #     if persist_conn:
+        #         self.config.dump_data()
+        #     logger.error("Obtained connection with retry!")
 
         return
 
@@ -202,109 +218,109 @@ class ArangoPipeAdmin:
     def get_config(self):
         return self.config
 
-    def create_db(
-        self,
-        db_srv_host,
-        db_srv_port,
-        db_serv_name,
-        db_end_point,
-        db_dbName,
-        db_user_name,
-        db_password,
-        db_conn_protocol,
-    ):
+    # def create_db(
+    #     self,
+    #     db_srv_host,
+    #     db_srv_port,
+    #     db_serv_name,
+    #     db_end_point,
+    #     db_dbName,
+    #     db_user_name,
+    #     db_password,
+    #     db_conn_protocol,
+    # ):
 
-        host_connection = (db_conn_protocol + "://" + db_srv_host + ":" +
-                           str(db_srv_port))
-        client = ArangoClient(hosts=host_connection)
-        logger.debug("Connection reuse: " + str(self.reuse_connection))
-        if not self.reuse_connection:
-            API_ENDPOINT = (host_connection + "/_db/_system/" + db_end_point +
-                            "/" + db_serv_name)
-            print("API endpoint: " + API_ENDPOINT)
+    #     host_connection = (db_conn_protocol + "://" + db_srv_host + ":" +
+    #                        str(db_srv_port))
+    #     client = ArangoClient(hosts=host_connection)
+    #     logger.debug("Connection reuse: " + str(self.reuse_connection))
+    #     if not self.reuse_connection:
+    #         API_ENDPOINT = (host_connection + "/_db/_system/" + db_end_point +
+    #                         "/" + db_serv_name)
+    #         print("API endpoint: " + API_ENDPOINT)
 
-            if db_dbName:
-                logger.info("DB name preferrence: " + str(db_dbName))
-            if db_user_name:
-                logger.info("DB user name preferrence: " + str(db_user_name))
-            if db_password:
-                logger.info(
-                    "Password preference for managed connection was indicated !"
-                )
+    #         if db_dbName:
+    #             logger.info("DB name preferrence: " + str(db_dbName))
+    #         if db_user_name:
+    #             logger.info("DB user name preferrence: " + str(db_user_name))
+    #         if db_password:
+    #             logger.info(
+    #                 "Password preference for managed connection was indicated !"
+    #             )
 
-            api_data = {
-                self.mscp.DB_NAME: db_dbName,
-                self.mscp.DB_USER_NAME: db_user_name,
-                self.mscp.DB_PASSWORD: db_password,
-            }
-            logger.info("Requesting a managed service database...")
+    #         api_data = {
+    #             self.mscp.DB_NAME: db_dbName,
+    #             self.mscp.DB_USER_NAME: db_user_name,
+    #             self.mscp.DB_PASSWORD: db_password,
+    #         }
+    #         logger.info("Requesting a managed service database...")
 
-            if (self.mscp.DB_ROOT_USER_PASSWORD in self.cfg["arangodb"]
-                    and self.mscp.DB_ROOT_USER in self.cfg["arangodb"]):
-                r = requests.post(
-                    url=API_ENDPOINT,
-                    auth=HTTPBasicAuth(
-                        self.cfg["arangodb"][self.mscp.DB_ROOT_USER],
-                        self.cfg["arangodb"][self.mscp.DB_ROOT_USER_PASSWORD],
-                    ),
-                    json=api_data,
-                    verify=True,
-                )
-            else:
-                r = requests.post(url=API_ENDPOINT, json=api_data, verify=True)
+    #         if (self.mscp.DB_ROOT_USER_PASSWORD in self.cfg["arangodb"]
+    #                 and self.mscp.DB_ROOT_USER in self.cfg["arangodb"]):
+    #             r = requests.post(
+    #                 url=API_ENDPOINT,
+    #                 auth=HTTPBasicAuth(
+    #                     self.cfg["arangodb"][self.mscp.DB_ROOT_USER],
+    #                     self.cfg["arangodb"][self.mscp.DB_ROOT_USER_PASSWORD],
+    #                 ),
+    #                 json=api_data,
+    #                 verify=True,
+    #             )
+    #         else:
+    #             r = requests.post(url=API_ENDPOINT, json=api_data, verify=True)
 
-            if r.status_code == 409 or r.status_code == 400:
-                logger.error(
-                    "It appears that you are attempting to connecting using \
-                             existing connection information. So either set reconnect = True when you create ArangoPipeAdmin or recreate a connection config and try again!"
+    #         if r.status_code == 409 or r.status_code == 400:
+    #             logger.error(
+    #                 "It appears that you are attempting to connecting using \
+    #                          existing connection information. So either set reconnect = True when you create ArangoPipeAdmin or recreate a connection config and try again!"
 
-                    # noqa E501
-                )
-                return
+    #                 # noqa E501
+    #             )
+    #             return
 
-            assert r.status_code == 200, (
-                "Managed DB endpoint is unavailable !, reason: " + r.reason +
-                " err code: " + str(r.status_code))
-            result = json.loads(r.text)
-            logger.info("Managed service database was created !")
-            ms_dbName = result["dbName"]
-            ms_user_name = result["username"]
-            ms_password = result["password"]
-            self.cfg["arangodb"][self.mscp.DB_NAME] = ms_dbName
-            self.cfg["arangodb"][self.mscp.DB_USER_NAME] = ms_user_name
-            self.cfg["arangodb"][self.mscp.DB_PASSWORD] = ms_password
-            self.cfg["arangodb"][self.mscp.DB_SERVICE_HOST] = db_srv_host
-            self.cfg["arangodb"][self.mscp.DB_SERVICE_NAME] = db_serv_name
-            self.cfg["arangodb"][self.mscp.DB_SERVICE_END_POINT] = db_end_point
-            self.cfg["arangodb"][self.mscp.DB_SERVICE_PORT] = db_srv_port
-            self.cfg["arangodb"][self.mscp.DB_CONN_PROTOCOL] = db_conn_protocol
+    #         assert r.status_code == 200, (
+    #             "Managed DB endpoint is unavailable !, reason: " + r.reason +
+    #             " err code: " + str(r.status_code))
+    #         result = json.loads(r.text)
+    #         logger.info("Managed service database was created !")
+    #         ms_dbName = result["dbName"]
+    #         ms_user_name = result["username"]
+    #         ms_password = result["password"]
+    #         self.cfg["arangodb"][self.mscp.DB_NAME] = ms_dbName
+    #         self.cfg["arangodb"][self.mscp.DB_USER_NAME] = ms_user_name
+    #         self.cfg["arangodb"][self.mscp.DB_PASSWORD] = ms_password
+    #         self.cfg["arangodb"][self.mscp.DB_SERVICE_HOST] = db_srv_host
+    #         self.cfg["arangodb"][self.mscp.DB_SERVICE_NAME] = db_serv_name
+    #         self.cfg["arangodb"][self.mscp.DB_SERVICE_END_POINT] = db_end_point
+    #         self.cfg["arangodb"][self.mscp.DB_SERVICE_PORT] = db_srv_port
+    #         self.cfg["arangodb"][self.mscp.DB_CONN_PROTOCOL] = db_conn_protocol
 
-        else:
-            if self.use_supp_config_to_reconnect:
-                ms_dbName = self.cfg["arangodb"][self.mscp.DB_NAME]
-                ms_user_name = self.cfg["arangodb"][self.mscp.DB_USER_NAME]
-                ms_password = self.cfg["arangodb"][self.mscp.DB_PASSWORD]
+    #     else:
+    #         if self.use_supp_config_to_reconnect:
+    #             ms_dbName = self.cfg["arangodb"][self.mscp.DB_NAME]
+    #             ms_user_name = self.cfg["arangodb"][self.mscp.DB_USER_NAME]
+    #             ms_password = self.cfg["arangodb"][self.mscp.DB_PASSWORD]
 
-            else:
-                disk_cfg = ArangoPipeConfig()
-                pcfg = disk_cfg.get_cfg()  # persisted config values
-                ms_dbName = pcfg["arangodb"][self.mscp.DB_NAME]
-                ms_user_name = pcfg["arangodb"][self.mscp.DB_USER_NAME]
-                ms_password = pcfg["arangodb"][self.mscp.DB_PASSWORD]
-                self.config = disk_cfg
-                self.cfg = disk_cfg.cfg
-        # Connect to arangopipe database as administrative user.
-        # This returns an API wrapper for "test" database.
-        print("Host Connection: " + str(host_connection))
-        client = ArangoClient(hosts=host_connection)
-        # This is for the case when it is not a 409 or 400
-        # but due to the OASIS connection issue
+    #         else:
+    #             disk_cfg = ArangoPipeConfig()
+    #             pcfg = disk_cfg.get_cfg()  # persisted config values
+    #             ms_dbName = pcfg["arangodb"][self.mscp.DB_NAME]
+    #             ms_user_name = pcfg["arangodb"][self.mscp.DB_USER_NAME]
+    #             ms_password = pcfg["arangodb"][self.mscp.DB_PASSWORD]
+    #             self.config = disk_cfg
+    #             self.cfg = disk_cfg.cfg
+    #     # Connect to arangopipe database as administrative user.
+    #     # This returns an API wrapper for "test" database.
+    #     print("Host Connection: " + str(host_connection))
+    #     client = ArangoClient(hosts=host_connection)
+    #     # This is for the case when it is not a 409 or 400
+    #     # but due to the OASIS connection issue
 
-        db = client.db(ms_dbName, ms_user_name, ms_password, verify=True)
+    #     db = client.db(ms_dbName, ms_user_name, ms_password, verify=True)
 
-        self.db = db
+    #     self.db = db
 
-        return
+    #     return
 
     def create_enterprise_ml_graph(self, db_replication_factor):
 
@@ -601,109 +617,109 @@ class ArangoPipeAdmin:
 
         return result
 
-    def delete_all_databases(
-        self,
-        preserve=[
-            "arangopipe",
-            "facebook_db",
-            "fb_node2vec_db",
-            "node2vecdb",
-            "_system",
-        ],
-    ):
-        db_srv_host = self.cfg["arangodb"][self.mscp.DB_SERVICE_HOST]
-        db_srv_port = self.cfg["arangodb"][self.mscp.DB_SERVICE_PORT]
+    # def delete_all_databases(
+    #     self,
+    #     preserve=[
+    #         "arangopipe",
+    #         "facebook_db",
+    #         "fb_node2vec_db",
+    #         "node2vecdb",
+    #         "_system",
+    #     ],
+    # ):
+    #     db_srv_host = self.cfg["arangodb"][self.mscp.DB_SERVICE_HOST]
+    #     db_srv_port = self.cfg["arangodb"][self.mscp.DB_SERVICE_PORT]
 
-        try:
-            root_user = self.cfg["arangodb"][self.mscp.DB_ROOT_USER]
-            root_user_password = self.cfg["arangodb"][
-                self.mscp.DB_ROOT_USER_PASSWORD]
-        except KeyError as k:
-            msg = ("Root credentials are unvailable, try again " +
-                   "with a new connection and credentials for root provided")
-            logger.error(msg)
-            logger.error("Credential information that is missing : " +
-                         k.args[0])
-            raise Exception("Key error associated with missing " + k.args[0])
+    #     try:
+    #         root_user = self.cfg["arangodb"][self.mscp.DB_ROOT_USER]
+    #         root_user_password = self.cfg["arangodb"][
+    #             self.mscp.DB_ROOT_USER_PASSWORD]
+    #     except KeyError as k:
+    #         msg = ("Root credentials are unvailable, try again " +
+    #                "with a new connection and credentials for root provided")
+    #         logger.error(msg)
+    #         logger.error("Credential information that is missing : " +
+    #                      k.args[0])
+    #         raise Exception("Key error associated with missing " + k.args[0])
 
-        db_conn_protocol = self.cfg["arangodb"][self.mscp.DB_CONN_PROTOCOL]
+    #     db_conn_protocol = self.cfg["arangodb"][self.mscp.DB_CONN_PROTOCOL]
 
-        host_connection = (db_conn_protocol + "://" + db_srv_host + ":" +
-                           str(db_srv_port))
-        if not root_user and not root_user_password:
-            msg = (
-                "You will need to provide root credentials while connecting to perform"
-                + " deletes of databases ! Please try again after doing so.")
-            logger.info(msg)
-            return
+    #     host_connection = (db_conn_protocol + "://" + db_srv_host + ":" +
+    #                        str(db_srv_port))
+    #     if not root_user and not root_user_password:
+    #         msg = (
+    #             "You will need to provide root credentials while connecting to perform"
+    #             + " deletes of databases ! Please try again after doing so.")
+    #         logger.info(msg)
+    #         return
 
-        client = ArangoClient(hosts=host_connection)
-        if "_system" not in preserve:
-            preserve.append("_system")
+    #     client = ArangoClient(hosts=host_connection)
+    #     if "_system" not in preserve:
+    #         preserve.append("_system")
 
-        sys_db = client.db("_system",
-                           username=root_user,
-                           password=root_user_password,
-                           verify=True)
+    #     sys_db = client.db("_system",
+    #                        username=root_user,
+    #                        password=root_user_password,
+    #                        verify=True)
 
-        try:
+    #     try:
 
-            all_db = sys_db.databases()
-            print("There were " + str(len(all_db) - 4) + " databases!")
+    #         all_db = sys_db.databases()
+    #         print("There were " + str(len(all_db) - 4) + " databases!")
 
-            for the_db in all_db:
-                if the_db not in preserve:
-                    sys_db.delete_database(the_db)
+    #         for the_db in all_db:
+    #             if the_db not in preserve:
+    #                 sys_db.delete_database(the_db)
 
-        except DatabaseListError as err:
-            logger.error(err)
-            print("Error code: " + str(err.error_code) + " received !")
-            print("Error Message: " + str(err.error_message))
+    #     except DatabaseListError as err:
+    #         logger.error(err)
+    #         print("Error code: " + str(err.error_code) + " received !")
+    #         print("Error Message: " + str(err.error_message))
 
-        return
+    #     return
 
-    def delete_database(self, db_to_delete):
-        db_srv_host = self.cfg["arangodb"][self.mscp.DB_SERVICE_HOST]
-        db_srv_port = self.cfg["arangodb"][self.mscp.DB_SERVICE_PORT]
-        try:
-            root_user = self.cfg["arangodb"][self.mscp.DB_ROOT_USER]
-            root_user_password = self.cfg["arangodb"][
-                self.mscp.DB_ROOT_USER_PASSWORD]
-        except KeyError as k:
-            msg = ("Root credentials are unvailable, try again " +
-                   "with a new connection and credentials for root provided")
-            logger.error(msg)
-            logger.error("Credential information that is missing : " +
-                         k.args[0])
-            raise Exception("Key error associated with missing " + k.args[0])
+    # def delete_database(self, db_to_delete):
+    #     db_srv_host = self.cfg["arangodb"][self.mscp.DB_SERVICE_HOST]
+    #     db_srv_port = self.cfg["arangodb"][self.mscp.DB_SERVICE_PORT]
+    #     try:
+    #         root_user = self.cfg["arangodb"][self.mscp.DB_ROOT_USER]
+    #         root_user_password = self.cfg["arangodb"][
+    #             self.mscp.DB_ROOT_USER_PASSWORD]
+    #     except KeyError as k:
+    #         msg = ("Root credentials are unvailable, try again " +
+    #                "with a new connection and credentials for root provided")
+    #         logger.error(msg)
+    #         logger.error("Credential information that is missing : " +
+    #                      k.args[0])
+    #         raise Exception("Key error associated with missing " + k.args[0])
 
-        db_conn_protocol = self.cfg["arangodb"][self.mscp.DB_CONN_PROTOCOL]
+    #     db_conn_protocol = self.cfg["arangodb"][self.mscp.DB_CONN_PROTOCOL]
 
-        host_connection = (db_conn_protocol + "://" + db_srv_host + ":" +
-                           str(db_srv_port))
-        if not root_user and not root_user_password:
-            msg = (
-                "You will need to provide root credentials while connecting to perform"
-                + " deletes of databases ! Please try again after doing so.")
-            logger.info(msg)
-            return
+    #     host_connection = (db_conn_protocol + "://" + db_srv_host + ":" +
+    #                        str(db_srv_port))
+    #     if not root_user and not root_user_password:
+    #         msg = (
+    #             "You will need to provide root credentials while connecting to perform"
+    #             + " deletes of databases ! Please try again after doing so.")
+    #         logger.info(msg)
+    #         return
 
-        client = ArangoClient(hosts=host_connection)
+    #     client = ArangoClient(hosts=host_connection)
 
-        sys_db = client.db("_system",
-                           username=root_user,
-                           password=root_user_password,
-                           verify=True)
-        try:
-            if sys_db.has_database(db_to_delete):
-                sys_db.delete_database(db_to_delete)
-            else:
-                logger.error("The database, " + db_to_delete +
-                             ", does not exist !")
+    #     sys_db = client.db("_system",
+    #                        username=root_user,
+    #                        password=root_user_password,
+    #                        verify=True)
+    #     try:
+    #         if sys_db.has_database(db_to_delete):
+    #             sys_db.delete_database(db_to_delete)
+    #         else:
+    #             logger.error("The database, " + db_to_delete +
+    #                          ", does not exist !")
 
-        except DatabaseListError as err:
-            logger.error(err)
-            print("Error code: " + str(err.error_code) + " received !")
-            print("Error Message: " + str(err.error_message))
+    #     except DatabaseListError as err:
+    #         logger.error(err)
+    #         print("Error code: " + str(err.error_code) + " received !")
+    #         print("Error Message: " + str(err.error_message))
 
-        return
+    #     return

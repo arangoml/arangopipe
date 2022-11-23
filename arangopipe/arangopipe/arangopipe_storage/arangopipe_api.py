@@ -9,6 +9,7 @@ Created on Sat Apr 13 08:35:58 2019
 import logging
 
 from arango import AQLQueryExecuteError, ArangoClient
+from arango.database import StandardDatabase
 
 from arangopipe.arangopipe_storage.arangopipe_config import (
     APConfigDict,
@@ -46,10 +47,10 @@ class ArangoPipe:
     (4) Register you model with ArangoPipe
     """
 
-    def __init__(self, config: ArangoPipeConfig):
+    def __init__(self, db: StandardDatabase, config: ArangoPipeConfig):
         self.cfg = config.get_cfg()
         self.emlg = None
-        self.db = None
+        self.db = db
         self.mscp = ManagedServiceConnParam()
         self.init_graph()
         self.heart_beat()
@@ -250,21 +251,21 @@ class ArangoPipe:
 
     def init_graph(self) -> None:
         """Initialize a graph when an instance of ArangoPipe is provisioned."""
-        db_serv_host = self.cfg["arangodb"]["DB_service_host"]
-        db_serv_port = self.cfg["arangodb"]["DB_service_port"]
-        db_name = self.cfg["arangodb"]["dbName"]
-        db_user_name = self.cfg["arangodb"]["username"]
-        db_passwd = self.cfg["arangodb"]["password"]
-        db_conn_protocol = self.cfg["arangodb"][self.mscp.DB_CONN_PROTOCOL]
+        # db_serv_host = self.cfg["arangodb"]["DB_service_host"]
+        # db_serv_port = self.cfg["arangodb"]["DB_service_port"]
+        # db_name = self.cfg["arangodb"]["dbName"]
+        # db_user_name = self.cfg["arangodb"]["username"]
+        # db_passwd = self.cfg["arangodb"]["password"]
+        # db_conn_protocol = self.cfg["arangodb"][self.mscp.DB_CONN_PROTOCOL]
 
-        host_conn_str = (db_conn_protocol + "://" + db_serv_host + ":" +
-                         str(db_serv_port))
-        client = ArangoClient(hosts=host_conn_str)
+        # host_conn_str = (db_conn_protocol + "://" + db_serv_host + ":" +
+        #                  str(db_serv_port))
+        # client = ArangoClient(hosts=host_conn_str)
 
-        self.db = client.db(name=db_name,
-                            username=db_user_name,
-                            password=db_passwd,
-                            verify=True)
+        # self.db = client.db(name=db_name,
+        #                     username=db_user_name,
+        #                     password=db_passwd,
+        #                     verify=True)
 
         if self.db is None:
             return
