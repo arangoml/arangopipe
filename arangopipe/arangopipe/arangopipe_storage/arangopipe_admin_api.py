@@ -9,9 +9,10 @@ Created on Thu Apr 25 09:30:33 2019
 import logging
 
 import requests
-#from arango import ArangoClient, DatabaseListError
-#from arango.database import StandardDatabase
-#from requests.auth import HTTPBasicAuth
+
+# from arango import ArangoClient, DatabaseListError
+# from arango.database import StandardDatabase
+# from requests.auth import HTTPBasicAuth
 
 from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig
 from arangopipe.arangopipe_storage.managed_service_conn_parameters import (
