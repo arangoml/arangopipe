@@ -46,7 +46,8 @@ class ArangoPipeAdmin:
                  reuse_connection=True,
                  config=None,
                  persist_conn=True,
-                 client_url=None):
+                 client_url=None,
+                 create_graph: bool = True):
         self.reuse_connection = reuse_connection
         self.emlg = None
         self.config = None
@@ -140,7 +141,8 @@ class ArangoPipeAdmin:
         #     logger.info("A root user password was specified, persisting...")
 
         #Provision the graph
-        self.create_enterprise_ml_graph(db_replication_factor)
+        if create_graph:
+            self.create_enterprise_ml_graph(db_replication_factor)
 
         # try:
         #     self.create_db(
@@ -390,9 +392,11 @@ class ArangoPipeAdmin:
             "featureset_dataset",
         ]
         for edge, fromv, tov in zip(edge_names, from_list, to_list):
-            if not self.emlg.has_edge_definition(edge):
+            if not self.db.has_collection(edge):
                 self.db.create_collection(
-                    edge, edge=True, replication_factor=db_replication_factor)
+                    edge, edge=True, replication_factor=db_replication_factor
+                )
+            if not self.emlg.has_edge_definition(edge):
                 self.emlg.create_edge_definition(
                     edge_collection=edge,
                     from_vertex_collections=[fromv],

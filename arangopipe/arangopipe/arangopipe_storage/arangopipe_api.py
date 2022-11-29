@@ -53,7 +53,9 @@ class ArangoPipe:
         self.db = db
         self.mscp = ManagedServiceConnParam()
         self.init_graph()
-        self.heart_beat()
+        self.heart_beat()        
+        if db is None:
+           raise ValueError("db parameter is null")
 
     def heart_beat(self) -> None:
         try:
@@ -268,7 +270,7 @@ class ArangoPipe:
         #                     verify=True)
 
         if self.db is None:
-            return
+            raise ValueError("db parameter is null")
         self.emlg = self.db.graph(self.cfg["mlgraph"]["graphname"])
 
         return
