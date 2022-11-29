@@ -11,21 +11,20 @@ from typing import Any, Dict, Optional, cast
 import yaml
 
 from arangopipe.arangopipe_storage.managed_service_conn_parameters import (
-    ManagedServiceConnParam, )
+    ManagedServiceConnParam,
+)
 
 APConfigDict = Dict[str, Dict[str, Any]]
 ConnectionConfig = Dict[str, Any]
 
 
 class ArangoPipeConfig:
-
     def __init__(self) -> None:
         self.cfg: Optional[APConfigDict] = None
         self.mscp = ManagedServiceConnParam()
 
     def read_data(self) -> APConfigDict:
-        file_name = os.path.join(os.path.dirname(__file__),
-                                 "arangopipe_config.yaml")
+        file_name = os.path.join(os.path.dirname(__file__), "arangopipe_config.yaml")
         with open(file_name, "r") as file_descriptor:
             cfg = yaml.load(file_descriptor, Loader=yaml.FullLoader)
         return cast(APConfigDict, cfg)
@@ -44,8 +43,9 @@ class ArangoPipeConfig:
                 cfg = yaml.dump(self.cfg, file_descriptor)
                 return cfg
         except (IOError, EOFError) as e:
-            print("Error writing config file to specified location: {}".format(
-                e.args[-1]))
+            print(
+                "Error writing config file to specified location: {}".format(e.args[-1])
+            )
             return None
 
     def create_config(self, file_path: str) -> ConnectionConfig:
@@ -56,25 +56,22 @@ class ArangoPipeConfig:
             for key, value in cfg["arangodb"].items():
                 conn_config[key] = value
         except (yaml.YAMLError, IOError, EOFError) as exc:
-            print("Error reading the config file from the path specified {}".
-                  format(exc.args[-1]))
+            print(
+                "Error reading the config file from the path specified {}".format(
+                    exc.args[-1]
+                )
+            )
 
         return conn_config
 
     def dump_data(self) -> Optional[APConfigDict]:
-        file_name = os.path.join(os.path.dirname(__file__),
-                                 "arangopipe_config.yaml")
+        file_name = os.path.join(os.path.dirname(__file__), "arangopipe_config.yaml")
         with open(file_name, "w") as file_descriptor:
             cfg = yaml.dump(self.cfg, file_descriptor)
         return cfg
 
     def create_connection_config(self, conn_params: Dict[str, Any]):
-        self.cfg = {
-            "arangodb": {},
-            "mlgraph": {
-                "graphname": "enterprise_ml_graph"
-            }
-        }
+        self.cfg = {"arangodb": {}, "mlgraph": {"graphname": "enterprise_ml_graph"}}
         for key, value in conn_params.items():
             self.cfg["arangodb"][key] = value
         return self

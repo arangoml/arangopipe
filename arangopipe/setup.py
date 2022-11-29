@@ -7,12 +7,14 @@ HERE = pathlib.Path(__file__).resolve().parents[1]
 # The text of the README file
 README = (HERE / "README.md").read_text()
 
-requirements = ['python-arango',
-                'pandas',
-                'PyYAML==5.1.1',
-                'sklearn2',
-                'yapf',
-                'autopep8']
+requirements = [
+    "python-arango",
+    "pandas",
+    "PyYAML==5.1.1",
+    "sklearn2",
+    "yapf",
+    "autopep8",
+]
 
 # This call to setup() does all the work
 setup(
@@ -28,9 +30,14 @@ setup(
     classifiers=[
         "License :: OSI Approved :: Apache Software License",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.7"],
-    packages=["arangopipe", "arangopipe.arangopipe_storage", "arangopipe.arangopipe_analytics"],
-    package_data={'config': ['arangopipe/arangopipe_storage/arangopipe_config.yaml']},
+        "Programming Language :: Python :: 3.7",
+    ],
+    packages=[
+        "arangopipe",
+        "arangopipe.arangopipe_storage",
+        "arangopipe.arangopipe_analytics",
+    ],
+    package_data={"config": ["arangopipe/arangopipe_storage/arangopipe_config.yaml"]},
     include_package_data=True,
     install_requires=requirements,
     python_requires=">=3.7",
@@ -44,5 +51,5 @@ setup(
             "types-requests~=2.28",
             "types-urllib3~=1.26",
         ]
-    }
+    },
 )
