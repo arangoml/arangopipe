@@ -33,9 +33,8 @@ if __name__ == "__main__":
     the_config = admin.get_config()
     ap = ArangoPipe(config=the_config)
     # Read the wine-quality csv file (make sure you're running this from the root of MLflow!)
-    wine_path = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), "wine-quality.csv"
-    )
+    wine_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                             "wine-quality.csv")
     data = pd.read_csv(wine_path)
 
     ds_reg = ap.lookup_dataset("wine dataset")
@@ -67,7 +66,11 @@ if __name__ == "__main__":
         print("  MAE: %s" % mae)
         print("  R2: %s" % r2)
 
-        model_params = {"l1_ratio": l1_ratio, "alpha": alpha, "run_id": str(ruuid)}
+        model_params = {
+            "l1_ratio": l1_ratio,
+            "alpha": alpha,
+            "run_id": str(ruuid)
+        }
         model_perf = {
             "rmse": rmse,
             "r2": r2,

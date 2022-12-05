@@ -10,6 +10,7 @@ from abc import ABC
 
 
 class DatasetShiftDetector(ABC):
+
     def detect_dataset_shift(dataframe1, dataframe2):
         pass
 
