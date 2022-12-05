@@ -8,16 +8,9 @@ Created on Sat Apr 13 08:35:58 2019
 
 import logging
 
-from arango import AQLQueryExecuteError, ArangoClient
+from arango import AQLQueryExecuteError
 from arango.database import StandardDatabase
 
-from arangopipe.arangopipe_storage.arangopipe_config import (
-    APConfigDict,
-    ArangoPipeConfig,
-)
-from arangopipe.arangopipe_storage.managed_service_conn_parameters import (
-    ManagedServiceConnParam,
-)
 
 # create logger with 'spam_application'
 logger = logging.getLogger("arangopipe_logger")

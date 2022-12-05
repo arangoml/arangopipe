@@ -9,13 +9,6 @@ Created on Thu Apr 25 09:30:33 2019
 import logging
 from typing import Optional
 
-import requests
-
-from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig
-from arangopipe.arangopipe_storage.managed_service_conn_parameters import (
-    ManagedServiceConnParam,
-)
-
 # import traceback
 # create logger with 'spam_application'
 logger = logging.getLogger("arangopipe_admin_logger")
