@@ -8,7 +8,6 @@ Created on Thu Dec  5 09:05:19 2019
 
 
 class ManagedServiceConnParam:
-
     @property
     def DB_SERVICE_HOST(self) -> str:
         return "DB_service_host"

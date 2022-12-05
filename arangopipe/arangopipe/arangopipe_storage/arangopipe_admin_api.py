@@ -13,7 +13,8 @@ import requests
 
 from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig
 from arangopipe.arangopipe_storage.managed_service_conn_parameters import (
-    ManagedServiceConnParam, )
+    ManagedServiceConnParam,
+)
 
 # import traceback
 # create logger with 'spam_application'
@@ -26,8 +27,7 @@ fh.setLevel(logging.DEBUG)
 ch = logging.StreamHandler()
 ch.setLevel(logging.ERROR)
 # create formatter and add it to the handlers
-formatter = logging.Formatter(
-    "%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 fh.setFormatter(formatter)
 ch.setFormatter(formatter)
 # add the handlers to the logger
@@ -36,7 +36,6 @@ logger.addHandler(ch)
 
 
 class ArangoPipeAdmin:
-
     def __init__(
         self,
         db,
@@ -46,8 +45,7 @@ class ArangoPipeAdmin:
         create_graph: bool = True,
     ):
         if db is None:
-            logger.error(
-                "A database object is required to initialize ArangoPipeAdmin")
+            logger.error("A database object is required to initialize ArangoPipeAdmin")
             raise Exception("arango_db object parameter is missing")
         else:
             self.db = db
@@ -176,7 +174,8 @@ class ArangoPipeAdmin:
         for edge, fromv, tov in zip(edge_names, from_list, to_list):
             if not self.db.has_collection(edge):
                 self.db.create_collection(
-                    edge, edge=True, replication_factor=db_replication_factor)
+                    edge, edge=True, replication_factor=db_replication_factor
+                )
             if not self.emlg.has_edge_definition(edge):
                 self.emlg.create_edge_definition(
                     edge_collection=edge,
@@ -229,10 +228,8 @@ class ArangoPipeAdmin:
         deploy_info = {"tag": dep_tag}
         dep_reg = deployment.insert(deploy_info)
         # Link the deployment to the model parameters
-        dep_model_params_edge = self.emlg.edge_collection(
-            "deployment_modelparams")
-        dep_model_params_key = dep_reg["_key"] + "-" + tagged_model_params[
-            "_key"]
+        dep_model_params_edge = self.emlg.edge_collection("deployment_modelparams")
+        dep_model_params_key = dep_reg["_key"] + "-" + tagged_model_params["_key"]
         the_dep_model_param_edge = {
             "_key": dep_model_params_key,
             "_from": dep_reg["_id"],
@@ -242,8 +239,7 @@ class ArangoPipeAdmin:
         dep_model_params_edge.insert(the_dep_model_param_edge)
 
         # Link the deployment to the featureset
-        dep_featureset_edge = self.emlg.edge_collection(
-            "deployment_featureset")
+        dep_featureset_edge = self.emlg.edge_collection("deployment_featureset")
         dep_featureset_key = dep_reg["_key"] + "-" + tagged_featureset["_key"]
         the_dep_featureset_edge = {
             "_key": dep_featureset_key,
@@ -292,15 +288,15 @@ class ArangoPipeAdmin:
         if self.emlg.has_vertex_collection(vertex_to_remove):
             self.emlg.delete_vertex_collection(vertex_to_remove, purge)
 
-            logger.info("Vertex collection " + vertex_to_remove +
-                        " has been deleted!")
+            logger.info("Vertex collection " + vertex_to_remove + " has been deleted!")
         else:
             logger.error("Vertex, " + vertex_to_remove + " does not exist!")
 
         return
 
-    def add_edge_definition_to_arangopipe(self, edge_col_name, edge_name,
-                                          from_vertex_name, to_vertex_name):
+    def add_edge_definition_to_arangopipe(
+        self, edge_col_name, edge_name, from_vertex_name, to_vertex_name
+    ):
         rf = self.db_replication_factor
 
         if not self.db.has_graph(self.graph_name):
@@ -311,20 +307,26 @@ class ArangoPipeAdmin:
         # Check if all data needed to create an edge exists, if so, create it
 
         if not self.emlg.has_vertex_collection(from_vertex_name):
-            logger.error("Source vertex, " + from_vertex_name +
-                         " does not exist, aborting edge creation!")
+            logger.error(
+                "Source vertex, "
+                + from_vertex_name
+                + " does not exist, aborting edge creation!"
+            )
             return
         elif not self.emlg.has_vertex_collection(to_vertex_name):
-            logger.error("Destination vertex, " + to_vertex_name +
-                         " does not exist, aborting edge creation!")
+            logger.error(
+                "Destination vertex, "
+                + to_vertex_name
+                + " does not exist, aborting edge creation!"
+            )
             return
 
         else:
             if not self.emlg.has_edge_definition(edge_name):
                 if not self.emlg.has_edge_collection(edge_col_name):
-                    self.db.create_collection(edge_col_name,
-                                              edge=True,
-                                              replication_factor=rf)
+                    self.db.create_collection(
+                        edge_col_name, edge=True, replication_factor=rf
+                    )
 
                 self.emlg.create_edge_definition(
                     edge_collection=edge_col_name,
@@ -336,8 +338,7 @@ class ArangoPipeAdmin:
 
         return
 
-    def add_edges_to_arangopipe(self, edge_col_name, from_vertex_list,
-                                to_vertex_list):
+    def add_edges_to_arangopipe(self, edge_col_name, from_vertex_list, to_vertex_list):
         rf = self.db_replication_factor
 
         if not self.db.has_graph(self.graph_name):
@@ -348,12 +349,9 @@ class ArangoPipeAdmin:
         # Check if all data needed to create an edge exists, if so, create it
 
         if not self.emlg.has_edge_collection(edge_col_name):
-            msg = "Edge collection %s did not exist, creating it!" % (
-                edge_col_name)
+            msg = "Edge collection %s did not exist, creating it!" % (edge_col_name)
             logger.info(msg)
-            self.db.create_collection(edge_col_name,
-                                      edge=True,
-                                      replication_factor=rf)
+            self.db.create_collection(edge_col_name, edge=True, replication_factor=rf)
 
         self.emlg.create_edge_definition(
             edge_collection=edge_col_name,

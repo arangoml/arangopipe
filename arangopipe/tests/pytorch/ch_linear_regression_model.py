@@ -10,7 +10,6 @@ import torch
 
 
 class CH_LinearRegression(torch.nn.Module):
-
     def __init__(self, inputSize, outputSize):
         super(CH_LinearRegression, self).__init__()
         self.linear = torch.nn.Linear(inputSize, outputSize)

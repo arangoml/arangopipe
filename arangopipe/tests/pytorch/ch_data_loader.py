@@ -29,8 +29,7 @@ class CH_Dataset(data.Dataset):
         self.featureset = featureset
         self.ds_info = {
             "name": "california-housing-dataset",
-            "description":
-            "This dataset lists median house prices in Califoria. Various house features are provided",
+            "description": "This dataset lists median house prices in Califoria. Various house features are provided",
             "source": "UCI ML Repository",
         }
         df[preds] = StandardScaler().fit_transform(df[preds].values)
@@ -38,12 +37,12 @@ class CH_Dataset(data.Dataset):
         trng_end = ceil(num_rows * trng_prop)
         if train:
             self.X = torch.from_numpy(df.loc[:trng_end, preds].values)
-            self.Y = torch.from_numpy(df.loc[:trng_end,
-                                             "medianHouseValue"].values)
+            self.Y = torch.from_numpy(df.loc[:trng_end, "medianHouseValue"].values)
         else:
-            self.X = torch.from_numpy(df.loc[(trng_end + 1):, preds].values)
-            self.Y = torch.from_numpy(df.loc[(trng_end + 1):,
-                                             "medianHouseValue"].values)
+            self.X = torch.from_numpy(df.loc[(trng_end + 1) :, preds].values)
+            self.Y = torch.from_numpy(
+                df.loc[(trng_end + 1) :, "medianHouseValue"].values
+            )
         self.input_size = len(preds)
         self.output_size = 1
 
