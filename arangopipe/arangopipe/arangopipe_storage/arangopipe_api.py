@@ -10,6 +10,7 @@ import logging
 
 from arango import AQLQueryExecuteError
 from arango.database import StandardDatabase
+from typing import Optional
 
 
 # create logger with 'spam_application'
@@ -40,7 +41,12 @@ class ArangoPipe:
     (4) Register you model with ArangoPipe
     """
 
-    def __init__(self, db: StandardDatabase, graph_name: str):
+    def __init__(
+        self,
+        db: StandardDatabase,
+        graph_name: str,
+        replication_factor: Optional[int] = None,
+    ):
         self.emlg = None
         if db is None:
             raise ValueError("db parameter is null")
@@ -48,6 +54,7 @@ class ArangoPipe:
             raise ValueError("graph_name parameter is null")
         self.db = db
         self.graph_name = graph_name
+        self.replication_factor = replication_factor
         # self.mscp = ManagedServiceConnParam()
         self.init_graph()
         self.heart_beat()
@@ -582,3 +589,80 @@ class ArangoPipe:
             logger.error("Edge, " + edge_name + " does not exist!")
 
         return edge_info
+
+    def create_enterprise_ml_graph(self):
+
+        cl = [
+            "project",
+            "models",
+            "datasets",
+            "featuresets",
+            "modelparams",
+            "run",
+            "devperf",
+            "servingperf",
+            "deployment",
+        ]
+
+        if self.db.has_graph(self.graph_name):
+            self.emlg = self.db.graph(self.graph_name)
+        else:
+            self.emlg = self.db.create_graph(self.graph_name)
+
+        for col in cl:
+            if not self.emlg.has_vertex_collection(col):
+                self.db.create_collection(col, self.replication_factor)
+                self.emlg.create_vertex_collection(col)
+
+        from_list = [
+            "project",
+            "models",
+            "run",
+            "run",
+            "run",
+            "run",
+            "deployment",
+            "deployment",
+            "deployment",
+            "deployment",
+            "featuresets",
+        ]
+        to_list = [
+            "models",
+            "run",
+            "modelparams",
+            "datasets",
+            "devperf",
+            "featuresets",
+            "servingperf",
+            "models",
+            "modelparams",
+            "featuresets",
+            "datasets",
+        ]
+        edge_names = [
+            "project_models",
+            "run_models",
+            "run_modelparams",
+            "run_datasets",
+            "run_devperf",
+            "run_featuresets",
+            "deployment_servingperf",
+            "deployment_model",
+            "deployment_modelparams",
+            "deployment_featureset",
+            "featureset_dataset",
+        ]
+        for edge, fromv, tov in zip(edge_names, from_list, to_list):
+            if not self.db.has_collection(edge):
+                self.db.create_collection(
+                    edge, edge=True, replication_factor=self.replication_factor
+                )
+            if not self.emlg.has_edge_definition(edge):
+                self.emlg.create_edge_definition(
+                    edge_collection=edge,
+                    from_vertex_collections=[fromv],
+                    to_vertex_collections=[tov],
+                )
+
+        return
