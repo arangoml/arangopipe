@@ -20,8 +20,7 @@ from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig
 import uuid
 import datetime
 from arangopipe.arangopipe_storage.managed_service_conn_parameters import (
-    ManagedServiceConnParam,
-)
+    ManagedServiceConnParam, )
 import yaml
 import os
 
@@ -29,9 +28,8 @@ import os
 
 
 def get_test_config():
-    file_name = os.path.join(
-        os.path.dirname(__file__), "../test_config/test_datagen_config.yaml"
-    )
+    file_name = os.path.join(os.path.dirname(__file__),
+                             "../test_config/test_datagen_config.yaml")
     with open(file_name, "r") as file_descriptor:
         test_cfg = yaml.load(file_descriptor, Loader=yaml.FullLoader)
 
@@ -116,7 +114,8 @@ def run_driver():
     test_cfg = get_test_config()
     conn_params = {
         msc.DB_SERVICE_HOST: test_cfg["arangodb"][msc.DB_SERVICE_HOST],
-        msc.DB_SERVICE_END_POINT: test_cfg["arangodb"][msc.DB_SERVICE_END_POINT],
+        msc.DB_SERVICE_END_POINT:
+        test_cfg["arangodb"][msc.DB_SERVICE_END_POINT],
         msc.DB_SERVICE_NAME: test_cfg["arangodb"][msc.DB_SERVICE_NAME],
         msc.DB_SERVICE_PORT: test_cfg["arangodb"][msc.DB_SERVICE_PORT],
         msc.DB_CONN_PROTOCOL: test_cfg["arangodb"][msc.DB_CONN_PROTOCOL],
@@ -137,9 +136,8 @@ def run_driver():
     ruuid = str(uuid.uuid4().int)
     model_name = "pytorch-linear-reg" + "_dev_run_" + ruuid
     model_info = {"name": model_name, "type": "model-development"}
-    model_reg = ap.register_model(
-        model_info, project="Housing_Price_Estimation_Project"
-    )
+    model_reg = ap.register_model(model_info,
+                                  project="Housing_Price_Estimation_Project")
     ds_info = trng_dataset.get_dataset()
     ds_reg = ap.register_dataset(ds_info)
     fs = trng_dataset.get_featureset()
@@ -170,7 +168,9 @@ def run_driver():
     }
     ap.log_run(run_info)
     mp = ap.lookup_modelperf(run_tag)
-    print("A look up of the loss schedule for this experiment in Arangopipe yields:")
+    print(
+        "A look up of the loss schedule for this experiment in Arangopipe yields:"
+    )
     print(str(mp["training_loss_schedule"]))
 
     return
