@@ -5,31 +5,35 @@ Created on Fri Sep 13 09:19:36 2019
 
 @author: Rajiv Sambasivan
 """
+import datetime
+import os
+import uuid
+from math import sqrt
+
+import jsonpickle
+import numpy as np
 import torch
+import torch.nn as nn
+import yaml
 from ch_data_loader import CH_Dataset
 from ch_linear_regression_model import CH_LinearRegression
-import torch.nn as nn
-from torch.utils import data
 from torch.autograd import Variable
-import numpy as np
-from math import sqrt
-import jsonpickle
-from arangopipe.arangopipe_storage.arangopipe_api import ArangoPipe
+from torch.utils import data
+
+from arangopipe.arangopipe.arangopipe_storage.arangopipe_api import ArangoPipe
 from arangopipe.arangopipe_storage.arangopipe_admin_api import ArangoPipeAdmin
 from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig
-import uuid
-import datetime
 from arangopipe.arangopipe_storage.managed_service_conn_parameters import (
-    ManagedServiceConnParam, )
-import yaml
-import os
+    ManagedServiceConnParam,
+)
 
 # from torch.utils.data.sampler import SubsetRandomSampler
 
 
 def get_test_config():
-    file_name = os.path.join(os.path.dirname(__file__),
-                             "../test_config/test_datagen_config.yaml")
+    file_name = os.path.join(
+        os.path.dirname(__file__), "../test_config/test_datagen_config.yaml"
+    )
     with open(file_name, "r") as file_descriptor:
         test_cfg = yaml.load(file_descriptor, Loader=yaml.FullLoader)
 
@@ -114,8 +118,7 @@ def run_driver():
     test_cfg = get_test_config()
     conn_params = {
         msc.DB_SERVICE_HOST: test_cfg["arangodb"][msc.DB_SERVICE_HOST],
-        msc.DB_SERVICE_END_POINT:
-        test_cfg["arangodb"][msc.DB_SERVICE_END_POINT],
+        msc.DB_SERVICE_END_POINT: test_cfg["arangodb"][msc.DB_SERVICE_END_POINT],
         msc.DB_SERVICE_NAME: test_cfg["arangodb"][msc.DB_SERVICE_NAME],
         msc.DB_SERVICE_PORT: test_cfg["arangodb"][msc.DB_SERVICE_PORT],
         msc.DB_CONN_PROTOCOL: test_cfg["arangodb"][msc.DB_CONN_PROTOCOL],
@@ -136,8 +139,9 @@ def run_driver():
     ruuid = str(uuid.uuid4().int)
     model_name = "pytorch-linear-reg" + "_dev_run_" + ruuid
     model_info = {"name": model_name, "type": "model-development"}
-    model_reg = ap.register_model(model_info,
-                                  project="Housing_Price_Estimation_Project")
+    model_reg = ap.register_model(
+        model_info, project="Housing_Price_Estimation_Project"
+    )
     ds_info = trng_dataset.get_dataset()
     ds_reg = ap.register_dataset(ds_info)
     fs = trng_dataset.get_featureset()
@@ -168,9 +172,7 @@ def run_driver():
     }
     ap.log_run(run_info)
     mp = ap.lookup_modelperf(run_tag)
-    print(
-        "A look up of the loss schedule for this experiment in Arangopipe yields:"
-    )
+    print("A look up of the loss schedule for this experiment in Arangopipe yields:")
     print(str(mp["training_loss_schedule"]))
 
     return

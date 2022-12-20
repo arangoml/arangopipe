@@ -4,3 +4,4 @@ PyYAML==5.4
 sklearn2
 yapf
 autopep8
+pre-commit

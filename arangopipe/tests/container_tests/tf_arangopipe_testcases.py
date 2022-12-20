@@ -5,26 +5,29 @@ Created on Wed Aug 28 15:16:13 2019
 
 @author: Rajiv Sambasivan
 """
-import unittest
-from arangopipe.arangopipe_storage.arangopipe_admin_api import ArangoPipeAdmin
-from arangopipe.arangopipe_storage.arangopipe_api import ArangoPipe
-from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig
 import datetime
+import os
+import sys
+import traceback
+import unittest
+
+import pandas as pd
+import tensorflow_data_validation as tfdv
+import yaml
+from google.protobuf import json_format
+
 from arangopipe.arangopipe_analytics.rf_dataset_shift_detector import (
     RF_DatasetShiftDetector,
 )
-import os
-import pandas as pd
-import sys, traceback
-import tensorflow_data_validation as tfdv
-from google.protobuf import json_format
+from arangopipe.arangopipe_storage.arangopipe_admin_api import ArangoPipeAdmin
+from arangopipe.arangopipe_storage.arangopipe_api import ArangoPipe
+from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig
 
 # from tensorflow_metadata.proto.v0 import statistics_pb2
 # from tensorflow_metadata.proto.v0 import schema_pb2
 from arangopipe.arangopipe_storage.managed_service_conn_parameters import (
     ManagedServiceConnParam,
 )
-import yaml
 
 
 class TestArangopipe(unittest.TestCase):
