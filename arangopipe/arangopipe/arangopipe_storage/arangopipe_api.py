@@ -279,7 +279,6 @@ class ArangoPipe:
             raise ValueError("db parameter is null")
 
         self.create_enterprise_ml_graph()
-        self.emlg = self.db.graph(self.graph_name)
 
         return
 
