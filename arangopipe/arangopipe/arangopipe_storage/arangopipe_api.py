@@ -125,7 +125,6 @@ class ArangoPipe:
             asset_keys = [doc for doc in cursor]
         except AQLQueryExecuteError as e:
             print(e)
-        
 
         asset_info = None
         if len(asset_keys) == 0:
