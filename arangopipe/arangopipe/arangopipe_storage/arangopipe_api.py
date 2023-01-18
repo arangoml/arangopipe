@@ -120,7 +120,9 @@ class ArangoPipe:
         if not self.db:
             return
         if self.db:
-            cursor = self.db.aql.execute(aql, bind_vars={"value": entity_id}, batch_size=1)
+            cursor = self.db.aql.execute(
+                aql, bind_vars={"value": entity_id}, batch_size=1
+            )
             while cursor.has_more():
                 asset_keys = [doc for doc in cursor]
             while not cursor.empty():
