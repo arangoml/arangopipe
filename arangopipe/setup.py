@@ -51,6 +51,7 @@ setup(
             "types-PyYAML~=6.0",
             "types-requests~=2.28",
             "types-urllib3~=1.26",
+            "dynaconf==3.1.11"
         ]
     },
 )
