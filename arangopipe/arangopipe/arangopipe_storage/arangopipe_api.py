@@ -120,7 +120,8 @@ class ArangoPipe:
         if not self.db:
             return
         cursor = self.db.aql.execute(aql, bind_vars={"value": entity_id})
-        asset_keys = [doc for doc in cursor]
+        if cursor.empty() is not True:
+            asset_keys = [doc for doc in cursor]
 
         asset_info = None
         if len(asset_keys) == 0:
@@ -273,6 +274,7 @@ class ArangoPipe:
 
         if self.db is None:
             raise ValueError("db parameter is null")
+
         self.create_enterprise_ml_graph()
         self.emlg = self.db.graph(self.graph_name)
 
