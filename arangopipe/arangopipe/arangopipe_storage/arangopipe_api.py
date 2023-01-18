@@ -125,18 +125,18 @@ class ArangoPipe:
         except AQLQueryExecuteError as e:
             print(e)
 
-        if "__iter__" in dir(cursor):
-            asset_keys = [doc for doc in cursor]
+        # if "__iter__" in dir(cursor):
+        #     asset_keys = [doc for doc in cursor]
 
-        asset_info = None
-        if len(asset_keys) == 0:
-            logger.info(
-                "The asset by name: " + entity_id + " was not found in Arangopipe!"
-            )
-        else:
-            asset_info = asset_keys[0]
+        # asset_info = None
+        # if len(asset_keys) == 0:
+        #     logger.info(
+        #         "The asset by name: " + entity_id + " was not found in Arangopipe!"
+        #     )
+        # else:
+        #     asset_info = asset_keys[0]
 
-        return asset_info
+        return "1"
 
     def lookup_entity(self, asset_name, asset_type):
         aql = "FOR doc IN %s FILTER doc.name == @value RETURN doc" % (asset_type)
