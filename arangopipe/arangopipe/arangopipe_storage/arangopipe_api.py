@@ -120,7 +120,7 @@ class ArangoPipe:
         if not self.db:
             return
         cursor = self.db.aql.execute(aql, bind_vars={"value": entity_id})
-        if cursor.empty() is not True:
+        if cursor is not None:
             asset_keys = [doc for doc in cursor]
 
         asset_info = None
