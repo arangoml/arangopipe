@@ -122,11 +122,9 @@ class ArangoPipe:
 
         try:
             cursor = self.db.aql.execute(aql, bind_vars={"value": entity_id})
+            asset_keys = [doc for doc in cursor]
         except AQLQueryExecuteError as e:
             print(e)
-
-        if "__iter__" in dir(cursor):
-            asset_keys = [doc for doc in cursor]
 
         asset_info = None
         if len(asset_keys) == 0:
