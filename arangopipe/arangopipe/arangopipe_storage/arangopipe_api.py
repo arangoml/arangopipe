@@ -7,16 +7,10 @@ Created on Sat Apr 13 08:35:58 2019
 """
 
 import logging
+from typing import Optional
 
-from arango import AQLQueryExecuteError, ArangoClient
-
-from arangopipe.arangopipe_storage.arangopipe_config import (
-    APConfigDict,
-    ArangoPipeConfig,
-)
-from arangopipe.arangopipe_storage.managed_service_conn_parameters import (
-    ManagedServiceConnParam,
-)
+from arango import AQLQueryExecuteError
+from arango.database import StandardDatabase
 
 # create logger with 'spam_application'
 logger = logging.getLogger("arangopipe_logger")
@@ -46,11 +40,21 @@ class ArangoPipe:
     (4) Register you model with ArangoPipe
     """
 
-    def __init__(self, config: ArangoPipeConfig):
-        self.cfg = config.get_cfg()
+    def __init__(
+        self,
+        db: StandardDatabase,
+        graph_name: str,
+        replication_factor: Optional[int] = None,
+    ):
         self.emlg = None
-        self.db = None
-        self.mscp = ManagedServiceConnParam()
+        if db is None:
+            raise ValueError("db parameter is null")
+        if graph_name is None:
+            raise ValueError("graph_name parameter is null")
+        self.db = db
+        self.graph_name = graph_name
+        self.replication_factor = replication_factor
+        # self.mscp = ManagedServiceConnParam()
         self.init_graph()
         self.heart_beat()
 
@@ -64,10 +68,6 @@ class ArangoPipe:
             raise Exception("Your connection is stale, try a new connection!")
 
         return
-
-    def get_config(self) -> APConfigDict:
-        apc = ArangoPipeConfig()
-        return apc.get_cfg()
 
     def get_collection_from_id(self, id_str: str) -> str:
         sep = "/"
@@ -119,8 +119,11 @@ class ArangoPipe:
         # Execute the query
         if not self.db:
             return
-        cursor = self.db.aql.execute(aql, bind_vars={"value": entity_id})
-        asset_keys = [doc for doc in cursor]
+        if self.db:
+            cursor = self.db.aql.execute(
+                aql, bind_vars={"value": entity_id}, batch_size=1
+            )
+            asset_keys = [doc for doc in cursor]
 
         asset_info = None
         if len(asset_keys) == 0:
@@ -255,25 +258,26 @@ class ArangoPipe:
 
     def init_graph(self) -> None:
         """Initialize a graph when an instance of ArangoPipe is provisioned."""
-        db_serv_host = self.cfg["arangodb"]["DB_service_host"]
-        db_serv_port = self.cfg["arangodb"]["DB_service_port"]
-        db_name = self.cfg["arangodb"]["dbName"]
-        db_user_name = self.cfg["arangodb"]["username"]
-        db_passwd = self.cfg["arangodb"]["password"]
-        db_conn_protocol = self.cfg["arangodb"][self.mscp.DB_CONN_PROTOCOL]
+        # db_serv_host = self.cfg["arangodb"]["DB_service_host"]
+        # db_serv_port = self.cfg["arangodb"]["DB_service_port"]
+        # db_name = self.cfg["arangodb"]["dbName"]
+        # db_user_name = self.cfg["arangodb"]["username"]
+        # db_passwd = self.cfg["arangodb"]["password"]
+        # db_conn_protocol = self.cfg["arangodb"][self.mscp.DB_CONN_PROTOCOL]
 
-        host_conn_str = (
-            db_conn_protocol + "://" + db_serv_host + ":" + str(db_serv_port)
-        )
-        client = ArangoClient(hosts=host_conn_str)
+        # host_conn_str = (db_conn_protocol + "://" + db_serv_host + ":" +
+        #                  str(db_serv_port))
+        # client = ArangoClient(hosts=host_conn_str)
 
-        self.db = client.db(
-            name=db_name, username=db_user_name, password=db_passwd, verify=True
-        )
+        # self.db = client.db(name=db_name,
+        #                     username=db_user_name,
+        #                     password=db_passwd,
+        #                     verify=True)
 
         if self.db is None:
-            return
-        self.emlg = self.db.graph(self.cfg["mlgraph"]["graphname"])
+            raise ValueError("db parameter is null")
+
+        self.create_enterprise_ml_graph()
 
         return
 
@@ -584,3 +588,292 @@ class ArangoPipe:
             logger.error("Edge, " + edge_name + " does not exist!")
 
         return edge_info
+
+    def create_enterprise_ml_graph(self):
+
+        cl = [
+            "project",
+            "models",
+            "datasets",
+            "featuresets",
+            "modelparams",
+            "run",
+            "devperf",
+            "servingperf",
+            "deployment",
+        ]
+
+        if self.db.has_graph(self.graph_name):
+            self.emlg = self.db.graph(self.graph_name)
+        else:
+            self.emlg = self.db.create_graph(self.graph_name)
+
+        for col in cl:
+            if not self.emlg.has_vertex_collection(col):
+                self.db.create_collection(col, self.replication_factor)
+                self.emlg.create_vertex_collection(col)
+
+        from_list = [
+            "project",
+            "models",
+            "run",
+            "run",
+            "run",
+            "run",
+            "deployment",
+            "deployment",
+            "deployment",
+            "deployment",
+            "featuresets",
+        ]
+        to_list = [
+            "models",
+            "run",
+            "modelparams",
+            "datasets",
+            "devperf",
+            "featuresets",
+            "servingperf",
+            "models",
+            "modelparams",
+            "featuresets",
+            "datasets",
+        ]
+        edge_names = [
+            "project_models",
+            "run_models",
+            "run_modelparams",
+            "run_datasets",
+            "run_devperf",
+            "run_featuresets",
+            "deployment_servingperf",
+            "deployment_model",
+            "deployment_modelparams",
+            "deployment_featureset",
+            "featureset_dataset",
+        ]
+        for edge, fromv, tov in zip(edge_names, from_list, to_list):
+            if not self.db.has_collection(edge):
+                self.db.create_collection(
+                    edge, edge=True, replication_factor=self.replication_factor
+                )
+            if not self.emlg.has_edge_definition(edge):
+                self.emlg.create_edge_definition(
+                    edge_collection=edge,
+                    from_vertex_collections=[fromv],
+                    to_vertex_collections=[tov],
+                )
+
+        return
+
+    def register_project(self, p):
+
+        projects = self.emlg.vertex_collection("project")
+        proj_reg = projects.insert(p)
+
+        return proj_reg
+
+    def delete_arangomldb(self):
+
+        return
+
+    def register_deployment(self, dep_tag):
+
+        # Execute the query
+        cursor = self.db.aql.execute(
+            "FOR doc IN run FILTER doc.deployment_tag == @value RETURN doc",
+            bind_vars={"value": dep_tag},
+        )
+        run_docs = [doc for doc in cursor]
+        the_run_doc = run_docs[0]
+        # Get the model params for the run
+        rmpe = self.emlg.edge_collection("run_modelparams")
+        edge_dict = rmpe.edges(the_run_doc, direction="out")
+        tmp_id = edge_dict["edges"][0]["_to"]
+        mpc = self.emlg.edge_collection("modelparams")
+        tagged_model_params = mpc.get(tmp_id)
+        # Get the model for the run
+        rme = self.emlg.edge_collection("run_models")
+        edge_dict = rme.edges(the_run_doc, direction="in")
+        tm_id = edge_dict["edges"][0]["_from"]
+        mc = self.emlg.edge_collection("models")
+        tagged_model = mc.get(tm_id)
+        # Get the featureset for the run
+        rfse = self.emlg.edge_collection("run_featuresets")
+        edge_dict = rfse.edges(the_run_doc, direction="out")
+        tfid = edge_dict["edges"][0]["_to"]
+        tfc = self.emlg.edge_collection("featuresets")
+        tagged_featureset = tfc.get(tfid)
+        # Create a deployment artifact
+        deployment = self.emlg.vertex_collection("deployment")
+        deploy_info = {"tag": dep_tag}
+        dep_reg = deployment.insert(deploy_info)
+        # Link the deployment to the model parameters
+        dep_model_params_edge = self.emlg.edge_collection("deployment_modelparams")
+        dep_model_params_key = dep_reg["_key"] + "-" + tagged_model_params["_key"]
+        the_dep_model_param_edge = {
+            "_key": dep_model_params_key,
+            "_from": dep_reg["_id"],
+            "_to": tagged_model_params["_id"],
+        }
+
+        dep_model_params_edge.insert(the_dep_model_param_edge)
+
+        # Link the deployment to the featureset
+        dep_featureset_edge = self.emlg.edge_collection("deployment_featureset")
+        dep_featureset_key = dep_reg["_key"] + "-" + tagged_featureset["_key"]
+        the_dep_featureset_edge = {
+            "_key": dep_featureset_key,
+            "_from": dep_reg["_id"],
+            "_to": tagged_featureset["_id"],
+        }
+        dep_featureset_edge.insert(the_dep_featureset_edge)
+
+        # Link the deployment to the model
+        dep_model_edge = self.emlg.edge_collection("deployment_model")
+        dep_featureset_key = dep_reg["_key"] + "-" + tagged_model["_key"]
+        the_dep_model_edge = {
+            "_key": dep_featureset_key,
+            "_from": dep_reg["_id"],
+            "_to": tagged_model["_id"],
+        }
+
+        dep_model_reg = dep_model_edge.insert(the_dep_model_edge)
+        return dep_model_reg
+
+    def add_vertex_to_arangopipe(self, vertex_to_create):
+        rf = self.replication_factor
+
+        if not self.db.has_graph(self.graph_name):
+            self.emlg = self.db.create_graph(self.graph_name)
+        else:
+            self.emlg = self.db.graph(self.graph_name)
+
+        # Check if vertex exists in the graph, if not create it
+        if not self.emlg.has_vertex_collection(vertex_to_create):
+            self.db.create_collection(vertex_to_create, rf)
+            self.emlg.create_vertex_collection(vertex_to_create)
+        else:
+            logger.error("Vertex, " + vertex_to_create + " already exists!")
+
+        return
+
+    def remove_vertex_from_arangopipe(self, vertex_to_remove, purge=True):
+
+        if not self.db.has_graph(self.graph_name):
+            self.emlg = self.db.create_graph(self.graph_name)
+        else:
+            self.emlg = self.db.graph(self.graph_name)
+
+        # Check if vertex exists in the graph, if not create it
+        if self.emlg.has_vertex_collection(vertex_to_remove):
+            self.emlg.delete_vertex_collection(vertex_to_remove, purge)
+
+            logger.info("Vertex collection " + vertex_to_remove + " has been deleted!")
+        else:
+            logger.error("Vertex, " + vertex_to_remove + " does not exist!")
+
+        return
+
+    def add_edge_definition_to_arangopipe(
+        self, edge_col_name, edge_name, from_vertex_name, to_vertex_name
+    ):
+        rf = self.replication_factor
+
+        if not self.db.has_graph(self.graph_name):
+            self.emlg = self.db.create_graph(self.graph_name)
+        else:
+            self.emlg = self.db.graph(self.graph_name)
+
+        # Check if all data needed to create an edge exists, if so, create it
+
+        if not self.emlg.has_vertex_collection(from_vertex_name):
+            logger.error(
+                "Source vertex, "
+                + from_vertex_name
+                + " does not exist, aborting edge creation!"
+            )
+            return
+        elif not self.emlg.has_vertex_collection(to_vertex_name):
+            logger.error(
+                "Destination vertex, "
+                + to_vertex_name
+                + " does not exist, aborting edge creation!"
+            )
+            return
+
+        else:
+            if not self.emlg.has_edge_definition(edge_name):
+                if not self.emlg.has_edge_collection(edge_col_name):
+                    self.db.create_collection(
+                        edge_col_name, edge=True, replication_factor=rf
+                    )
+
+                self.emlg.create_edge_definition(
+                    edge_collection=edge_col_name,
+                    from_vertex_collections=[from_vertex_name],
+                    to_vertex_collections=[to_vertex_name],
+                )
+            else:
+                logger.error("Edge, " + edge_name + " already exists!")
+
+        return
+
+    def add_edges_to_arangopipe(self, edge_col_name, from_vertex_list, to_vertex_list):
+        rf = self.replication_factor
+
+        if not self.db.has_graph(self.graph_name):
+            self.emlg = self.db.create_graph(self.graph_name)
+        else:
+            self.emlg = self.db.graph(self.graph_name)
+
+        # Check if all data needed to create an edge exists, if so, create it
+
+        if not self.emlg.has_edge_collection(edge_col_name):
+            msg = "Edge collection %s did not exist, creating it!" % (edge_col_name)
+            logger.info(msg)
+            self.db.create_collection(edge_col_name, edge=True, replication_factor=rf)
+
+        self.emlg.create_edge_definition(
+            edge_collection=edge_col_name,
+            from_vertex_collections=from_vertex_list,
+            to_vertex_collections=to_vertex_list,
+        )
+
+        return
+
+    def remove_edge_definition_from_arangopipe(self, edge_name, purge=True):
+
+        if not self.db.has_graph(self.graph_name):
+            self.emlg = self.db.create_graph(self.graph_name)
+        else:
+            self.emlg = self.db.graph(self.graph_name)
+
+        if self.emlg.has_edge_definition(edge_name):
+            self.emlg.delete_edge_definition(edge_name, purge)
+
+        else:
+            logger.error("Edge definition " + edge_name + " does not exist!")
+
+        return
+
+    def has_vertex(self, vertex_name):
+
+        if not self.db.has_graph(self.graph_name):
+            self.emlg = self.db.create_graph(self.graph_name)
+        else:
+            self.emlg = self.db.graph(self.graph_name)
+
+        result = self.emlg.has_vertex_collection(vertex_name)
+        return result
+
+    def has_edge(self, edge_name):
+
+        if not self.db.has_graph(self.graph_name):
+            self.emlg = self.db.create_graph(self.graph_name)
+        else:
+            self.emlg = self.db.graph(self.graph_name)
+
+        result = self.emlg.has_edge_definition(edge_name)
+
+        return result
