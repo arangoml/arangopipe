@@ -119,13 +119,14 @@ class ArangoPipe:
         # Execute the query
         if not self.db:
             return
-
-        try:
-            cursor = self.db.aql.execute(aql, bind_vars={"value": entity_id})
-            asset_keys = [doc for doc in cursor]
-        except AQLQueryExecuteError as e:
-            print(e)
-        
+        if self.db:
+            cursor = self.db.aql.execute(
+                aql, bind_vars={"value": entity_id}, batch_size=1
+            )
+            while cursor.has_more():
+                asset_keys = [doc for doc in cursor]
+            while not cursor.empty():
+                cursor.pop
 
         asset_info = None
         if len(asset_keys) == 0:
