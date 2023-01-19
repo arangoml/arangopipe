@@ -123,10 +123,7 @@ class ArangoPipe:
             cursor = self.db.aql.execute(
                 aql, bind_vars={"value": entity_id}, batch_size=1
             )
-            while cursor.has_more():
-                asset_keys = [doc for doc in cursor]
-            while not cursor.empty():
-                cursor.pop
+            asset_keys = [doc for doc in cursor]
 
         asset_info = None
         if len(asset_keys) == 0:
