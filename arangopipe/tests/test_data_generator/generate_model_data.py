@@ -19,18 +19,18 @@ from sklearn import linear_model
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 
-from arangopipe.arangopipe.arangopipe_storage.arangopipe_api import ArangoPipe
+from arangopipe.arangopipe.arangopipe_api import ArangoPipe
 from arangopipe.arangopipe_storage.arangopipe_admin_api import ArangoPipeAdmin
 from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig
 from arangopipe.arangopipe_storage.managed_service_conn_parameters import (
-    ManagedServiceConnParam,
-)
+    ManagedServiceConnParam, )
 
 NUM_PERIODS = 22
 go_back_days = dt.timedelta(days=30)
 period_begin = dt.date.today()
 period_end = period_begin - go_back_days
-file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cal_housing.csv")
+file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                         "cal_housing.csv")
 data = pd.read_csv(file_path)
 preds = data.columns.tolist()
 preds.remove("medianHouseValue")
@@ -48,7 +48,8 @@ fh.setLevel(logging.DEBUG)
 ch = logging.StreamHandler()
 ch.setLevel(logging.ERROR)
 # create formatter and add it to the handlers
-formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+formatter = logging.Formatter(
+    "%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 fh.setFormatter(formatter)
 ch.setFormatter(formatter)
 # add the handlers to the logger
@@ -60,9 +61,8 @@ cfg = None
 def read_data():
     global cfg
     if cfg is None:
-        file_name = os.path.join(
-            os.path.dirname(__file__), "../test_config/test_datagen_config.yaml"
-        )
+        file_name = os.path.join(os.path.dirname(__file__),
+                                 "../test_config/test_datagen_config.yaml")
         with open(file_name, "r") as file_descriptor:
             cfg = yaml.load(file_descriptor, Loader=yaml.FullLoader)
 
@@ -82,10 +82,12 @@ def period_string_generator():
 def dataset_generator():
 
     for period in range(NUM_PERIODS):
-        X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2)
-        X_train, X_val, y_train, y_val = train_test_split(
-            X_train, y_train, test_size=0.2
-        )
+        X_train, X_test, y_train, y_test = train_test_split(X,
+                                                            Y,
+                                                            test_size=0.2)
+        X_train, X_val, y_train, y_val = train_test_split(X_train,
+                                                          y_train,
+                                                          test_size=0.2)
         yield (X_train, X_test, y_train, y_test, X_val, y_val)
 
 
@@ -109,10 +111,8 @@ def delete_users():
         root_user = cfg["arangodb"][mscp.DB_ROOT_USER]
         root_user_password = cfg["arangodb"][mscp.DB_ROOT_USER_PASSWORD]
     except KeyError as k:
-        msg = (
-            "Root credentials are unvailable, try again "
-            + "with a new connection and credentials for root provided"
-        )
+        msg = ("Root credentials are unvailable, try again " +
+               "with a new connection and credentials for root provided")
         print(msg)
         print("Credential information that is missing : " + k.args[0])
         raise Exception("Key error associated with missing " + k.args[0])
@@ -121,9 +121,10 @@ def delete_users():
     #    sys_user_name = cfg['arangodb'][mscp.DB_ROOT_USER]
     #    sys_passwd = cfg['arangodb'][mscp.DB_ROOT_USER_PASSWORD]
     client = ArangoClient(hosts=host_connection)
-    sys_db = client.db(
-        "_system", username=root_user, password=root_user_password, verify=True
-    )
+    sys_db = client.db("_system",
+                       username=root_user,
+                       password=root_user_password,
+                       verify=True)
     ul = sys_db.users()
     unl = [tu["username"] for tu in ul]
     for u in unl:
@@ -144,10 +145,8 @@ def delete_arangopipe_db():
         root_user = cfg["arangodb"][mscp.DB_ROOT_USER]
         root_user_password = cfg["arangodb"][mscp.DB_ROOT_USER_PASSWORD]
     except KeyError as k:
-        msg = (
-            "Root credentials are unvailable, try again "
-            + "with a new connection and credentials for root provided"
-        )
+        msg = ("Root credentials are unvailable, try again " +
+               "with a new connection and credentials for root provided")
         print(msg)
         print("Credential information that is missing : " + k.args[0])
         raise Exception("Key error associated with missing " + k.args[0])
@@ -156,12 +155,15 @@ def delete_arangopipe_db():
     # sys_user_name = cfg['arangodb'][mscp.DB_ROOT_USER]
     # sys_passwd = cfg['arangodb'][mscp.DB_ROOT_USER_PASSWORD]
     client = ArangoClient(hosts=host_connection)
-    sys_db = client.db(
-        "_system", username=root_user, password=root_user_password, verify=True
-    )
+    sys_db = client.db("_system",
+                       username=root_user,
+                       password=root_user_password,
+                       verify=True)
     try:
         if sys_db.has_database("arangopipe"):
-            print("Before starting the test, cleaning up arangopipe instances...")
+            print(
+                "Before starting the test, cleaning up arangopipe instances..."
+            )
             sys_db.delete_database("arangopipe")
         else:
             print("Test Prep: The database arangopipe does not exist !")
@@ -188,7 +190,8 @@ def generate_runs(clean=False):
         mscp.DB_PASSWORD: cfg["arangodb"][mscp.DB_PASSWORD],
         mscp.DB_NAME: cfg["arangodb"][mscp.DB_NAME],
         mscp.DB_ROOT_USER: cfg["arangodb"][mscp.DB_ROOT_USER],
-        mscp.DB_ROOT_USER_PASSWORD: cfg["arangodb"][mscp.DB_ROOT_USER_PASSWORD],
+        mscp.DB_ROOT_USER_PASSWORD:
+        cfg["arangodb"][mscp.DB_ROOT_USER_PASSWORD],
         mscp.DB_SERVICE_END_POINT: cfg["arangodb"][mscp.DB_SERVICE_END_POINT],
         mscp.DB_SERVICE_NAME: cfg["arangodb"][mscp.DB_SERVICE_NAME],
         mscp.DB_SERVICE_PORT: cfg["arangodb"][mscp.DB_SERVICE_PORT],
@@ -239,7 +242,12 @@ def generate_runs(clean=False):
         }
         serving_pred = lrm.predict(X_test)
         (rmse, mae, r2) = eval_metrics(y_test, serving_pred)
-        ex_servingperf = {"rmse": rmse, "r2": r2, "mae": mae, "period": aperiod}
+        ex_servingperf = {
+            "rmse": rmse,
+            "r2": r2,
+            "mae": mae,
+            "period": aperiod
+        }
         deployment_tag = "Deployment_HPE_" + aperiod
         dataset_tag = "Housing_Dataset_" + aperiod
         pipeline_tag = "Pipeline_HPE" + aperiod
@@ -255,8 +263,13 @@ def generate_runs(clean=False):
         fs_reg = ap.register_featureset(featureset, ds_reg["_key"])
         model_tag = "model_period:" + aperiod
         model_name = "Housing Regression Model_" + str(ruuid)
-        model_info = {"name": model_name, "type": "LASSO regression", "tag": model_tag}
-        model_reg = ap.register_model(model_info, project="Home_Value_Assessor")
+        model_info = {
+            "name": model_name,
+            "type": "LASSO regression",
+            "tag": model_tag
+        }
+        model_reg = ap.register_model(model_info,
+                                      project="Home_Value_Assessor")
         model_params = {"alpha": alpha_random, "run_id": str(ruuid)}
         run_info = {
             "dataset": ds_reg["_key"],

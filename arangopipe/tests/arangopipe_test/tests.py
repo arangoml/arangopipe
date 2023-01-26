@@ -1,7 +1,7 @@
 from arango import ArangoClient
 from environment_settings import settings
 
-from arangopipe.arangopipe_storage.arangopipe_api import ArangoPipe
+from arangopipe.arangopipe.arangopipe_api import ArangoPipe
 
 # Initialize the client for ArangoDB.
 client = ArangoClient(hosts=settings.TEST_HOST_NAME)

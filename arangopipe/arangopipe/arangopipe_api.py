@@ -22,7 +22,8 @@ fh.setLevel(logging.DEBUG)
 ch = logging.StreamHandler()
 ch.setLevel(logging.ERROR)
 # create formatter and add it to the handlers
-formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+formatter = logging.Formatter(
+    "%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 fh.setFormatter(formatter)
 ch.setFormatter(formatter)
 # add the handlers to the logger
@@ -63,7 +64,8 @@ class ArangoPipe:
             self.lookup_dataset("heart beat check")
         except AQLQueryExecuteError as e:
             print("WARNING : " + str(e))
-            logger.error("Your database was perhaps deleted, try a new connection")
+            logger.error(
+                "Your database was perhaps deleted, try a new connection")
             # logger.error("Error: " + str(e))
             raise Exception("Your connection is stale, try a new connection!")
 
@@ -100,43 +102,44 @@ class ArangoPipe:
         src_entity_type = self.get_collection_from_id(src_id)
         related_key = "related_" + dest_entity_type
         concat_key = "doc." + related_key
-        aql_str = (
-            'FOR doc in %s FILTER doc._id == @value UPDATE doc WITH {\
-  %s: CONCAT_SEPARATOR(",", %s, @dest_entity) } IN %s'
-            % (src_entity_type, related_key, concat_key, src_entity_type)
-        )
+        aql_str = ('FOR doc in %s FILTER doc._id == @value UPDATE doc WITH {\
+  %s: CONCAT_SEPARATOR(",", %s, @dest_entity) } IN %s' %
+                   (src_entity_type, related_key, concat_key, src_entity_type))
 
         if self.db:
-            self.db.aql.execute(
-                aql_str, bind_vars={"value": src_id, "dest_entity": dest_id}
-            )
+            self.db.aql.execute(aql_str,
+                                bind_vars={
+                                    "value": src_id,
+                                    "dest_entity": dest_id
+                                })
 
         return
 
     def lookup_entity_by_id(self, entity_id: str):
         entity_col = self.get_collection_from_id(entity_id)
-        aql = "FOR doc in %s FILTER doc._id == @value RETURN doc" % (entity_col)
+        aql = "FOR doc in %s FILTER doc._id == @value RETURN doc" % (
+            entity_col)
         # Execute the query
         if not self.db:
             return
         if self.db:
-            cursor = self.db.aql.execute(
-                aql, bind_vars={"value": entity_id}, batch_size=1
-            )
+            cursor = self.db.aql.execute(aql,
+                                         bind_vars={"value": entity_id},
+                                         batch_size=1)
             asset_keys = [doc for doc in cursor]
 
         asset_info = None
         if len(asset_keys) == 0:
-            logger.info(
-                "The asset by name: " + entity_id + " was not found in Arangopipe!"
-            )
+            logger.info("The asset by name: " + entity_id +
+                        " was not found in Arangopipe!")
         else:
             asset_info = asset_keys[0]
 
         return asset_info
 
     def lookup_entity(self, asset_name, asset_type):
-        aql = "FOR doc IN %s FILTER doc.name == @value RETURN doc" % (asset_type)
+        aql = "FOR doc IN %s FILTER doc.name == @value RETURN doc" % (
+            asset_type)
         # Execute the query
         if not self.db:
             return
@@ -145,9 +148,8 @@ class ArangoPipe:
 
         asset_info = None
         if len(asset_keys) == 0:
-            logger.info(
-                "The asset by name: " + asset_name + " was not found in Arangopipe!"
-            )
+            logger.info("The asset by name: " + asset_name +
+                        " was not found in Arangopipe!")
         else:
             asset_info = asset_keys[0]
 
@@ -222,11 +224,8 @@ class ArangoPipe:
         mp_info = None
         mp_keys = [doc for doc in cursor]
         if len(mp_keys) == 0:
-            logger.info(
-                "The model params for tag: "
-                + tag_value
-                + " was not found in Arangopipe!"
-            )
+            logger.info("The model params for tag: " + tag_value +
+                        " was not found in Arangopipe!")
         else:
             mp_info = mp_keys[0]
         return mp_info
@@ -246,11 +245,8 @@ class ArangoPipe:
         mperf_info = None
         mperf_keys = [doc for doc in cursor]
         if len(mperf_keys) == 0:
-            logger.info(
-                "The model performance for tag: "
-                + tag_value
-                + " was not found in Arangopipe!"
-            )
+            logger.info("The model performance for tag: " + tag_value +
+                        " was not found in Arangopipe!")
         else:
             mperf_info = mperf_keys[0]
 
@@ -281,9 +277,10 @@ class ArangoPipe:
 
         return
 
-    def register_model(
-        self, mi, user_id="authorized_user", project="Wine-Quality-Regression-Modelling"
-    ):
+    def register_model(self,
+                       mi,
+                       user_id="authorized_user",
+                       project="Wine-Quality-Regression-Modelling"):
         """
         Register a model. The operation requires specifying a user id. If the user id
         is permitted to register a model, then the registration proceeds, otherwise an
@@ -299,8 +296,7 @@ class ArangoPipe:
         if existing_model is not None:
             msg = (
                 "It looks like the model name %s is already taken, try another name"
-                % (model_name)
-            )
+                % (model_name))
             logger.error(msg)
             return None
         models = self.emlg.vertex_collection("models")
@@ -343,8 +339,7 @@ class ArangoPipe:
         if existing_ds is not None:
             msg = (
                 "It looks like the dataset name %s is already taken, try another name"
-                % (ds_name)
-            )
+                % (ds_name))
             logger.error(msg)
             return None
         ds = self.emlg.vertex_collection("datasets")
@@ -353,7 +348,10 @@ class ArangoPipe:
 
         return ds_reg
 
-    def register_featureset(self, fs_info, dataset_id, user_id="authorized_user"):
+    def register_featureset(self,
+                            fs_info,
+                            dataset_id,
+                            user_id="authorized_user"):
         """
         Register a featureset. ManagedServiceConnParamThe operation requires specifying
         a user id. If the user id is permitted to register a featureset, then the
@@ -368,15 +366,15 @@ class ArangoPipe:
         if existing_fs is not None:
             msg = (
                 "It looks like the featureset name %s is already taken, try another name"  # noqa E501
-                % (fs_name)
-            )
+                % (fs_name))
             logger.error(msg)
             return None
 
         fs = self.emlg.vertex_collection("featuresets")
         fs_reg = fs.insert(fs_info)
         logger.info("Recording featureset " + str(fs_reg))
-        featureset_dataset_edge = self.emlg.edge_collection("featureset_dataset")
+        featureset_dataset_edge = self.emlg.edge_collection(
+            "featureset_dataset")
         featureset_dataset_key = fs_reg["_key"] + "-" + dataset_id
 
         a_featureset_dataset_edge = {
@@ -541,7 +539,8 @@ class ArangoPipe:
         dep_docs = [doc for doc in cursor]
         the_dep_doc = dep_docs[0]
         # Link the service performance record with the deployment record
-        dep_servingperf_edge = self.emlg.edge_collection("deployment_servingperf")
+        dep_servingperf_edge = self.emlg.edge_collection(
+            "deployment_servingperf")
         dep_servingperf_key = the_dep_doc["_key"] + "-" + sp_reg["_key"]
         the_dep_servingperf_edge = {
             "_key": dep_servingperf_key,
@@ -549,7 +548,8 @@ class ArangoPipe:
             "_to": sp_reg["_id"],
         }
 
-        dep_servingperf_reg = dep_servingperf_edge.insert(the_dep_servingperf_edge)
+        dep_servingperf_reg = dep_servingperf_edge.insert(
+            the_dep_servingperf_edge)
         return dep_servingperf_reg
 
     def insert_into_vertex_type(self, vertex_type_name, document):
@@ -558,13 +558,16 @@ class ArangoPipe:
             vc = self.emlg.vertex_collection(vertex_type_name)
             vertex_info = vc.insert(document)
         else:
-            logger.error(
-                "Vertex, " + vertex_type_name + " does not exist in Arangopipe!"
-            )
+            logger.error("Vertex, " + vertex_type_name +
+                         " does not exist in Arangopipe!")
 
         return vertex_info
 
-    def insert_into_edge_type(self, edge_name, from_vdoc, to_vdoc, document=None):
+    def insert_into_edge_type(self,
+                              edge_name,
+                              from_vdoc,
+                              to_vdoc,
+                              document=None):
         edge_info = None
         if self.emlg.has_edge_collection(edge_name):
             try:
@@ -655,8 +658,9 @@ class ArangoPipe:
         for edge, fromv, tov in zip(edge_names, from_list, to_list):
             if not self.db.has_collection(edge):
                 self.db.create_collection(
-                    edge, edge=True, replication_factor=self.replication_factor
-                )
+                    edge,
+                    edge=True,
+                    replication_factor=self.replication_factor)
             if not self.emlg.has_edge_definition(edge):
                 self.emlg.create_edge_definition(
                     edge_collection=edge,
@@ -709,8 +713,10 @@ class ArangoPipe:
         deploy_info = {"tag": dep_tag}
         dep_reg = deployment.insert(deploy_info)
         # Link the deployment to the model parameters
-        dep_model_params_edge = self.emlg.edge_collection("deployment_modelparams")
-        dep_model_params_key = dep_reg["_key"] + "-" + tagged_model_params["_key"]
+        dep_model_params_edge = self.emlg.edge_collection(
+            "deployment_modelparams")
+        dep_model_params_key = dep_reg["_key"] + "-" + tagged_model_params[
+            "_key"]
         the_dep_model_param_edge = {
             "_key": dep_model_params_key,
             "_from": dep_reg["_id"],
@@ -720,7 +726,8 @@ class ArangoPipe:
         dep_model_params_edge.insert(the_dep_model_param_edge)
 
         # Link the deployment to the featureset
-        dep_featureset_edge = self.emlg.edge_collection("deployment_featureset")
+        dep_featureset_edge = self.emlg.edge_collection(
+            "deployment_featureset")
         dep_featureset_key = dep_reg["_key"] + "-" + tagged_featureset["_key"]
         the_dep_featureset_edge = {
             "_key": dep_featureset_key,
@@ -769,15 +776,15 @@ class ArangoPipe:
         if self.emlg.has_vertex_collection(vertex_to_remove):
             self.emlg.delete_vertex_collection(vertex_to_remove, purge)
 
-            logger.info("Vertex collection " + vertex_to_remove + " has been deleted!")
+            logger.info("Vertex collection " + vertex_to_remove +
+                        " has been deleted!")
         else:
             logger.error("Vertex, " + vertex_to_remove + " does not exist!")
 
         return
 
-    def add_edge_definition_to_arangopipe(
-        self, edge_col_name, edge_name, from_vertex_name, to_vertex_name
-    ):
+    def add_edge_definition_to_arangopipe(self, edge_col_name, edge_name,
+                                          from_vertex_name, to_vertex_name):
         rf = self.replication_factor
 
         if not self.db.has_graph(self.graph_name):
@@ -788,26 +795,20 @@ class ArangoPipe:
         # Check if all data needed to create an edge exists, if so, create it
 
         if not self.emlg.has_vertex_collection(from_vertex_name):
-            logger.error(
-                "Source vertex, "
-                + from_vertex_name
-                + " does not exist, aborting edge creation!"
-            )
+            logger.error("Source vertex, " + from_vertex_name +
+                         " does not exist, aborting edge creation!")
             return
         elif not self.emlg.has_vertex_collection(to_vertex_name):
-            logger.error(
-                "Destination vertex, "
-                + to_vertex_name
-                + " does not exist, aborting edge creation!"
-            )
+            logger.error("Destination vertex, " + to_vertex_name +
+                         " does not exist, aborting edge creation!")
             return
 
         else:
             if not self.emlg.has_edge_definition(edge_name):
                 if not self.emlg.has_edge_collection(edge_col_name):
-                    self.db.create_collection(
-                        edge_col_name, edge=True, replication_factor=rf
-                    )
+                    self.db.create_collection(edge_col_name,
+                                              edge=True,
+                                              replication_factor=rf)
 
                 self.emlg.create_edge_definition(
                     edge_collection=edge_col_name,
@@ -819,7 +820,8 @@ class ArangoPipe:
 
         return
 
-    def add_edges_to_arangopipe(self, edge_col_name, from_vertex_list, to_vertex_list):
+    def add_edges_to_arangopipe(self, edge_col_name, from_vertex_list,
+                                to_vertex_list):
         rf = self.replication_factor
 
         if not self.db.has_graph(self.graph_name):
@@ -830,9 +832,12 @@ class ArangoPipe:
         # Check if all data needed to create an edge exists, if so, create it
 
         if not self.emlg.has_edge_collection(edge_col_name):
-            msg = "Edge collection %s did not exist, creating it!" % (edge_col_name)
+            msg = "Edge collection %s did not exist, creating it!" % (
+                edge_col_name)
             logger.info(msg)
-            self.db.create_collection(edge_col_name, edge=True, replication_factor=rf)
+            self.db.create_collection(edge_col_name,
+                                      edge=True,
+                                      replication_factor=rf)
 
         self.emlg.create_edge_definition(
             edge_collection=edge_col_name,

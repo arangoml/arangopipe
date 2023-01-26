@@ -8,8 +8,6 @@ TEST_PYPI_PASSWORD = arangopipe
 
 python_arangopipe:$(SRC)
 	find ./arangopipe -name '*.py' -print0 | xargs -0 yapf -i
-	find ./arangopipe/arangopipe_storage -name '*.py' -print0 | xargs -0 yapf -i
-	find ./arangopipe/arangopipe_analytics -name '*.py' -print0 | xargs -0 yapf -i
 	find ./tests/mlflow -name '*.py' -print0 | xargs -0 yapf -i
 	find ./tests/pytorch -name '*.py' -print0 | xargs -0 yapf -i
 	find ./tests/test_data_generator -name '*.py' -print0 | xargs -0 yapf -i
