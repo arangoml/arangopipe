@@ -12,19 +12,15 @@ import traceback
 import unittest
 
 import pandas as pd
-import tensorflow_data_validation as tfdv
 import yaml
-from google.protobuf import json_format
+from ch_torch_linear_regression_driver import run_driver
 
 from arangopipe.arangopipe.rf_dataset_shift_detector import (
     RF_DatasetShiftDetector,
 )
 from arangopipe.arangopipe_storage.arangopipe_admin_api import ArangoPipeAdmin
-from arangopipe.arangopipe.arangopipe_api import ArangoPipe
+from arangopipe.arangopipe.api.arangopipe_api import ArangoPipe
 from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig
-
-# from tensorflow_metadata.proto.v0 import statistics_pb2
-# from tensorflow_metadata.proto.v0 import schema_pb2
 from arangopipe.arangopipe_storage.managed_service_conn_parameters import (
     ManagedServiceConnParam,
 )
@@ -227,46 +223,24 @@ class TestArangopipe(unittest.TestCase):
 
         return score
 
-    def run_tf_test(self):
-        print("Running tf workflow test!")
-        DATA_DIR = "./"
-        TRAIN_DATA = os.path.join(DATA_DIR, "cal_housing.csv")
-        train_stats = tfdv.generate_statistics_from_csv(TRAIN_DATA, delimiter=",")
-        schema = tfdv.infer_schema(train_stats)
-        enc_stats = json_format.MessageToJson(train_stats)
-        enc_schema = json_format.MessageToJson(schema)
-        data = pd.read_csv("cal_housing.csv")
-        ds_info = {
-            "name": "cal_housing_dataset",
-            "description": "data about housing in California",
-            "encoded_stats": enc_stats,
-            "encoded_schema": enc_schema,
-            "source": "UCI ML Repository",
-        }
-        ds_reg = self.ap.register_dataset(ds_info)
-        featureset = data.dtypes.to_dict()
-        featureset = {k: str(featureset[k]) for k in featureset}
-        featureset["name"] = "wine_no_transformations"
-        fs_reg = self.ap.register_featureset(featureset, ds_reg["_key"])
-        dataset = self.ap.lookup_dataset("cal_housing_dataset")
-        retrieved_stats = dataset["encoded_stats"]
-        retrieved_schema = dataset["encoded_schema"]
-        # print("Retrieved stats: " + str(retrieved_stats))
-        print("Completed tf workflow test!")
+    def torch_test(self):
+        print("Running test for pytorch...")
+        run_driver()
+        print("Pytorch test completed!")
         return
 
-    def test_tf_workflow(self):
+    def test_torch_workflow(self):
         err_raised = False
         try:
-            self.run_tf_test()
+            self.torch_test()
         except:
             err_raised = True
             print("-" * 60)
             traceback.print_exc(file=sys.stdout)
             print("-" * 60)
-            self.assertTrue(err_raised, "Exception raised while looking up dataset")
+            self.assertTrue(err_raised, "Exception raised while provisioning project")
+
         self.assertFalse(err_raised)
-        return
 
         return
 
@@ -451,13 +425,13 @@ class TestArangopipe(unittest.TestCase):
         self.admin.add_vertex_to_arangopipe("test_vertex_s")
         self.admin.add_vertex_to_arangopipe("test_vertex_d")
         self.admin.add_edge_definition_to_arangopipe(
-            "test_edge", "test_vertex_s", "test_vertex_d"
+            "test_col", "test_edge", "test_vertex_s", "test_vertex_d"
         )
         return
 
     def test_arangopipe_edge_add(self):
         self.add_edge_to_arangopipe()
-        self.assertTrue(self.admin.has_edge("test_edge"))
+        self.assertTrue(self.admin.has_edge("test_col"))
 
         return
 
@@ -465,7 +439,7 @@ class TestArangopipe(unittest.TestCase):
         self.admin.add_vertex_to_arangopipe("test_vertex_s1")
         self.admin.add_vertex_to_arangopipe("test_vertex_d1")
         self.admin.add_edge_definition_to_arangopipe(
-            "test_edge_1", "test_vertex_s1", "test_vertex_d1"
+            "test_col", "test_edge_1", "test_vertex_s1", "test_vertex_d1"
         )
         self.admin.remove_edge_definition_from_arangopipe("test_edge_1", purge=True)
 
@@ -498,9 +472,9 @@ class TestArangopipe(unittest.TestCase):
         v1 = self.ap.insert_into_vertex_type("test_vertex_s3", sd)
         v2 = self.ap.insert_into_vertex_type("test_vertex_s4", sd)
         self.admin.add_edge_definition_to_arangopipe(
-            "test_edge", "test_vertex_s3", "test_vertex_s4"
+            "test_col", "test_edge", "test_vertex_s3", "test_vertex_s4"
         )
-        ei = self.ap.insert_into_edge_type("test_edge", v1, v2)
+        ei = self.ap.insert_into_edge_type("test_col", v1, v2)
 
         return ei
 

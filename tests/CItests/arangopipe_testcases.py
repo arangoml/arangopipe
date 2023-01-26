@@ -18,7 +18,7 @@ from arangopipe.arangopipe.rf_dataset_shift_detector import (
     RF_DatasetShiftDetector,
 )
 from arangopipe.arangopipe_storage.arangopipe_admin_api import ArangoPipeAdmin
-from arangopipe.arangopipe.arangopipe_api import ArangoPipe
+from arangopipe.arangopipe.api.arangopipe_api import ArangoPipe
 from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig
 from arangopipe.arangopipe_storage.connection_manager import arango_pipe_connections
 from arangopipe.arangopipe_storage.managed_service_conn_parameters import (

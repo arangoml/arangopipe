@@ -14,7 +14,7 @@ from sklearn.linear_model import ElasticNet
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 
-from arangopipe.arangopipe.arangopipe_api import ArangoPipe
+from arangopipe.arangopipe.api.arangopipe_api import ArangoPipe
 from arangopipe.arangopipe_storage.arangopipe_admin_api import ArangoPipeAdmin
 from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig
 
@@ -87,7 +87,10 @@ if __name__ == "__main__":
             "model-perf": model_perf,
             "pipeline": "Wine-Regression-Pipeline",
             "project": "Wine-Quality-Assessment",
+            "tag_for_deployment": True,
+            "deployment_tag": "Wine_Elastic_Net_Regression",
         }
 
         ap.log_run(run_info)
+
         mlflow.sklearn.log_model(lr, "model")

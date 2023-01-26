@@ -19,7 +19,7 @@ from sklearn import linear_model
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 
-from arangopipe.arangopipe.arangopipe_api import ArangoPipe
+from arangopipe.arangopipe.api.arangopipe_api import ArangoPipe
 from arangopipe.arangopipe_storage.arangopipe_admin_api import ArangoPipeAdmin
 from arangopipe.arangopipe_storage.arangopipe_config import ArangoPipeConfig
 from arangopipe.arangopipe_storage.managed_service_conn_parameters import (
