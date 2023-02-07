@@ -3,15 +3,16 @@
 # log files
 **/*.log
 # Setuptools distribution folder.
-arangopipe/dist/
+dist/
 # Remove the build directory from repo
-arangopipe/build/
+build/
 # Remove the data dir for the pytorch examples from repo
-arangopipe/tests/pytorch/.data/
+tests/pytorch/.data/
 #mlruns folder
-/arangopipe/tests/mlflow/mlruns/
+tests/mlflow/mlruns/
 # Python egg metadata, regenerated from source files by setuptools.
 arangopipe/*.egg-info
+*.egg-info
 #ipynb checkpoints
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
