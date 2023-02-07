@@ -19,3 +19,4 @@ arangopipe/*.egg-info
 #OSX DS_Store
 **/*.DS_Store
 .venv
+.env
