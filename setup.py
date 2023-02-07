@@ -15,6 +15,7 @@ requirements = [
     "sklearn2",
     "yapf",
     "autopep8",
+    "requests"
 ]
 
 # This call to setup() does all the work
