@@ -3,7 +3,7 @@ import pathlib
 from setuptools import setup
 
 # The directory containing this file
-HERE = pathlib.Path(__file__).resolve().parents[1]
+HERE = pathlib.Path(__file__).resolve().parents[0]
 
 # The text of the README file
 README = (HERE / "README.md").read_text()
@@ -35,8 +35,8 @@ setup(
     ],
     packages=[
         "arangopipe",
-        "arangopipe.arangopipe_storage",
-        "arangopipe.arangopipe_analytics",
+        "arangopipe.api",
+        "arangopipe.analytics",
     ],
     package_data={"config": ["arangopipe/arangopipe_storage/arangopipe_config.yaml"]},
     include_package_data=True,

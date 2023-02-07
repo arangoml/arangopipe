@@ -1,7 +1,9 @@
 from arango import ArangoClient
 from environment_settings import settings
+import sys
+sys.path.append('../../arangopipe/api')
 
-from arangopipe.arangopipe.api.arangopipe_api import ArangoPipe
+from arangopipe_api import ArangoPipe
 
 # Initialize the client for ArangoDB.
 client = ArangoClient(hosts=settings.TEST_HOST_NAME)
