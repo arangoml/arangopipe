@@ -1,3 +1,11 @@
+----------------------------------------------------------------------------------
+                                 PLEASE NOTE                                                          
+                      ARANOGPIPE IS UNDERGOING MAINTENANCE                      
+                      EXAMPLES AND NOTEBOOKS MAY NOT WORK                        
+                      STAY TUNED FOR UPDATES OR                                
+                      JOIN THE ARANGOGRAPHML BETA TO TRY OUT THE LATEST CHANGES                    
+----------------------------------------------------------------------------------
+JOIN THE BETA: [https://www.arangodb.com/arangodb-for-machine-learning/](https://www.arangodb.com/arangodb-for-machine-learning/)
 # ArangoML Pipeline
 
 <center>
