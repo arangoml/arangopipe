@@ -1,0 +1,14 @@
+README.md
+pyproject.toml
+setup.cfg
+setup.py
+arangopipe/__init__.py
+arangopipe.egg-info/PKG-INFO
+arangopipe.egg-info/SOURCES.txt
+arangopipe.egg-info/dependency_links.txt
+arangopipe.egg-info/requires.txt
+arangopipe.egg-info/top_level.txt
+arangopipe/analytics/dataset_shift_detector.py
+arangopipe/analytics/rf_dataset_shift_detector.py
+arangopipe/api/__init__.py
+arangopipe/api/arangopipe_api.py

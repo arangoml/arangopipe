@@ -1,0 +1,16 @@
+python-arango
+pandas
+PyYAML==5.1.1
+sklearn2
+yapf
+autopep8
+
+[dev]
+black~=22.8
+flake8~=5.0
+isort~=5.10
+mypy~=0.982
+types-PyYAML~=6.0
+types-requests~=2.28
+types-urllib3~=1.26
+dynaconf==3.1.11
